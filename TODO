@@ -1,0 +1,4 @@
+- Documentation
+- Implement tags system
+- Implement Django filter plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference
+ 

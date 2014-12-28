@@ -5,6 +5,17 @@ use parent 'Exporter';
 use 5.018002;
 our $VERSION = '0.01';
 
+=head1 NAME
+
+DTL::Fast - Perl implementation of Django templating language.
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+
 use Cwd;
 use DTL::Fast::Template;
 
@@ -160,5 +171,6 @@ sub select_template
     
     return $result;
 }
+
 
 1;
