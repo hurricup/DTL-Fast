@@ -1,6 +1,8 @@
 package DTL::Fast::Template::Variable;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
+use Scalar::Util qw(looks_like_number);
+
 sub new
 {
     my $proto = shift;
@@ -13,13 +15,22 @@ sub new
     
     my @variable;
     my $static = 0;
-    if( $variable_name =~ /^\"(.+?)\"$/ )   
+    if( 
+        $variable_name =~ /^\"(.+?)\"$/ 
+    )   
     {
         @variable = ($1);
         $static = 1;
     }
+    elsif( looks_like_number($variable_name) )
+    {
+        @variable = ($variable_name);
+        $static = 1;
+    }
     else
     {
+        die "Variable can't contain brackets: $variable_name" 
+            if $variable_name =~ /[()]/;
         @variable = split /\.+/, $variable_name;
     }
     
