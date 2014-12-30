@@ -10,6 +10,7 @@ sub new
     my @filters = split /\|+/, $variable;
     
     my $variable_name = shift @filters;
+    
     my @variable;
     my $static = 0;
     if( $variable_name =~ /^\"(.+?)\"$/ )   

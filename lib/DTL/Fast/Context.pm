@@ -23,6 +23,10 @@ sub get
     {
         $variable_path = [split /\.+/, $variable_path];
     }
+    else
+    {
+        $variable_path = [@$variable_path]; # cloning for re-use
+    }
     
     my $variable_name = shift @$variable_path;
     
