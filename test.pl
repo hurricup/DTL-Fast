@@ -8,4 +8,5 @@ runtests(
     't/template.t',
     't/filter/join.t',
     't/filter/add.t',
+    't/tag/include.t',
 );

@@ -7,8 +7,8 @@ our %FILTER_HANDLERS;
     
 use DTL::Fast::Template::Variable;
 use DTL::Fast::Template::Text;
-use DTL::Fast::Template::Tags;
 use DTL::Fast::Template::Filters;
+use DTL::Fast::Template::Tags;
     
 sub new
 {
@@ -69,20 +69,11 @@ sub parse_next_chunk
     }
     elsif
     ( 
-        $chunk =~ /^\{\% ([^\s]+?)(?: (.*?))? \%\}$/ 
+        $chunk =~ /^\{\% ([^\s]+?)(.*?)? \%\}$/ 
+        and exists $TAG_HANDLERS{$1}
     )
     {
-        my($tag_name, $tag_param) = ($1, $2);
-        
-        if( exists $TAG_HANDLERS{$tag_name} )
-        {        
-            $chunk = $TAG_HANDLERS{$tag_name}->new($tag_param, $self);
-        }
-        else
-        {
-            warn "Unknown tag: $tag_name";
-            $chunk = DTL::Fast::Template::Text->new( "", $self );
-        }
+        $chunk = $TAG_HANDLERS{$1}->new($2, $self);
     }
     else
     {

@@ -1,4 +1,6 @@
 - Documentation
-- Implement tags system
+- Recursion protection on inheritance
+- Recursion protection on inclusion
 - Implement Django filter plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference
+- Implement Django tag plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference
  

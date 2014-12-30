@@ -62,6 +62,8 @@ is( DTL::Fast::Template->new('checking {{ hash.key4.key5 }}')->render($context),
 is( DTL::Fast::Template->new('checking {{ hash.key6.method2 }}')->render($context), 'checking result2', 'Traversed substitution: hash->object->method');
 
 is( DTL::Fast::Template->new('checking {{ "static variable" }}')->render($context), 'checking static variable', 'Static variable interpolation');
+is( DTL::Fast::Template->new('checking {{ "static variable"|unknown_filter_example }}')->render($context), 'checking static variable', 'Static variable interpolation with unknown filter warning');
+is( DTL::Fast::Template->new('checking {{ "static variable" }}{% unknown_tag_example vars %}')->render($context), 'checking static variable', 'Static variable interpolation with unknown tag warning');
 
 # $template = get_template('complex.txt', $dirs);
 # print Dumper($template);

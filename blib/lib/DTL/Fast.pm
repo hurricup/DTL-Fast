@@ -142,11 +142,6 @@ sub _read_template
         $TEMPLATES_CACHE{$cache_key} = $template;
     }
 
-    die sprintf( <<'_EOT_', $template_name, join("\n", @$dirs)) if not defined $template;
-Unable to find template %s in directories: 
-%s
-_EOT_
-    
     return $template;
 }
 

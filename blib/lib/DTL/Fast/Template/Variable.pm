@@ -26,16 +26,11 @@ sub new
     {
         my @arguments = split ':', $filter;
         my $filter_name = shift @arguments;
-
-        if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
-        {
-            $filter = $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
-        }
-        else
-        {
-            warn "Unknown filter: $filter_name.";
-            $filter = undef;
-        }
+        
+        die "Unknown filter: $filter_name. Currently installed filters: \n\t".join("\n\t", keys(%DTL::Fast::Template::FILTER_HANDLERS))
+            if not exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name};
+            
+        $filter = $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
     }
     
     return bless {
@@ -56,8 +51,7 @@ sub render
     
     foreach my $filter (@{$self->{'filters'}})
     {
-        $value = $filter->filter($value, $context)
-            if defined $filter;
+        $value = $filter->filter($value, $context);
     }
     
     return $value;
