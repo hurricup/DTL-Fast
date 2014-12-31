@@ -15,6 +15,13 @@ sub new
     
     my @variable;
     my $static = 0;
+    my $sign = 1;
+    
+    if( $variable_name =~ s/^\-// )
+    {
+        $sign = -1;
+    }
+    
     if( 
         $variable_name =~ /^\"(.+?)\"$/ 
     )   
@@ -53,6 +60,7 @@ sub new
     return bless {
         'variable' => [@variable]
         , 'filters' => [@filters]
+        , 'sign' => $sign
         , 'static' => $static
     }, $proto;
 }

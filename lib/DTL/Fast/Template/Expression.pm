@@ -3,6 +3,9 @@ use strict; use utf8; use warnings FATAL => 'all';
 
 use DTL::Fast::Template::Variable;
 use DTL::Fast::Template::Expression::Operator;
+use DTL::Fast::Template::Expression::Replacement;
+
+use Data::Dumper;
 
 # @todo cache mechanism via get_expression
 # @todo expression validation on pre-compilation or execution time
@@ -10,64 +13,81 @@ sub new
 {
     my $proto = shift;
     my $expression = shift;
-    
-    my $blocksep = '';
-    my $block_num = 0;
-    while( $expression =~ /$blocksep/ )
-    {
-        $blocksep = sprintf '__BLOCK_%s_%%s__', $block_num++;
-    }
-    
+    my $replacement = shift // 
+        DTL::Fast::Template::Expression::Replacement->new($expression);
+
+#    warn "*Processing $expression";
+        
     my $self = bless {
-        'block_counter' => 0
-        , 'blocks' => {}
-        , 'block_ph' => $blocksep
+        'expression' => $expression
+        , 'replacement' => $replacement
     }, $proto;
     
     $self->{'expression'} = $self->_parse_expression(
-        $self->_parse_brackets($expression)
-        , 0
+        $self->_parse_brackets(
+            $self->_parse_strings($expression)
+        )
     );
 
-    delete @{$self}{'blocks','block_ph','block_counter'};
+#    warn "*Processed as $self->{'expression'}";
     
-    return $self;
+    return $self->{'expression'};
+}
+
+sub _parse_strings
+{
+    my $self = shift;
+    my $expression = shift;
+
+    while( $expression =~ s/(?<!\\)(".+?(?<!\\)")/$self->_get_string_replacement($1)/ge ){};
+    
+    return $expression;
 }
 
 sub _parse_brackets
 {
     my $self = shift;
     my $expression = shift;
-    
+
+    $expression =~ s/\s+/ /gsi;
     while( $expression =~ s/\(([^()]+)\)/$self->_get_brackets_replacement($1)/ge ){};
     
+    die 'Unpaired brackets in: '.$self->{'expression'}
+        if $expression =~ /[()]/;
+    
     return $expression;
+}
+
+sub _get_string_replacement
+{
+    my $self = shift;
+    my $string = shift;
+    
+    return $self->{'replacement'}->add_replacement(new DTL::Fast::Template::Variable($string));
 }
 
 sub _get_brackets_replacement
 {
     my $self = shift;
     my $expression = shift;
-    my $key = sprintf $self->{'block_ph'}, $self->{'block_counter'}++;
-    $self->{'blocks'}->{$key} = $self->_parse_expression($expression, 0);
-    return $key;
+
+    return $self->{'replacement'}->add_replacement(
+        DTL::Fast::Template::Expression->new($expression, $self->{'replacement'})
+    );
 }
 
-sub _get_block_or_variable
+sub _get_block_or_expression
 {
     my $self = shift;
     my $token = shift;
-    my $result = undef;
+
+#    warn "Reading replacement for $token";
     
-    if( exists $self->{'blocks'}->{$token} )    # sub-block
-    {
-        $result = $self->{'blocks'}->{$token};
-        delete $self->{'blocks'}->{$token};
-    }
-    else
-    {
-        $result = DTL::Fast::Template::Variable->new($token);
-    }
+    my $result = $self->{'replacement'}->get_replacement($token)
+        // DTL::Fast::Template::Expression->new($token, $self->{'replacement'});
+        
+#    warn "Got $result";
+        
     return $result;
 }
 
@@ -75,58 +95,110 @@ sub _parse_expression
 {
     my $self = shift;
     my $expression = shift;
-    my $level = shift;
-    my $operators = $DTL::Fast::Template::Expression::Operator::PRIORITY->[$level];
     
-    my $result = [];
-#    warn "Parsing $expression level $level";
-    my @expression = split /(?:^|\s+)($operators)(?:$|\s+)/, $expression;
-#    warn "Parsed to:\n\t".join("\n\t", @expression);
+    my $result = undef;
     
-    if( 
-        scalar @expression == 1 
-    )
+    foreach my $precedence (@{$DTL::Fast::Template::Expression::Operator::OPERATORS})
     {
-        if( $level < $#{$DTL::Fast::Template::Expression::Operator::PRIORITY} ) # seems nothing on this level
-        {
-            $result = $self->_parse_expression($expression[0], $level+1);
-        }
-        else
-        {
-            # suppose it's operand
-            $result = $self->_get_block_or_variable($expression[0]);
-        }
-    }
-    else
-    {
-        foreach my $token (@expression)
-        {
-            next if $token eq ''; 
-            
-            if( $token =~ /$operators/ ) # operation
-            {
-                push @$result, new DTL::Fast::Template::Expression::Operator($token);
-            }
-            elsif( $level < $#{$DTL::Fast::Template::Expression::Operator::PRIORITY} )  # operand or subexpression
-            {
-                push @$result, $self->_parse_expression($token, $level+1);
-            }
-            else # can be only operand
-            {
-                push @$result, $self->_get_block_or_variable($token);
-            }
-        }
-    }
-    return $result;
-}
+        my( $operators, $handler ) = @$precedence;
 
-sub render
-{
-    my $self = shift;
-    my $context = shift;
-    my $value = shift;
-    
-    return $value;
+        my @result = ();
+        my @source = split /(?:^|\s+)($operators)(?:$|\s+)/, $expression;
+
+        if( scalar @source > 1 ) 
+        {
+ #           warn "Parsed $expression as ".Dumper(\@source);
+            
+            # processing operands
+            while( defined ( my $token = shift @source) )
+            {
+                next if $token eq ''; 
+                
+                if( $token =~ /$operators/ ) # operation
+                {
+                    push @result, $token;
+                }
+                else 
+                {
+                    push @result, $self->_get_block_or_expression($token);
+                }
+            }
+            
+            # processing operators
+            while( my $token  = shift @result )
+            {
+#                warn "Processing token $token";
+                if( ref $token ) # operand
+                {
+                    if( defined $result )
+                    {
+                        die 'Two operands in a row: '.$self->{'expression'};
+                    }
+                    else
+                    {
+                        $result = $token;
+                    }
+                }
+                else    # operator
+                {
+                    if( 
+                        scalar @result      # there is a next token
+                        and ref $result[0]  # it's an operand
+                    )
+                    {
+                        my $operand = shift @result;
+                        
+                        if( $handler eq 'DTL::Fast::Template::Expression::Operator::Unary' )
+                        {
+                            if( defined $result )
+                            {
+                                die sprintf('Unary operator %s got left argument: %s'
+                                    , $token
+                                    , $self->{'expression'}
+                                );
+                            }
+                            else
+                            {
+                                $result = DTL::Fast::Template::Expression::Operator::Unary->new( $token, $operand);
+                            }
+                        }
+                        elsif($handler eq 'DTL::Fast::Template::Expression::Operator::Binary')
+                        {
+                            if( defined $result )
+                            {
+                                $result = DTL::Fast::Template::Expression::Operator::Binary->new( $token, $result, $operand);
+                            }
+                            else
+                            {
+                                die sprintf('Binary operator %s has no left argument: %s'
+                                    , $token
+                                    , $self->{'expression'}
+                                );
+                            }
+                        }
+                        else
+                        {
+                            die 'Unknown operator handler: '.$handler;
+                        }
+                    }
+                    else # got operator but there is no more operands
+                    {
+                        die sprintf('No right argument for %s (%s, %s, %s, %s): %s'
+                            , $token
+                            , scalar @result
+                            , ref $result[0] // 'undef'
+                            , $result
+                            , $result[0] // 'undef'
+                            , $self->{'expression'}
+                        );
+                    }
+                }
+            }
+            last if $result;    # parsed level
+        }
+            
+    }
+    return $result // DTL::Fast::Template::Variable->new($expression);
 }
 
 1;

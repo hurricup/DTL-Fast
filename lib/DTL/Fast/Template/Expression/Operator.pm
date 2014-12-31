@@ -1,35 +1,30 @@
 package DTL::Fast::Template::Expression::Operator;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
-our $PRIORITY = [
-    'or'
-    , 'and'
-    , '[=!<>]=?'
-    , '[+-]'
-    , '[*/]'
-    , 'not'
-];
+use DTL::Fast::Template::Expression::Operator::Unary;
+use DTL::Fast::Template::Expression::Operator::Binary;
 
-our $OPERANDS = {
-    'or' => {'left' => 1, 'right' => 1}
-    , 'and' => {'left' => 1, 'right' => 1}
-    , '[=!<>]=?' => {'left' => 1, 'right' => 1}
-    , '[+-]' => {'left' => 1, 'right' => 1}
-    , '[*/]' => {'left' => 1, 'right' => 1}
-    , 'not' => {'right' => 1}
-};
+our $OPERATORS = [
+    ['or', 'DTL::Fast::Template::Expression::Operator::Binary']
+    , ['and', 'DTL::Fast::Template::Expression::Operator::Binary']
+    , ['==|!=|<>|<=|>=|<|>', 'DTL::Fast::Template::Expression::Operator::Binary']
+    , ['[+-]', 'DTL::Fast::Template::Expression::Operator::Binary']
+    , ['[*/%]', 'DTL::Fast::Template::Expression::Operator::Binary']
+    , ['not', 'DTL::Fast::Template::Expression::Operator::Unary']
+    , ['[*]{2}', 'DTL::Fast::Template::Expression::Operator::Binary']
+]; # 
 
 sub new
 {
     my $proto = shift;
     my $operator = shift;
     
-    return bless{ 'operator' => $operator }, $proto;
+    return bless{ 'op' => $operator }, $proto;
 }
 
-sub op
+sub get_op
 {
-    return shift->{'operator'};
+    return shift->{'op'};
 }
 
 1;
