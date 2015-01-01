@@ -20,7 +20,7 @@ sub new
 {
     my $proto = shift;
     my $operator = lc(shift);
-    my $result = shift;
+    my $result = undef;
     
     if( $DTL::Fast::Template::Expression::Operator::KNOWN{$operator} )
     {

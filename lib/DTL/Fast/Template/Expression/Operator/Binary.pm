@@ -7,6 +7,14 @@ use DTL::Fast::Template::Expression::Operator::Binary::Plus;
 use DTL::Fast::Template::Expression::Operator::Binary::Eq;
 use DTL::Fast::Template::Expression::Operator::Binary::Ne;
 use DTL::Fast::Template::Expression::Operator::Binary::And;
+use DTL::Fast::Template::Expression::Operator::Binary::Ge;
+use DTL::Fast::Template::Expression::Operator::Binary::Le;
+use DTL::Fast::Template::Expression::Operator::Binary::Gt;
+use DTL::Fast::Template::Expression::Operator::Binary::Lt;
+use DTL::Fast::Template::Expression::Operator::Binary::Mul;
+use DTL::Fast::Template::Expression::Operator::Binary::Div;
+use DTL::Fast::Template::Expression::Operator::Binary::Pow;
+use DTL::Fast::Template::Expression::Operator::Binary::Mod;
 
 sub new
 {
@@ -22,7 +30,7 @@ sub new
 
 sub render_b
 {
-    return shift->{'a'}->render(shift);
+    return shift->{'b'}->render(shift);
 }
 
 sub render
