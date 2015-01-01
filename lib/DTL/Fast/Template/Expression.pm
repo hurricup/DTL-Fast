@@ -13,14 +13,17 @@ sub new
 {
     my $proto = shift;
     my $expression = shift;
-    my $replacement = shift // 
-        DTL::Fast::Template::Expression::Replacement->new($expression);
-
+    my %kwargs = @_;
+    
+    $kwargs{'replacement'} ||= DTL::Fast::Template::Expression::Replacement->new($expression);
+    $kwargs{'level'} //= 0;        
+        
 #    warn "*Processing $expression";
         
     my $self = bless {
         'expression' => $expression
-        , 'replacement' => $replacement
+        , 'replacement' => $kwargs{'replacement'}
+        , 'level' => $kwargs{'level'}
     }, $proto;
     
     $self->{'expression'} = $self->_parse_expression(
@@ -72,7 +75,11 @@ sub _get_brackets_replacement
     my $expression = shift;
 
     return $self->{'replacement'}->add_replacement(
-        DTL::Fast::Template::Expression->new($expression, $self->{'replacement'})
+        DTL::Fast::Template::Expression->new(
+            $expression
+            , 'replacement' => $self->{'replacement'}
+            , 'level' => 0 
+        )
     );
 }
 
@@ -80,11 +87,16 @@ sub _get_block_or_expression
 {
     my $self = shift;
     my $token = shift;
+    my $level = shift;
 
 #    warn "Reading replacement for $token";
     
     my $result = $self->{'replacement'}->get_replacement($token)
-        // DTL::Fast::Template::Expression->new($token, $self->{'replacement'});
+        // DTL::Fast::Template::Expression->new(
+            $token
+            , 'replacement' => $self->{'replacement'}
+            , 'level' => $level+1 
+        );
         
 #    warn "Got $result";
         
@@ -98,8 +110,9 @@ sub _parse_expression
     
     my $result = undef;
     
-    foreach my $precedence (@{$DTL::Fast::Template::Expression::Operator::OPERATORS})
+    for( my $level = $self->{'level'}; $level < scalar @{$DTL::Fast::Template::Expression::Operator::OPERATORS}; $level++ )
     {
+        my $precedence = $DTL::Fast::Template::Expression::Operator::OPERATORS->[$level];
         my( $operators, $handler ) = @$precedence;
 
         my @result = ();
@@ -120,7 +133,7 @@ sub _parse_expression
                 }
                 else 
                 {
-                    push @result, $self->_get_block_or_expression($token);
+                    push @result, $self->_get_block_or_expression($token, $level);
                 }
             }
             
