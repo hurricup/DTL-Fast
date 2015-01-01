@@ -8,14 +8,14 @@ sub new
     
     my $blocksep = '';
     my $block_num = 0;
-    while( $expression =~ /$blocksep/ )
+    while( not $blocksep or $expression =~ /$blocksep/ )
     {
-        $blocksep = sprintf '__BLOCK_%s_%%s__', $block_num++;
+        $blocksep = sprintf '__BLOCK_%s', $block_num++;
     }
 
     my $self = bless {
         'block_counter' => 0
-        , 'block_ph' => $blocksep
+        , 'block_ph' => $blocksep.'_%s__'
         , 'blocks' => {}
     }, $proto;
     

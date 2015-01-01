@@ -5,6 +5,8 @@ use DTL::Fast::Template::Variable;
 use DTL::Fast::Template::Expression::Operator;
 use DTL::Fast::Template::Expression::Replacement;
 
+use Data::Dumper;
+
 our %EXPRESSION_CACHE = ();
 our $EXPRESSION_CACHE_HITS = 0;
 
@@ -37,7 +39,7 @@ sub new
             , 'replacement' => $kwargs{'replacement'}
             , 'level' => $kwargs{'level'}
         }, $proto;
-        
+
         $self->{'expression'} = $self->_parse_expression(
             $self->_parse_brackets(
                 $self->_parse_strings($expression)
@@ -55,7 +57,9 @@ sub _parse_strings
     my $self = shift;
     my $expression = shift;
 
+#    warn "Parsing strings in $expression";
     while( $expression =~ s/(?<!\\)(".+?(?<!\\)")/$self->_get_string_replacement($1)/ge ){};
+#    warn "Done as $expression";
     
     return $expression;
 }
@@ -78,8 +82,12 @@ sub _get_string_replacement
 {
     my $self = shift;
     my $string = shift;
-    
-    return $self->{'replacement'}->add_replacement(new DTL::Fast::Template::Variable($string));
+ 
+#    warn "Making replacement for $string";
+    my $replacement = DTL::Fast::Template::Variable->new($string);
+#    warn "Done as ".Dumper($replacement);
+ 
+    return $self->{'replacement'}->add_replacement($replacement);
 }
 
 sub _get_brackets_replacement
@@ -224,7 +232,9 @@ sub _parse_expression
         }
             
     }
-    return $result // DTL::Fast::Template::Variable->new($expression);
+    return $result 
+        // $self->{'replacement'}->get_replacement($expression)
+        // DTL::Fast::Template::Variable->new($expression);
 }
 
 1;

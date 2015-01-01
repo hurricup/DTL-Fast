@@ -5,7 +5,6 @@ sub new
 {
     my $proto = shift;
     my $text = shift;
-    my $template = shift;
     
     return bless {'text' => $text}, $proto;
 }
