@@ -1,9 +1,6 @@
 package DTL::Fast::Template::Expression::Operator;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
-use DTL::Fast::Template::Expression::Operator::Unary;
-use DTL::Fast::Template::Expression::Operator::Binary;
-
 our $OPERATORS = [
     ['or', 'DTL::Fast::Template::Expression::Operator::Binary']
     , ['and', 'DTL::Fast::Template::Expression::Operator::Binary']
@@ -14,17 +11,28 @@ our $OPERATORS = [
     , ['[*]{2}', 'DTL::Fast::Template::Expression::Operator::Binary']
 ]; # 
 
+our %KNOWN;
+
+use DTL::Fast::Template::Expression::Operator::Unary;
+use DTL::Fast::Template::Expression::Operator::Binary;
+
 sub new
 {
     my $proto = shift;
-    my $operator = shift;
+    my $operator = lc(shift);
+    my $result = shift;
     
-    return bless{ 'op' => $operator }, $proto;
+    if( $DTL::Fast::Template::Expression::Operator::KNOWN{$operator} )
+    {
+        $result = $DTL::Fast::Template::Expression::Operator::KNOWN{$operator}->new(@_);
+    }
+    else
+    {
+        die "Unknown operator '$operator'";
+    }
+    
+    return $result;
 }
 
-sub get_op
-{
-    return shift->{'op'};
-}
 
 1;

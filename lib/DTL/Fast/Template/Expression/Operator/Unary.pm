@@ -1,26 +1,32 @@
 package DTL::Fast::Template::Expression::Operator::Unary;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::Expression::Operator';
+
+use DTL::Fast::Template::Expression::Operator::Unary::Not;
 
 sub new
 {
     my $proto = shift;
-    my $operator = shift;
-    my $argument1 = shift;
 
-    my $self = $proto->SUPER::new($operator);
-    
-    $self->{'a'} = $argument1;
-    
-    return $self;
+    return bless { 'a' => shift }, $proto;
+}
+
+sub render_a
+{
+    return shift->{'a'}->render(shift);
 }
 
 sub render
 {
     my $self = shift;
     my $context = shift;
-    
-    die 'Rendering not yet implemented';
+
+    return $self->dispatch( $self->render_a($context) );
 }
 
+sub dispatch
+{
+    my $self = shift;
+    my $arg1 = shift;
+    die 'ABSTRACT: This method should be overriden in subclasses';
+}
 1;

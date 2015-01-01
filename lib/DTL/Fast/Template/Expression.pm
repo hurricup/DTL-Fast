@@ -183,14 +183,14 @@ sub _parse_expression
                             }
                             else
                             {
-                                $result = DTL::Fast::Template::Expression::Operator::Unary->new( $token, $operand);
+                                $result = DTL::Fast::Template::Expression::Operator->new( $token, $operand);
                             }
                         }
                         elsif($handler eq 'DTL::Fast::Template::Expression::Operator::Binary')
                         {
                             if( defined $result )
                             {
-                                $result = DTL::Fast::Template::Expression::Operator::Binary->new( $token, $result, $operand);
+                                $result = DTL::Fast::Template::Expression::Operator->new( $token, $result, $operand);
                             }
                             else
                             {
