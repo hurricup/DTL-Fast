@@ -5,36 +5,47 @@ use DTL::Fast::Template::Variable;
 use DTL::Fast::Template::Expression::Operator;
 use DTL::Fast::Template::Expression::Replacement;
 
-use Data::Dumper;
+our %EXPRESSION_CACHE = ();
+our $EXPRESSION_CACHE_HITS = 0;
 
 # @todo cache mechanism via get_expression
-# @todo expression validation on pre-compilation or execution time
 sub new
 {
     my $proto = shift;
     my $expression = shift;
     my %kwargs = @_;
+    my $result = undef;
     
-    $kwargs{'replacement'} ||= DTL::Fast::Template::Expression::Replacement->new($expression);
-    $kwargs{'level'} //= 0;        
+    if( 
+        not $kwargs{'replacement'}
+        and not $kwargs{'level'}
+        and $EXPRESSION_CACHE{$expression}
+    )
+    {
+        $result = $EXPRESSION_CACHE{$expression};
+        $EXPRESSION_CACHE_HITS++;
+    }
+    else
+    {
+        $kwargs{'replacement'} ||= DTL::Fast::Template::Expression::Replacement->new($expression);
+        $kwargs{'level'} //= 0;        
+            
+        my $self = bless {
+            'expression' => $expression
+            , 'replacement' => $kwargs{'replacement'}
+            , 'level' => $kwargs{'level'}
+        }, $proto;
         
-#    warn "*Processing $expression";
-        
-    my $self = bless {
-        'expression' => $expression
-        , 'replacement' => $kwargs{'replacement'}
-        , 'level' => $kwargs{'level'}
-    }, $proto;
-    
-    $self->{'expression'} = $self->_parse_expression(
-        $self->_parse_brackets(
-            $self->_parse_strings($expression)
-        )
-    );
+        $self->{'expression'} = $self->_parse_expression(
+            $self->_parse_brackets(
+                $self->_parse_strings($expression)
+            )
+        );
 
-#    warn "*Processed as $self->{'expression'}";
-    
-    return $self->{'expression'};
+        $EXPRESSION_CACHE{$expression} = $result = $self->{'expression'};
+    }
+   
+    return $result;
 }
 
 sub _parse_strings
