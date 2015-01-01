@@ -3,6 +3,7 @@ use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Template::Expression::Operator::Binary';
 
 $DTL::Fast::Template::Expression::Operator::KNOWN{'mod'} = __PACKAGE__;
+$DTL::Fast::Template::Expression::Operator::KNOWN{'%'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
 

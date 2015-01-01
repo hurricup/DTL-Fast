@@ -50,9 +50,9 @@ sub dispatch
             }
         }        
     }
-    elsif( $arg1_type and $arg1->can('equal'))
+    elsif( $arg1_type and $arg1->can('compare'))
     {
-        $result = $arg1->equal($arg2);
+        $result = ($arg1->compare($arg2) ==  0);
     }
     else
     {

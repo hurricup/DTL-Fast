@@ -4,6 +4,7 @@ use parent 'DTL::Fast::Template::Expression::Operator::Unary';
 
 use DTL::Fast::Template::Expression::Operator::Binary::Or;
 use DTL::Fast::Template::Expression::Operator::Binary::Plus;
+use DTL::Fast::Template::Expression::Operator::Binary::Minus;
 use DTL::Fast::Template::Expression::Operator::Binary::Eq;
 use DTL::Fast::Template::Expression::Operator::Binary::Ne;
 use DTL::Fast::Template::Expression::Operator::Binary::And;
