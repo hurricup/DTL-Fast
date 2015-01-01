@@ -8,7 +8,8 @@ sub new
     my $proto = shift;
     my $variable = shift;
     my $template = shift;
-    
+
+    $variable =~ s/(^\s+|\s+$)//gsi;
     my @filters = split /\|+/, $variable;
     
     my $variable_name = shift @filters;

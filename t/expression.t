@@ -55,7 +55,7 @@ my $LOGICAL_SET = [ # logical operations
     {'val1' => 'bingo', 'val2' => 1 },
 ];
 
-my $MATH_NUM_SET = [    # math operations
+my $NUMERIC_SET = [    # math operations
     {'val1' => 3.14, 'val2' => 15.92},
     {'val1' => -3.14, 'val2' => 15.92},
     {'val1' => 3.14, 'val2' => -15.92},
@@ -67,7 +67,7 @@ my $MATH_NUM_SET = [    # math operations
     {'val1' => 0, 'val2' => 0},
 ];
 
-my $MATH_NUM_SET_DIV = [    # math operations without division by zero
+my $NUMERIC_SET_DIV = [    # math operations without division by zero
     {'val1' => 3.14, 'val2' => 15.92},
     {'val1' => -3.14, 'val2' => 15.92},
     {'val1' => 3.14, 'val2' => -15.92},
@@ -86,7 +86,7 @@ my $samples = [
 ################################################################################
     {
         'template' => 'val1 ** val2'
-        , 'context' => $MATH_NUM_SET
+        , 'context' => $NUMERIC_SET
         , 'control' => sub{
             my $c = shift;
             return( $c->{'val1'} ** $c->{'val2'});
@@ -104,7 +104,7 @@ my $samples = [
 ################################################################################
     {
         'template' => 'val1 / val2'
-        , 'context' => $MATH_NUM_SET_DIV
+        , 'context' => $NUMERIC_SET_DIV
         , 'control' => sub{
             my $c = shift;
             return( $c->{'val1'} / $c->{'val2'});
@@ -113,7 +113,7 @@ my $samples = [
 ################################################################################
     {
         'template' => 'val1 * val2'
-        , 'context' => $MATH_NUM_SET
+        , 'context' => $NUMERIC_SET
         , 'control' => sub{
             my $c = shift;
             return( $c->{'val1'} * $c->{'val2'});
@@ -134,7 +134,7 @@ my $samples = [
 ################################################################################
     {
         'template' => 'val1 % val2'
-        , 'context' => $MATH_NUM_SET_DIV
+        , 'context' => $NUMERIC_SET_DIV
         , 'control' => sub{
             my $c = shift;
             return( $c->{'val1'} % $c->{'val2'});
@@ -143,7 +143,7 @@ my $samples = [
 ################################################################################
     {
         'template' => 'val1 + val2'
-        , 'context' => $MATH_NUM_SET
+        , 'context' => $NUMERIC_SET
         , 'control' => sub{
             my $c = shift;
             return( $c->{'val1'} + $c->{'val2'});
@@ -161,7 +161,7 @@ my $samples = [
 ################################################################################
     {
         'template' => 'val1 - val2'
-        , 'context' => $MATH_NUM_SET
+        , 'context' => $NUMERIC_SET
         , 'control' => sub{
             my $c = shift;
             return( $c->{'val1'} - $c->{'val2'});
@@ -300,6 +300,36 @@ my $samples = [
         , 'control' => sub{
             my $c = shift;
             return( $c->{'val1'} && $c->{'val2'});
+        }
+    },
+################################################################################
+    {
+        'template' => 'val1 + val2 * val1 - val1 % val2 + val1 / val2'
+        , 'context' => $NUMERIC_SET_DIV
+        , 'control' => sub{
+            my $c = shift;
+            my( $val1, $val2 ) = @$c{'val1', 'val2'};
+            return( $val1 + $val2 * $val1 - $val1 % $val2 + $val1 / $val2);
+        }
+    },
+################################################################################
+    {
+        'template' => '(val1 + val2) * val1 - val1 % (val2 + val1) / val2'
+        , 'context' => $NUMERIC_SET_DIV
+        , 'control' => sub{
+            my $c = shift;
+            my( $val1, $val2 ) = @$c{'val1', 'val2'};
+            return( ($val1 + $val2) * $val1 - $val1 % ($val2 + $val1) / $val2);
+        }
+    },
+################################################################################
+    {
+        'template' => '((val1 + val2) * (val1 - val2 )) % (val2 + val1) / val2'
+        , 'context' => $NUMERIC_SET_DIV
+        , 'control' => sub{
+            my $c = shift;
+            my( $val1, $val2 ) = @$c{'val1', 'val2'};
+            return( (($val1 + $val2) * ($val1 - $val2)) % ($val2 + $val1) / $val2);
         }
     },
 ];

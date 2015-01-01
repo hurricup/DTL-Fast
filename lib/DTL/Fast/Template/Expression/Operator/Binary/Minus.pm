@@ -61,7 +61,12 @@ sub dispatch
     }
     else
     {
-        die "Don't know how to substitute $arg2 ($arg2_type) from $arg1 ($arg1_type)";
+        die sprintf("Don't know how to substitute %s (%s) from %s (%s)"
+            , $arg2 // 'undef'
+            , $arg2_type // 'undef'
+            , $arg1 // 'undef'
+            , $arg1_type // 'undef'
+        );
     }
 }
 

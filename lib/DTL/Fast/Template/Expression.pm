@@ -15,6 +15,8 @@ sub new
     my $expression = shift;
     my %kwargs = @_;
     my $result = undef;
+
+    $expression =~ s/(^\s+|\s+$)//gsi;
     
     if( 
         not $kwargs{'replacement'}
@@ -64,7 +66,7 @@ sub _parse_brackets
     my $expression = shift;
 
     $expression =~ s/\s+/ /gsi;
-    while( $expression =~ s/\(([^()]+)\)/$self->_get_brackets_replacement($1)/ge ){};
+    while( $expression =~ s/\(\s*([^()]+)\s*\)/$self->_get_brackets_replacement($1)/ge ){};
     
     die 'Unpaired brackets in: '.$self->{'expression'}
         if $expression =~ /[()]/;

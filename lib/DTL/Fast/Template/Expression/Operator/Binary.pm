@@ -38,7 +38,7 @@ sub render
 {
     my $self = shift;
     my $context = shift;
-
+    
     return $self->dispatch(     # this is bad in or, cause second argument should be calculated only if first is false. But in our situation it doesn't matter
         $self->render_a($context)
         , $self->render_b($context) 
