@@ -10,7 +10,7 @@ use DTL::Fast::Utils qw(has_method);
 
 sub dispatch
 {
-    my( $self, $arg1, $arg2) = @_;
+    my( $self, $arg1, $arg2, $context) = @_;
     my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
     
     if( looks_like_number($arg1) and looks_like_number($arg2))
@@ -29,7 +29,7 @@ sub dispatch
         }
         elsif( has_method($arg2, 'as_array'))
         {
-            return [@$arg1, @{$arg2->as_array}];
+            return [@$arg1, @{$arg2->as_array($context)}];
         }
         else
         {
@@ -48,7 +48,7 @@ sub dispatch
         }
         elsif( has_method($arg2, 'as_hash'))
         {
-            return {%$arg1, %{$arg2->as_hash}};
+            return {%$arg1, %{$arg2->as_hash($context)}};
         }
         else
         {
@@ -57,7 +57,7 @@ sub dispatch
     }
     elsif( has_method($arg1, 'plus'))
     {
-        return $arg1->plus($arg2);
+        return $arg1->plus($arg2, $context);
     }
     else
     {

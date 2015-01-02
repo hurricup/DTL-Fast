@@ -22,9 +22,8 @@ sub new
     # parent class just blesses passed hash with proto. Nothing more. Use it
     # for future compatibility
     return $proto->SUPER::new(
-    {
         'sep' => DTL::Fast::Template::Variable->new($arguments->[0])
-    });    
+    );    
 }
 
 # filtering function

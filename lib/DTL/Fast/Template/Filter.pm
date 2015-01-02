@@ -7,8 +7,8 @@ use DTL::Fast::Template;
 sub new
 {
     my $proto = shift;
-    my $data = shift // {};
-    return bless $data, $proto;
+    my %kwargs = @_;
+    return bless {%kwargs}, $proto;
 }
 
 sub filter

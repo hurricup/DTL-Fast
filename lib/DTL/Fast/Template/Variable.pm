@@ -42,28 +42,37 @@ sub new
         @variable = split /\.+/, $variable_name;
     }
     
-    foreach my $filter (@filters)
-    {
-        my @arguments = split ':', $filter;
-        my $filter_name = shift @arguments;
-
-        if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
-        {
-            $filter = $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
-        }
-        else
-        {
-            warn "Unknown filter: $filter_name.";
-            $filter = undef;
-        }
-    }
-    
-    return bless {
+    my $self = bless {
         'variable' => [@variable]
-        , 'filters' => [@filters]
+        , 'filters' => []
         , 'sign' => $sign
         , 'static' => $static
     }, $proto;
+    
+    foreach my $filter (@filters)
+    {
+        $self->add_filter($filter);
+    }
+
+    return $self;
+}
+
+sub add_filter
+{
+    my $self = shift;
+    my $filter = shift;
+    
+    my @arguments = split ':', $filter;
+    my $filter_name = shift @arguments;
+
+    if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
+    {
+        push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
+    }
+    else
+    {
+        warn "Unknown filter: $filter_name.";
+    }
 }
 
 sub render

@@ -21,7 +21,7 @@ sub render
     my $self = shift;
     my $context = shift;
 
-    return $self->dispatch( $self->render_a($context) );
+    return $self->dispatch( $self->render_a($context), $context );
 }
 
 sub dispatch
