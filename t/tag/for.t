@@ -28,6 +28,8 @@ $context = new DTL::Fast::Context({
         'key3' => 'val3',
         'key4' => 'val4',
     }
+    , 'empty_array' => []
+    , 'empty_hash' => {}
 });
 
 $template = <<'_EOT_';
@@ -107,6 +109,34 @@ Still value20-value21-value22
 _EOT_
 
 is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Nested iterations');
+
+$template = <<'_EOT_';
+{% for a,b ,c in empty_array %}This is a {{ a }}-{{ b }}-{{ c }}
+{% empty %}Nothing in this array
+{% endfor %}
+_EOT_
+
+$test_string = <<'_EOT_';
+Nothing in this array
+
+_EOT_
+
+is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Nothing block on empty array');
+
+
+$template = <<'_EOT_';
+{% for a,b in empty_hash %}This is a {{ a }}-{{ b }}-{{ c }}
+{% empty %}Nothing in this hash
+{% endfor %}
+_EOT_
+
+$test_string = <<'_EOT_';
+Nothing in this hash
+
+_EOT_
+
+is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Nothing block on empty hash');
+
 
 $template = <<'_EOT_';
 {% for a, b in hash %}This is a {{ a }}-{{ b }}
