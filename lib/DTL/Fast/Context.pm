@@ -50,11 +50,6 @@ sub get
         
     $variable = $self->traverse($variable, $variable_path)
         if( defined $variable );
-
-    # @todo make it clear how to behave on undef value and not existed key
-    cluck sprintf('Variable %s does not exists in current context'
-        , join('.', $variable_name, @$variable_path)
-    ) if not defined $variable;
         
     return $variable;
 }

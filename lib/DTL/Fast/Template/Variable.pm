@@ -1,6 +1,6 @@
 package DTL::Fast::Template::Variable;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp qw(confess);
+use Carp qw(confess cluck);
 
 use Scalar::Util qw(looks_like_number);
 
@@ -44,6 +44,7 @@ sub new
     
     my $self = bless {
         'variable' => [@variable]
+        , 'original' => $variable
         , 'filters' => []
         , 'sign' => $sign
         , 'static' => $static
@@ -83,11 +84,22 @@ sub render
     my $value = $self->{'static'} ? 
         $self->{'variable'}->[0]
         : $context->get($self->{'variable'});
-    
-    foreach my $filter (@{$self->{'filters'}})
+
+    if( defined $value )
     {
-        $value = $filter->filter($value, $context)
-            if defined $filter;
+        foreach my $filter (@{$self->{'filters'}})
+        {
+            $value = $filter->filter($value, $context)
+                if defined $filter;
+        }
+    }
+    else
+    {
+        # @todo make it clear how to behave on undef value and not existed key
+        cluck sprintf('Variable %s does not exists in current context'
+            , $self->{'original'}
+        ) if not defined $value;
+        $value = '';
     }
     
     return $value;
