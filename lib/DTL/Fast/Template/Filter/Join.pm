@@ -1,6 +1,7 @@
 package DTL::Fast::Template::Filter::Join;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
+use Carp qw(confess);
 
 $DTL::Fast::Template::FILTER_HANDLERS{'join'} = __PACKAGE__;
 
@@ -12,7 +13,7 @@ sub new
     my $proto = shift;
     my $arguments = shift;  # this is a single argument. Arrayref with filter arguments splitted by /:/
     
-    die "No separator passed to the filter ".__PACKAGE__
+    confess "No separator passed to the filter ".__PACKAGE__
         if(
             ref $arguments ne 'ARRAY'
             or not scalar @$arguments
@@ -47,7 +48,7 @@ sub filter
     }
     else
     {
-        die sprintf( "Unable to apply filter %s to the %s value"
+        confess sprintf( "Unable to apply filter %s to the %s value"
             , __PACKAGE__
             , $value_type || 'SCALAR'            
         );

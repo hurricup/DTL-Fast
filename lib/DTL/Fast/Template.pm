@@ -22,7 +22,7 @@ sub new
         _get_raw_chunks($template)
         , $dirs
     );
-    
+  
     return $self;
 }
 
@@ -30,9 +30,11 @@ sub new
 sub _get_raw_chunks
 {
     my $template = shift;
-    
+
     my $reg = qr/(\{[\{\%] .+? [\}\%]\})/;
-    return [split /$reg/s, $template];    
+    my $result = [split /$reg/s, $template];
+    
+    return $result;    
 }
 
 

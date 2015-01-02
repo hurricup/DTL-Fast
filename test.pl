@@ -10,4 +10,5 @@ runtests(
     't/filter/join.t',
     't/filter/add.t',
     't/tag/include.t',
+    't/tag/if.t',
 );

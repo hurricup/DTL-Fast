@@ -1,6 +1,6 @@
 package DTL::Fast::Template::Tag::Include;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::Tag';  # block-based tags should be inherited from Iterator, not Tag
+use parent 'DTL::Fast::Template::SimpleTag';  
 
 $DTL::Fast::Template::TAG_HANDLERS{'include'} = __PACKAGE__;
 
@@ -23,10 +23,9 @@ sub new
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
     return $proto->SUPER::new(
-    {
         'template' => DTL::Fast::Template::Expression->new($parameter)
         , 'dirs' => $kwargs{'dirs'}
-    });    
+    );    
 }
 
 # Processing function

@@ -1,6 +1,7 @@
 package DTL::Fast::Template::Filter::Add;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
+use Carp qw(confess);
 
 $DTL::Fast::Template::FILTER_HANDLERS{'add'} = __PACKAGE__;
 
@@ -13,7 +14,7 @@ sub new
     my $proto = shift;
     my $arguments = shift;  # this is a single argument. Arrayref with filter arguments splitted by /:/
     
-    die "No single arguments passed to the add ".__PACKAGE__
+    confess "No single arguments passed to the add ".__PACKAGE__
         if(
             ref $arguments ne 'ARRAY'
             or not scalar @$arguments
@@ -51,7 +52,7 @@ sub filter
     }
     elsif( $value_type ) # @todo here we can implement ->add interface
     {
-        die "Don't know how to add anything to $value_type";
+        confess "Don't know how to add anything to $value_type";
     }
     
     foreach my $argument (@{$self->{'arguments'}})
@@ -73,7 +74,7 @@ sub filter
             }
             else
             {
-                die "It's not possible to add a single value to a hash";
+                confess "It's not possible to add a single value to a hash";
             }
         }
         elsif( $result_type eq 'ARRAY' )

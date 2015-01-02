@@ -1,5 +1,6 @@
 package DTL::Fast::Template::Filter;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use Carp qw(confess);
 
 use DTL::Fast::Template;
 
@@ -12,7 +13,7 @@ sub new
 
 sub filter
 {
-    die "This is abstract method and it must be overrided";
+    confess "This is abstract method and it must be overrided";
 }
 
 1;

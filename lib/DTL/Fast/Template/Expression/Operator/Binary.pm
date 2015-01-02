@@ -1,6 +1,7 @@
 package DTL::Fast::Template::Expression::Operator::Binary;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Expression::Operator::Unary';
+use Carp qw(confess);
 
 use DTL::Fast::Template::Expression::Operator::Binary::Or;
 use DTL::Fast::Template::Expression::Operator::Binary::Plus;
@@ -50,7 +51,7 @@ sub dispatch
     my $self = shift;
     my $arg1 = shift;
     my $arg2 = shift;
-    die 'ABSTRACT: This method should be overriden in subclasses';
+    confess 'ABSTRACT: This method should be overriden in subclasses';
 }
 
 1;

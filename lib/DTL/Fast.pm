@@ -1,6 +1,7 @@
 package DTL::Fast;
 use strict; use warnings FATAL => 'all'; 
 use parent 'Exporter';
+use Carp qw(confess);
 
 use 5.018002;
 our $VERSION = '0.01';
@@ -35,10 +36,10 @@ sub get_template
     my $template_name = shift;
     my $dirs = shift // [getcwd()];
     
-    die "Template name was not specified" 
+    confess "Template name was not specified" 
         if not $template_name;
     
-    die "Second parameter must be a dirs array reference" 
+    confess "Second parameter must be a dirs array reference" 
         if(
             not ref $dirs
             or ref $dirs ne 'ARRAY'
@@ -128,7 +129,7 @@ sub _read_template
                 }
                 else
                 {
-                    die sprintf(
+                    confess sprintf(
                         'Error opening file %s, %s'
                         , $template_path
                         , $!
@@ -142,7 +143,7 @@ sub _read_template
         $TEMPLATES_CACHE{$cache_key} = $template;
     }
 
-    die sprintf( <<'_EOT_', $template_name, join("\n", @$dirs)) if not defined $template;
+    confess sprintf( <<'_EOT_', $template_name, join("\n", @$dirs)) if not defined $template;
 Unable to find template %s in directories: 
 %s
 _EOT_
@@ -157,7 +158,7 @@ sub select_template
     my $template_names = shift;
     my $dirs = shift // [getcwd()];
     
-    die "First parameter must be a template names array reference" 
+    confess "First parameter must be a template names array reference" 
         if(
             not ref $template_names
             or ref $template_names ne 'ARRAY'

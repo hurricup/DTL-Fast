@@ -1,12 +1,13 @@
 package DTL::Fast::Context;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use Carp qw(confess);
 
 sub new
 {
     my $proto = shift;
     my $context = shift // {};
     
-    die "Context should be a HASH reference"
+    confess "Context should be a HASH reference"
         if ref $context ne 'HASH';
         
     return bless {
@@ -84,7 +85,7 @@ sub traverse
         }
         else
         {
-            die sprintf("Don't know how to traverse %s (%s) with %s"
+            confess sprintf("Don't know how to traverse %s (%s) with %s"
                 , $variable
                 , $current_type
                 , $step 
@@ -114,7 +115,7 @@ sub set
             my $variable_name = pop @key;
             my $variable = $self->get([@key]);
             
-            die sprintf('Unable to set variable %s because parent %s is not defined.'
+            confess sprintf('Unable to set variable %s because parent %s is not defined.'
                 , $key
                 , join('.', @key)
             ) if not defined $variable;
@@ -133,7 +134,7 @@ sub set
             }
             else
             {
-                die sprintf("Don't know how to set variable %s for parent node of type %s"
+                confess sprintf("Don't know how to set variable %s for parent node of type %s"
                     , $variable_name
                     , $variable_type
                 );
@@ -157,7 +158,7 @@ sub push
 sub pop
 {
     my $self = shift;
-    die "It's a last context layer available."
+    confess "It's a last context layer available."
         if scalar @{$self->{'ns'}} ==  1;
     pop @{$self->{'ns'}};
     return $self;

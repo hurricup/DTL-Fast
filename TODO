@@ -1,6 +1,8 @@
 - Documentation
+- More tests
 - Recursion protection on inheritance
 - Recursion protection on inclusion
+- Error exceptions
+- Performance testing in comparision of other perl implementations and Django itself
 - Implement Django filter plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference
 - Implement Django tag plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference
- 

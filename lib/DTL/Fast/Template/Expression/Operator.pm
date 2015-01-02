@@ -1,5 +1,6 @@
 package DTL::Fast::Template::Expression::Operator;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use Carp qw(confess);
 
 our $OPERATORS = [
     ['or', 'DTL::Fast::Template::Expression::Operator::Binary']
@@ -28,7 +29,7 @@ sub new
     }
     else
     {
-        die "Unknown operator '$operator'";
+        confess "Unknown operator '$operator'";
     }
     
     return $result;

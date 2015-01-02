@@ -1,6 +1,7 @@
 package DTL::Fast::Template::Expression::Operator::Binary::Pow;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Expression::Operator::Binary';
+use Carp qw(confess);
 
 $DTL::Fast::Template::Expression::Operator::KNOWN{'**'} = __PACKAGE__;
 
@@ -22,7 +23,7 @@ sub dispatch
     }
     else
     {
-        die "Don't know how to involute $arg1 ($arg1_type) to power of $arg2 ($arg2_type)";
+        confess "Don't know how to involute $arg1 ($arg1_type) to power of $arg2 ($arg2_type)";
     }
     
     return $result;

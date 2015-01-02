@@ -1,5 +1,7 @@
 package DTL::Fast::Template::Iterator;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use parent 'DTL::Fast::Template::Renderer';
+use Carp qw(confess);
 
 use DTL::Fast::Template::Expression;
 
@@ -8,14 +10,18 @@ sub new
     my $proto = shift;
     my $raw_chunks = shift;
     my $dirs = shift // [];
-    
-    my $self = bless
-    {
-        'dirs' => $dirs
-        , 'chunks' => []
-    }, $proto;
+    my %kwargs = @_;
 
-    $self->parse_chunks($raw_chunks);
+    $kwargs{'dirs'} = $dirs;
+    $kwargs{'raw_chunks'} = $raw_chunks;
+    
+    confess "Source chunks not passed to the constructor"
+        if not $kwargs{'raw_chunks'}
+            or ref $kwargs{'raw_chunks'} ne 'ARRAY';
+    
+    my $self = $proto->SUPER::new(%kwargs);
+
+    $self->parse_chunks();
     
     return $self;
 }
@@ -23,27 +29,17 @@ sub new
 sub parse_chunks
 {
     my $self = shift;
-    my $raw_chunks = shift;
     
-    while( scalar @$raw_chunks )
+    while( scalar @{$self->{'raw_chunks'}} )
     {
-         $self->add_chunk( $self->parse_next_chunk($raw_chunks));
+         $self->add_chunk( $self->parse_next_chunk());
     }
-}
-
-sub add_chunk
-{
-    my $self = shift;
-    my $chunk = shift;
-    
-    push @{$self->{'chunks'}}, $chunk if defined $chunk;
 }
 
 sub parse_next_chunk
 {
     my $self = shift;
-    my $raw_chunks = shift;
-    my $chunk = shift @$raw_chunks;
+    my $chunk = shift @{$self->{'raw_chunks'}};
     
 #    warn "Processing chunk $chunk";
     if( $chunk =~ /^\{\{ (.+?) \}\}$/ )
@@ -55,7 +51,7 @@ sub parse_next_chunk
         $chunk =~ /^\{\% ([^\s]+?)(?: (.*?))? \%\}$/ 
     )
     {
-        $chunk = $self->parse_tag_chunk($1, $2, $raw_chunks);
+        $chunk = $self->parse_tag_chunk($1, $2);
     }
     else
     {
@@ -70,14 +66,13 @@ sub parse_tag_chunk
     my $self = shift;
     my $tag_name = shift;
     my $tag_param = shift;
-    my $raw_chunks = shift; 
     
     my $result = undef;
 
     if( exists $DTL::Fast::Template::TAG_HANDLERS{$tag_name} )
     {        
         $result = $DTL::Fast::Template::TAG_HANDLERS{$tag_name}->new($tag_param
-            , 'raw_chunks' => $raw_chunks
+            , 'raw_chunks' => $self->{'raw_chunks'}
             , 'dirs' => $self->{'dirs'}
         );
     }
@@ -88,22 +83,6 @@ sub parse_tag_chunk
     }
     
     return $result;
-}
-
-sub render
-{
-    my $self = shift;
-    my $context = shift;
-    
-    die "Context must be a DTL::Fast::Context object"
-        if(
-            defined $context
-            and ref $context ne 'DTL::Fast::Context'
-        );
-        
-    return join '', map{ 
-        $_->render($context)
-    } @{$self->{'chunks'}};
 }
 
 

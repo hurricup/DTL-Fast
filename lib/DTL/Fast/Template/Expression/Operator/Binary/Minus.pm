@@ -1,6 +1,7 @@
 package DTL::Fast::Template::Expression::Operator::Binary::Minus;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Expression::Operator::Binary';
+use Carp qw(confess);
 
 $DTL::Fast::Template::Expression::Operator::KNOWN{'-'} = __PACKAGE__;
 
@@ -17,7 +18,7 @@ sub dispatch
     }
     elsif( $arg1_type eq 'ARRAY' ) # @todo array substitution
     {
-        die 'Arrays substitution not yet implemented';
+        confess 'Arrays substitution not yet implemented';
         # if( $arg2_type eq 'ARRAY' )
         # {
             # return [@$arg1, @$arg2];
@@ -37,7 +38,7 @@ sub dispatch
     }
     elsif( $arg1_type eq 'HASH' )   # @todo hash substitution
     {
-        die 'Hashes substitution not yet implemented';
+        confess 'Hashes substitution not yet implemented';
         # if( $arg2_type eq 'ARRAY' )
         # {
             # return {%$arg1, @$arg2};
@@ -52,7 +53,7 @@ sub dispatch
         # }
         # else
         # {
-            # die "Don't know how to add $arg2 ($arg2_type) to a HASH";
+            # confess "Don't know how to add $arg2 ($arg2_type) to a HASH";
         # }
     }
     elsif( $arg1_type and $arg1->can('minus'))
@@ -61,7 +62,7 @@ sub dispatch
     }
     else
     {
-        die sprintf("Don't know how to substitute %s (%s) from %s (%s)"
+        confess sprintf("Don't know how to substitute %s (%s) from %s (%s)"
             , $arg2 // 'undef'
             , $arg2_type // 'undef'
             , $arg1 // 'undef'

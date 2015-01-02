@@ -1,5 +1,6 @@
 package DTL::Fast::Template::Expression;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use Carp qw(confess);
 
 use DTL::Fast::Template::Variable;
 use DTL::Fast::Template::Expression::Operator;
@@ -72,7 +73,7 @@ sub _parse_brackets
     $expression =~ s/\s+/ /gsi;
     while( $expression =~ s/\(\s*([^()]+)\s*\)/$self->_get_brackets_replacement($1)/ge ){};
     
-    die 'Unpaired brackets in: '.$self->{'expression'}
+    confess 'Unpaired brackets in: '.$self->{'expression'}
         if $expression =~ /[()]/;
     
     return $expression;
@@ -166,7 +167,7 @@ sub _parse_expression
                 {
                     if( defined $result )
                     {
-                        die 'Two operands in a row: '.$self->{'expression'};
+                        confess 'Two operands in a row: '.$self->{'expression'};
                     }
                     else
                     {
@@ -186,7 +187,7 @@ sub _parse_expression
                         {
                             if( defined $result )
                             {
-                                die sprintf('Unary operator %s got left argument: %s'
+                                confess sprintf('Unary operator %s got left argument: %s'
                                     , $token
                                     , $self->{'expression'}
                                 );
@@ -204,7 +205,7 @@ sub _parse_expression
                             }
                             else
                             {
-                                die sprintf('Binary operator %s has no left argument: %s'
+                                confess sprintf('Binary operator %s has no left argument: %s'
                                     , $token
                                     , $self->{'expression'}
                                 );
@@ -212,12 +213,12 @@ sub _parse_expression
                         }
                         else
                         {
-                            die 'Unknown operator handler: '.$handler;
+                            confess 'Unknown operator handler: '.$handler;
                         }
                     }
                     else # got operator but there is no more operands
                     {
-                        die sprintf('No right argument for %s (%s, %s, %s, %s): %s'
+                        confess sprintf('No right argument for %s (%s, %s, %s, %s): %s'
                             , $token
                             , scalar @result
                             , ref $result[0] // 'undef'
