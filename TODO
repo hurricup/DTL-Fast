@@ -1,8 +1,11 @@
 - Documentation
 - More tests
+- Error exceptions
 - Recursion protection on inheritance
 - Recursion protection on inclusion
-- Error exceptions
+- Recursion protection on deep comparision
+- Decide, what to do on not existed context variable
+- Deep comparision option to enable/disable multi-level comparision in Operators
 - Performance testing in comparision of other perl implementations and Django itself
 - Implement Django filter plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference
 - Implement Django tag plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference

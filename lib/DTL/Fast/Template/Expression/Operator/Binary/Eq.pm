@@ -5,6 +5,7 @@ use parent 'DTL::Fast::Template::Expression::Operator::Binary';
 $DTL::Fast::Template::Expression::Operator::KNOWN{'=='} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
+use DTL::Fast::Utils qw(has_method);
 
 # @todo Recurursion protection on deep comparision or one-level comparision
 sub dispatch
@@ -24,7 +25,7 @@ sub dispatch
             $result = 1;
             for( my $i = 0; $i < scalar @$arg1; $i++ )
             {
-                if( not $self->dispatch($arg1->[$i], $arg2->[$i] ))
+                if( not dispatch($self, $arg1->[$i], $arg2->[$i] ))
                 {
                     $result = 0;
                     last;
@@ -37,12 +38,12 @@ sub dispatch
         my @keys1 = sort keys %$arg1;
         my @keys2 = sort keys %$arg2;
         
-        if( $self->dispatch( \@keys1, \@keys2 ) )
+        if( dispatch( $self, \@keys1, \@keys2 ) )
         {
             my $result = 1;
             foreach my $key (@keys1)
             {
-                if( not $self->dispatch($arg1->{$key}, $arg2->{$key} ))
+                if( not dispatch($self, $arg1->{$key}, $arg2->{$key} ))
                 {
                     $result = 0;
                     last;
@@ -50,9 +51,13 @@ sub dispatch
             }
         }        
     }
-    elsif( $arg1_type and $arg1->can('compare'))
+    elsif( has_method($arg1, 'compare'))
     {
         $result = ($arg1->compare($arg2) ==  0);
+    }
+    elsif( has_method($arg2, 'compare'))
+    {
+        $result = ($arg2->compare($arg1) ==  0);
     }
     else
     {

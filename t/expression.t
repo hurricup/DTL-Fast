@@ -338,11 +338,6 @@ foreach my $sample (@$samples)
 {
     $exp = new DTL::Fast::Template::Expression($sample->{'template'});
 
-    if( $sample->{'template'} eq 'debugA % B' )
-    {
-        warn Dumper($exp);
-    }
-
     if( ref $sample->{'context'} eq 'HASH' )
     {
         $sample->{'context'} = [$sample->{'context'}];

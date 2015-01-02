@@ -7,6 +7,7 @@ $DTL::Fast::Template::Expression::Operator::KNOWN{'mod'} = __PACKAGE__;
 $DTL::Fast::Template::Expression::Operator::KNOWN{'%'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
+use DTL::Fast::Utils qw(has_method);
 
 sub dispatch
 {
@@ -18,7 +19,7 @@ sub dispatch
     {
         $result = ($arg1 % $arg2);
     }
-    elsif( $arg1_type and $arg1->can('mod'))
+    elsif( has_method($arg1, 'mod'))
     {
         $result = $arg1->mod($arg2);
     }

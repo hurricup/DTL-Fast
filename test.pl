@@ -7,6 +7,7 @@ runtests(
     't/loader.t',
     't/template.t',
     't/expression.t',
+    't/expression/in.t',
     't/filter/join.t',
     't/filter/add.t',
     't/tag/include.t',

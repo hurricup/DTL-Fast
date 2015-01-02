@@ -6,6 +6,7 @@ use Carp qw(confess);
 $DTL::Fast::Template::Expression::Operator::KNOWN{'/'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
+use DTL::Fast::Utils qw(has_method);
 
 sub dispatch
 {
@@ -17,7 +18,7 @@ sub dispatch
     {
         $result = ($arg1 / $arg2);
     }
-    elsif( $arg1_type and $arg1->can('div'))
+    elsif( has_method($arg1, 'div'))
     {
         $result = $arg1->div($arg2);
     }

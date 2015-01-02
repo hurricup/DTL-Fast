@@ -6,6 +6,7 @@ use Carp qw(confess);
 $DTL::Fast::Template::Expression::Operator::KNOWN{'+'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
+use DTL::Fast::Utils qw(has_method);
 
 sub dispatch
 {
@@ -26,7 +27,7 @@ sub dispatch
         {
             return [@$arg1, %$arg2];
         }
-        elsif( $arg2_type and can('as_array'))
+        elsif( has_method($arg2, 'as_array'))
         {
             return [@$arg1, @{$arg2->as_array}];
         }
@@ -45,7 +46,7 @@ sub dispatch
         {
             return {%$arg1, %$arg2};
         }
-        elsif( $arg2_type and can('as_hash'))
+        elsif( has_method($arg2, 'as_hash'))
         {
             return {%$arg1, %{$arg2->as_hash}};
         }
@@ -54,7 +55,7 @@ sub dispatch
             confess "Don't know how to add $arg2 ($arg2_type) to a HASH";
         }
     }
-    elsif( $arg1_type and $arg1->can('plus'))
+    elsif( has_method($arg1, 'plus'))
     {
         return $arg1->plus($arg2);
     }

@@ -17,6 +17,8 @@ use DTL::Fast::Template::Expression::Operator::Binary::Mul;
 use DTL::Fast::Template::Expression::Operator::Binary::Div;
 use DTL::Fast::Template::Expression::Operator::Binary::Pow;
 use DTL::Fast::Template::Expression::Operator::Binary::Mod;
+use DTL::Fast::Template::Expression::Operator::Binary::In;
+use DTL::Fast::Template::Expression::Operator::Binary::NotIn;
 
 sub new
 {

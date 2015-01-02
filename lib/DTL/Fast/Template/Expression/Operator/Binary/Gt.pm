@@ -5,6 +5,7 @@ use parent 'DTL::Fast::Template::Expression::Operator::Binary';
 $DTL::Fast::Template::Expression::Operator::KNOWN{'>'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
+use DTL::Fast::Utils qw(has_method);
 
 sub dispatch
 {
@@ -27,9 +28,9 @@ sub dispatch
 
         $result = ( scalar @$arg1 > scalar @$arg2 );
     }
-    elsif( $arg1_type and $arg1->can('compare'))
+    elsif( has_method($arg1, 'compare'))
     {
-        $result = ( $arg1->compare($arg2) > 0 );
+        $result = ($arg1->compare($arg2) > 0);
     }
     else
     {

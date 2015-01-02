@@ -1,6 +1,8 @@
 package DTL::Fast::Context;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp qw(confess);
+use Carp qw(confess cluck);
+
+use DTL::Fast::Utils qw(has_method);
 
 sub new
 {
@@ -48,7 +50,12 @@ sub get
         
     $variable = $self->traverse($variable, $variable_path)
         if( defined $variable );
-    
+
+    # @todo make it clear how to behave on undef value and not existed key
+    cluck sprintf('Variable %s does not exists in current context'
+        , join('.', $variable_name, @$variable_path)
+    ) if not defined $variable;
+        
     return $variable;
 }
 
@@ -59,7 +66,7 @@ sub traverse
     my $variable = shift;
     my $path = shift;
     
-    $variable = $variable->() 
+    $variable = $variable->($self) 
         if ref $variable eq 'CODE';
 
     foreach my $step (@$path)
@@ -76,12 +83,9 @@ sub traverse
         {
             $variable = $variable->[$step];
         }
-        elsif(
-            $current_type
-            and $variable->can($step)
-        )
+        elsif( has_method($variable, $step) )
         {
-            $variable = $variable->$step();
+            $variable = $variable->$step($self);
         }
         else
         {
@@ -93,7 +97,7 @@ sub traverse
         }        
     }
         
-    $variable = $variable->() 
+    $variable = $variable->($self) 
         if ref $variable eq 'CODE';
 
     return $variable;

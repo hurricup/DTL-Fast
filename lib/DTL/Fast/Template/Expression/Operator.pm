@@ -8,6 +8,7 @@ our $OPERATORS = [
     , ['==|!=|<>|<=|>=|<|>', 'DTL::Fast::Template::Expression::Operator::Binary']
     , ['[+-]', 'DTL::Fast::Template::Expression::Operator::Binary']
     , ['[*/%]|mod', 'DTL::Fast::Template::Expression::Operator::Binary']
+    , ['not in|in', 'DTL::Fast::Template::Expression::Operator::Binary'] # not sure if priority is right
     , ['not', 'DTL::Fast::Template::Expression::Operator::Unary']
     , ['[*]{2}', 'DTL::Fast::Template::Expression::Operator::Binary']
 ]; # 
