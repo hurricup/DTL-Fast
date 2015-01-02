@@ -48,6 +48,7 @@ sub new
         , 'filters' => []
         , 'sign' => $sign
         , 'static' => $static
+        , 'safe' => 0       # suppresses escaping
     }, $proto;
     
     foreach my $filter (@filters)
@@ -62,17 +63,24 @@ sub add_filter
 {
     my $self = shift;
     my $filter = shift;
-    
-    my @arguments = split ':', $filter;
-    my $filter_name = shift @arguments;
 
-    if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
+    if( $filter eq 'safe' )
     {
-        push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
+        $self->{'safe'} = 1;
     }
     else
     {
-        warn "Unknown filter: $filter_name.";
+        my @arguments = split ':', $filter;
+        my $filter_name = shift @arguments;
+
+        if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
+        {
+            push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
+        }
+        else
+        {
+            warn "Unknown filter: $filter_name.";
+        }
     }
 }
 

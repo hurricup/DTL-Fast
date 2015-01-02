@@ -2,6 +2,8 @@ package DTL::Fast::Template::Renderer;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use Carp qw(confess);
 
+use DTL::Fast::Utils;
+
 sub new
 {
     my $proto = shift;
@@ -34,7 +36,12 @@ sub render
         );
         
     return join '', map{ 
-        $_->render($context)
+        my $text = $_->render($context);
+        $text = DTL::Fast::Utils::html_protect($text)
+            if $_->isa('DTL::Fast::Template::Variable')
+                and not $_->{'safe'}
+            ;
+        $text;
     } @{$self->{'chunks'}};
 }
 

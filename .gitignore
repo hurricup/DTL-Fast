@@ -1,0 +1,10 @@
+/Makefile
+/blib
+
+
+script
+arch
+bin
+lib
+man1
+man3

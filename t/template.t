@@ -65,7 +65,57 @@ is( DTL::Fast::Template->new('checking {{ "static variable" }}')->render($contex
 is( DTL::Fast::Template->new('checking {{ "static variable"|unknown_filter_example }}')->render($context), 'checking static variable', 'Static variable interpolation with unknown filter warning');
 is( DTL::Fast::Template->new('checking {{ "static variable" }}{% unknown_tag_example vars %}')->render($context), 'checking static variable', 'Static variable interpolation with unknown tag warning');
 
-# $template = get_template('complex.txt', $dirs);
-# print Dumper($template);
+$context->set(
+    'val1' => [
+        'here is < value',
+        'here is > value',
+        'here is \' value',
+        'here is " value',
+        'here is & value',
+    ]
+);
+
+$template = DTL::Fast::Template->new( << '_EOT_' );
+checking {{ val1.0 }}
+checking {{ val1.1 }}
+checking {{ val1.2 }}
+checking {{ val1.3 }}
+checking {{ val1.4 }}
+_EOT_
+
+$test_string = <<'_EOT_';
+checking here is &lt; value
+checking here is &gt; value
+checking here is &#39; value
+checking here is &quot; value
+checking here is &amp; value
+_EOT_
+
+is( $template->render($context), $test_string, 'Variable values auto-protection');
+
+$template = DTL::Fast::Template->new( << '_EOT_' );
+{% for a in val1 %}checking {{ a }}
+{% endfor %}
+_EOT_
+
+$test_string .= "\n";
+
+is( $template->render($context), $test_string, 'Variable values auto-protection in a tag');
+
+$template = DTL::Fast::Template->new( << '_EOT_' );
+{% for a in val1 %}checking {{ a|safe }}
+{% endfor %}
+_EOT_
+
+$test_string = <<'_EOT_';
+checking here is < value
+checking here is > value
+checking here is ' value
+checking here is " value
+checking here is & value
+
+_EOT_
+
+is( $template->render($context), $test_string, 'safe variables filter');
 
 done_testing();
