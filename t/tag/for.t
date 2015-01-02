@@ -47,6 +47,20 @@ _EOT_
 is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Array rendering');
 
 $template = <<'_EOT_';
+{% for val in array reversed %}This is a {{ val }}
+{% endfor %}
+_EOT_
+
+$test_string = <<'_EOT_';
+This is a value2
+This is a value1
+This is a value0
+
+_EOT_
+
+is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Array rendering reversed');
+
+$template = <<'_EOT_';
 {% for val in array %}This is a {{ val }}-{{ forloop.counter }}-{{ forloop.counter0 }}-{{ forloop.revcounter }}-{{ forloop.revcounter0 }}-{{ forloop.first }}-{{ forloop.last }}-{{ forloop.odd }}-{{ forloop.odd0 }}-{{ forloop.even }}-{{ forloop.even0 }}
 {% endfor %}
 _EOT_
@@ -153,5 +167,7 @@ foreach my $key (keys %$hash)
 $test_string .= "\n";
 
 is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Hash rendering');
+
+# @todo reversed hash rendering
 
 done_testing();

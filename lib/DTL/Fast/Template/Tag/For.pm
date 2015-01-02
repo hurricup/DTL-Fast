@@ -21,7 +21,7 @@ sub new
     my %kwargs = @_;
     
     my(@target_names, $source_name, $reversed);
-    if( $condition =~ /^\s*(.+)\s+in\s+(.+)\s*(reversed)?\s*$/si )
+    if( $condition =~ /^\s*(.+)\s+in\s+(.+?)\s*(reversed)?\s*$/si )
     {
         $source_name = $2;
         $reversed = $3;
