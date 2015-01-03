@@ -10,6 +10,7 @@ runtests(
     't/expression/in.t',
     't/filter/join.t',
     't/filter/add.t',
+    't/tag/debug.t',
     't/tag/include.t',
     't/tag/autoescape.t',
     't/tag/comment.t',

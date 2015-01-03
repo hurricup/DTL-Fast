@@ -14,6 +14,8 @@ FOR SURE:
 - Profiling and optimising using NYTProf
 
 NEED IDEA:
+- Shouldn't context be pushed on top-level template, to preserve original context?
+- debug tag currently just dumping context. What else? check with Django. Supposedly there should be a template tree
 - csrf_token tag, what to do with it?
 - Control of closing tags and die or warn. 
 - Do something about spaces around tags and placeholders. 
