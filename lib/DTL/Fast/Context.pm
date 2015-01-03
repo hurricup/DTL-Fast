@@ -33,20 +33,27 @@ sub get
     
     my $variable_name = shift @$variable_path;
     
-    my $namespace_index = $#{$self->{'ns'}};
+    # multi-level version, supposed it slower
+    # my $namespace_index = $#{$self->{'ns'}};
     
-    my $namespace = $self->{'ns'}->[$namespace_index];
-    while(
-        $namespace_index > 0
-        and not exists $namespace->{$variable_name}
-    )
-    {
-        $namespace = $self->{'ns'}->[--$namespace_index];
-    }
+    # my $namespace = $self->{'ns'}->[$namespace_index];
+    # while(
+        # $namespace_index > 0
+        # and not exists $namespace->{$variable_name}
+    # )
+    # {
+        # $namespace = $self->{'ns'}->[--$namespace_index];
+    # }
 
+    # my $variable = exists $namespace->{$variable_name} ? 
+        # $namespace->{$variable_name}
+        # : undef;
+
+    # faster version
+    my $namespace = $self->{'ns'}->[-1];
     my $variable = exists $namespace->{$variable_name} ? 
         $namespace->{$variable_name}
-        : undef;
+        : undef; 
         
     $variable = $self->traverse($variable, $variable_path)
         if( defined $variable );
@@ -150,7 +157,8 @@ sub set
 sub push
 {
     my $self = shift;
-    push @{$self->{'ns'}}, {};
+#    push @{$self->{'ns'}}, {}; # multi-level version, suppose it's slower on reading
+    push @{$self->{'ns'}}, {%{$self->{'ns'}->[-1] // {}}};
     return $self;
 }
 
