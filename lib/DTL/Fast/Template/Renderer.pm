@@ -1,5 +1,6 @@
 package DTL::Fast::Template::Renderer;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use parent 'DTL::Fast::Template::Replacer';
 use Carp qw(confess);
 
 use DTL::Fast::Utils;
@@ -12,7 +13,7 @@ sub new
     
     $kwargs{'chunks'} = [];
 
-    my $self = bless {%kwargs}, $proto;
+    my $self = $proto->SUPER::new(%kwargs);
 
     return $self;
 }

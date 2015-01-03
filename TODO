@@ -5,6 +5,7 @@ FOR SURE:
 - Recursion protection on inheritance
 - Recursion protection on inclusion
 - Recursion protection on deep comparision
+- Implement cache control options for Template constructor
 - as_string method for variables and operations, useful for good error messaging
 - Performance testing in comparision of other perl implementations and Django itself
 - DTL::Fast::Utils::html_protect should work using XS module (to take from CDI3)
@@ -13,6 +14,7 @@ FOR SURE:
 - Profiling and optimising using NYTProf
 
 NEED IDEA:
+- csrf_token tag, what to do with it?
 - Control of closing tags and die or warn. 
 - Do something about spaces around tags and placeholders. 
 - What to do on not existed context variable. 

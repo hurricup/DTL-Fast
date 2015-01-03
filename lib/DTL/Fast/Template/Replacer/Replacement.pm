@@ -1,4 +1,4 @@
-package DTL::Fast::Template::Expression::Replacement;
+package DTL::Fast::Template::Replacer::Replacement;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
 sub new

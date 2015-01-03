@@ -14,6 +14,7 @@ runtests(
     't/tag/autoescape.t',
     't/tag/comment.t',
     't/tag/for.t',
+    't/tag/cycle.t',
     't/tag/if.t',
     't/tag/uncomment.t',
 );

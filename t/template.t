@@ -6,6 +6,10 @@ use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
 use Data::Dumper;
 
+local $SIG{__WARN__} = sub {
+     # here we get the warning
+};
+
 my $dirs = ['./t/tmpl'];
 my( $template, $test_string, $context);
 

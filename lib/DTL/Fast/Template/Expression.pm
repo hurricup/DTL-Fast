@@ -1,10 +1,11 @@
 package DTL::Fast::Template::Expression;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use parent 'DTL::Fast::Template::Replacer';
 use Carp qw(confess);
 
 use DTL::Fast::Template::Variable;
 use DTL::Fast::Template::Expression::Operator;
-use DTL::Fast::Template::Expression::Replacement;
+use DTL::Fast::Template::Replacer::Replacement;
 
 use Data::Dumper;
 
@@ -22,9 +23,9 @@ sub new
     $expression =~ s/(^\s+|\s+$)//gsi;
     
     if( 
-        not $kwargs{'replacement'}
-        and not $kwargs{'level'}
-        and $EXPRESSION_CACHE{$expression}
+        not $kwargs{'replacement'}          # cache only top-level expressions
+        and not $kwargs{'level'}            # same ^^
+        and $EXPRESSION_CACHE{$expression}  # has cached expression
     )
     {
         $result = $EXPRESSION_CACHE{$expression};
@@ -32,18 +33,14 @@ sub new
     }
     else
     {
-        $kwargs{'replacement'} ||= DTL::Fast::Template::Expression::Replacement->new($expression);
+        $kwargs{'expression'} = $expression;
         $kwargs{'level'} //= 0;        
             
-        my $self = bless {
-            'expression' => $expression
-            , 'replacement' => $kwargs{'replacement'}
-            , 'level' => $kwargs{'level'}
-        }, $proto;
+        my $self = $proto->SUPER::new(%kwargs);
 
         $self->{'expression'} = $self->_parse_expression(
             $self->_parse_brackets(
-                $self->_parse_strings($expression)
+                $self->backup_strings($expression)
             )
         );
 
@@ -53,25 +50,13 @@ sub new
     return $result;
 }
 
-sub _parse_strings
-{
-    my $self = shift;
-    my $expression = shift;
-
-#    warn "Parsing strings in $expression";
-    while( $expression =~ s/(?<!\\)(".+?(?<!\\)")/$self->_get_string_replacement($1)/ge ){};
-#    warn "Done as $expression";
-    
-    return $expression;
-}
-
 sub _parse_brackets
 {
     my $self = shift;
     my $expression = shift;
 
     $expression =~ s/\s+/ /gsi;
-    while( $expression =~ s/\(\s*([^()]+)\s*\)/$self->_get_brackets_replacement($1)/ge ){};
+    while( $expression =~ s/\(\s*([^()]+)\s*\)/$self->backup_expression($1)/ge ){};
     
     confess 'Unpaired brackets in: '.$self->{'expression'}
         if $expression =~ /[()]/;
@@ -79,51 +64,6 @@ sub _parse_brackets
     return $expression;
 }
 
-sub _get_string_replacement
-{
-    my $self = shift;
-    my $string = shift;
- 
-#    warn "Making replacement for $string";
-    my $replacement = DTL::Fast::Template::Variable->new($string);
-#    warn "Done as ".Dumper($replacement);
- 
-    return $self->{'replacement'}->add_replacement($replacement);
-}
-
-sub _get_brackets_replacement
-{
-    my $self = shift;
-    my $expression = shift;
-
-    return $self->{'replacement'}->add_replacement(
-        DTL::Fast::Template::Expression->new(
-            $expression
-            , 'replacement' => $self->{'replacement'}
-            , 'level' => 0 
-        )
-    );
-}
-
-sub _get_block_or_expression
-{
-    my $self = shift;
-    my $token = shift;
-    my $level = shift;
-
-#    warn "Reading replacement for $token";
-    
-    my $result = $self->{'replacement'}->get_replacement($token)
-        // DTL::Fast::Template::Expression->new(
-            $token
-            , 'replacement' => $self->{'replacement'}
-            , 'level' => $level+1 
-        );
-        
-#    warn "Got $result";
-        
-    return $result;
-}
 
 sub _parse_expression
 {
@@ -155,7 +95,7 @@ sub _parse_expression
                 }
                 else 
                 {
-                    push @result, $self->_get_block_or_expression($token, $level);
+                    push @result, $self->get_backup_or_expression($token, $level);
                 }
             }
             
@@ -233,9 +173,10 @@ sub _parse_expression
         }
             
     }
-    return $result 
-        // $self->{'replacement'}->get_replacement($expression)
-        // DTL::Fast::Template::Variable->new($expression);
+    return 
+        $result 
+        // $self->get_backup_or_variable($expression)
+        ;
 }
 
 1;
