@@ -45,14 +45,27 @@ sub render
     }
     
     my $is_safe = $context->get('_dtl_safe') // 0;
-    
+#    my $is_commented = $context->get('_dtl_commented') // 0;
+  
     return join '', map{ 
-        my $text = $_->render($context);
-        $text = DTL::Fast::Utils::html_protect($text)
-            if $_->isa('DTL::Fast::Template::Variable')
+        my $text = '';
+
+        # if( 
+            # not $is_commented
+            # or $_->isa('DTL::Fast::Template::Tag::Uncomment')
+        # )
+        # {
+            $text = $_->render($context);
+            
+            if(
+                $_->isa('DTL::Fast::Template::Variable')
                 and not $_->{'safe'}
                 and not $is_safe
-            ;
+            )
+            {
+                $text = DTL::Fast::Utils::html_protect($text);
+            }
+ #       }
         $text;
     } @{$self->{'chunks'}};
 }
