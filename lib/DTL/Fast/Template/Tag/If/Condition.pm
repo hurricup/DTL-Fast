@@ -7,10 +7,11 @@ sub new
 {
     my $proto = shift;
     my $condition = shift;
+    my %kwargs = @_;
+
+    $kwargs{'condition'} = DTL::Fast::Template::Expression->new($condition);
     
-    return $proto->SUPER::new(
-        'condition' => DTL::Fast::Template::Expression->new($condition)
-    );
+    return $proto->SUPER::new(%kwargs);
 }
 
 sub is_true

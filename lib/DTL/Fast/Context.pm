@@ -104,8 +104,8 @@ sub set
     my @sets = @_;
     
     while( 
-        (my $key = shift @sets)
-        and (my $val = shift @sets)
+        defined (my $key = shift @sets)
+        and defined (my $val = shift @sets)
     )
     {
         if( $key =~ /\./ )  # traversed set

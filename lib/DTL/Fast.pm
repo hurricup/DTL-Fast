@@ -35,6 +35,7 @@ sub get_template
 {
     my $template_name = shift;
     my $dirs = shift // [getcwd()];
+    my %kwargs = @_;
     
     confess "Template name was not specified" 
         if not $template_name;
@@ -63,7 +64,8 @@ sub get_template
         $template = _read_template($template_name, $dirs);
         $template =~ s/\{\% (?:block|endblock|extends) .*?\%\}//gs;
         
-        $template = DTL::Fast::Template->new($template, $dirs) 
+        
+        $template = DTL::Fast::Template->new($template, $dirs)
             if defined $template;
         $OBJECTS_CACHE{$cache_key} = $template;
     }

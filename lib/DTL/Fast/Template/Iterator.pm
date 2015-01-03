@@ -1,24 +1,27 @@
 package DTL::Fast::Template::Iterator;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Renderer';
-use Carp qw(confess);
+use Carp qw(confess cluck);
 
 use DTL::Fast::Template::Expression;
 
 sub new
 {
     my $proto = shift;
-    my $raw_chunks = shift;
-    my $dirs = shift // [];
     my %kwargs = @_;
 
-    $kwargs{'dirs'} = $dirs;
-    $kwargs{'raw_chunks'} = $raw_chunks;
+    confess 'No directory arrays passed into constructor'
+        if not $kwargs{'dirs'}
+            or ref $kwargs{'dirs'} ne 'ARRAY'
+        ;
     
-    confess "Source chunks not passed to the constructor"
+    confess 'No raw chunks array passed into constructor'
         if not $kwargs{'raw_chunks'}
-            or ref $kwargs{'raw_chunks'} ne 'ARRAY';
+            or ref $kwargs{'raw_chunks'} ne 'ARRAY'
+        ;
     
+    $kwargs{'safe'} //= 0;
+
     my $self = $proto->SUPER::new(%kwargs);
 
     $self->parse_chunks();
@@ -79,11 +82,10 @@ sub parse_tag_chunk
     else
     {
         warn "Unknown tag: $tag_name";
-        $result = DTL::Fast::Template::Text->new( "", $self );
+        $result = DTL::Fast::Template::Text->new( "" );
     }
     
     return $result;
 }
-
 
 1;

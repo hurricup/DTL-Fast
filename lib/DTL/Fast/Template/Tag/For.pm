@@ -35,17 +35,13 @@ sub new
         confess "Do not understand condition: $condition";
     }
     
+    $kwargs{'renderers'} = [];
+    $kwargs{'source_name'} = $source_name;
+    $kwargs{'targets'} = [@target_names];
+    
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
-    my $self = $proto->SUPER::new( 
-        $kwargs{'raw_chunks'}
-        , $kwargs{'dirs'}
-        , 'renderers' => [
-            DTL::Fast::Template::Renderer->new()
-        ]
-        , 'source' => DTL::Fast::Template::Variable->new($source_name)
-        , 'targets' => [@target_names]
-    );    
+    my $self = $proto->SUPER::new( %kwargs );
 
     if( $reversed )
     {
@@ -60,6 +56,15 @@ sub new
     return $self;
 }
 
+# chunks parsing pre-work
+sub parse_chunks
+{
+    my $self = shift;
+    $self->add_renderer();
+    $self->{'source'} = DTL::Fast::Template::Variable->new($self->{'source_name'});
+    $self->SUPER::parse_chunks();
+}
+
 # add chunk to the last condition
 sub add_chunk
 {
@@ -67,6 +72,12 @@ sub add_chunk
     my $chunk = shift;
     
     $self->{'renderers'}->[-1]->add_chunk($chunk);
+}
+
+sub add_renderer
+{
+    my $self = shift;
+    push @{$self->{'renderers'}}, DTL::Fast::Template::Renderer->new();
 }
 
 # parse extra tags from if blocks
@@ -90,7 +101,7 @@ sub parse_tag_chunk
         }
         else
         {
-            push @{$self->{'renderers'}}, DTL::Fast::Template::Renderer->new();
+            $self->add_renderer;
         }
     }
     else

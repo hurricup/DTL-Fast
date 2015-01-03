@@ -7,6 +7,7 @@ our $UTF8 = 1;
 our %TAG_HANDLERS;
 our %FILTER_HANDLERS;
     
+use DTL::Fast::Utils qw(has_method);
 use DTL::Fast::Template::Variable;
 use DTL::Fast::Template::Text;
 use DTL::Fast::Template::Tags;
@@ -17,11 +18,12 @@ sub new
     my $proto = shift;
     my $template = shift // '';
     my $dirs = shift // []; # optional dirs to look up for includes or parents
-
-    my $self = $proto->SUPER::new(
-        _get_raw_chunks($template)
-        , $dirs
-    );
+    my %kwargs = @_;
+    
+    $kwargs{'raw_chunks'} = _get_raw_chunks($template);
+    $kwargs{'dirs'} = $dirs;
+    
+    my $self = $proto->SUPER::new(%kwargs);
   
     return $self;
 }
@@ -36,6 +38,5 @@ sub _get_raw_chunks
     
     return $result;    
 }
-
 
 1;

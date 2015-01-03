@@ -5,5 +5,6 @@ use strict; use utf8; use warnings FATAL => 'all';
 use DTL::Fast::Template::Tag::Include;
 use DTL::Fast::Template::Tag::If;
 use DTL::Fast::Template::Tag::For;
+use DTL::Fast::Template::Tag::Autoescape;
 
 1;

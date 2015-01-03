@@ -22,10 +22,12 @@ sub new
     
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
-    return $proto->SUPER::new(
+    my $self = $proto->SUPER::new(
         'template' => DTL::Fast::Template::Expression->new($parameter)
         , 'dirs' => $kwargs{'dirs'}
     );    
+    
+    return $self;
 }
 
 # Processing function

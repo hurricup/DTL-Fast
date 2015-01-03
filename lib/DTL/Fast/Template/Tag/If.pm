@@ -19,17 +19,29 @@ sub new
     my $condition = shift;  # parameter of the opening tag
     my %kwargs = @_;
     
+    $kwargs{'condition'} = $condition;
+    $kwargs{'conditions'} = [];
+    
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
-    my $self = $proto->SUPER::new( 
-        $kwargs{'raw_chunks'}
-        , $kwargs{'dirs'}
-        , 'conditions' => [
-            DTL::Fast::Template::Tag::If::Condition->new($condition)
-        ]
-    );    
+    my $self = $proto->SUPER::new( %kwargs );
     
     return $self;
+}
+
+# chunks parsing pre-work
+sub parse_chunks
+{
+    my $self = shift;
+    $self->add_condition($self->{'condition'});
+    $self->SUPER::parse_chunks();
+}
+
+sub add_condition
+{
+    my $self = shift;
+    my $condition = shift;
+    push @{$self->{'conditions'}}, DTL::Fast::Template::Tag::If::Condition->new($condition);
 }
 
 # add chunk to the last condition
@@ -56,11 +68,11 @@ sub parse_tag_chunk
     }
     elsif( $tag_name eq 'elif' or $tag_name eq 'elsif' )
     {
-        push @{$self->{'conditions'}}, DTL::Fast::Template::Tag::If::Condition->new($tag_param);
+        $self->add_condition($tag_param);
     }
     elsif( $tag_name eq 'else' )
     {
-        push @{$self->{'conditions'}}, DTL::Fast::Template::Tag::If::Condition->new(1);
+        $self->add_condition(1);
     }
     else
     {

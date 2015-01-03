@@ -8,7 +8,8 @@ sub new
 {
     my $proto = shift;
     my $variable = shift;
-
+    my %kwargs = @_;
+    
     $variable =~ s/(^\s+|\s+$)//gsi;
     my @filters = split /\|+/, $variable;
     
@@ -48,7 +49,6 @@ sub new
         , 'filters' => []
         , 'sign' => $sign
         , 'static' => $static
-        , 'safe' => 0       # suppresses escaping
     }, $proto;
     
     foreach my $filter (@filters)
