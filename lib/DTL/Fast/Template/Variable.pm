@@ -19,6 +19,7 @@ sub new
     my @variable;
     my $static = 0;
     my $sign = 1;
+    my $undef = 0;
     
     if( $variable_name =~ s/^\-// )
     {
@@ -31,11 +32,22 @@ sub new
     {
         @variable = ($1);
         $static = 1;
+        $sign = 1;
     }
     elsif( looks_like_number($variable_name) )
     {
         @variable = ($variable_name);
         $static = 1;
+    }
+    elsif( 
+        $variable_name eq 'undef'
+        or $variable_name eq 'None' # python compatibility
+    )
+    {
+        $static = 1;
+        $sign = 1;
+        $undef = 1;
+        @variable = (undef);        
     }
     else
     {
@@ -48,6 +60,7 @@ sub new
         'variable' => [@variable]
         , 'original' => $variable
         , 'sign' => $sign
+        , 'undef' => $undef
         , 'static' => $static
         , 'filter_manager' => DTL::Fast::Template::FilterManager->new()
     }, $proto;
@@ -62,6 +75,7 @@ sub new
 
 sub filter_manager{ return shift->{'filter_manager'}; }
 sub is_safe{ return shift->filter_manager->is_safe; }
+sub is_undef{ return shift->{'undef'}; }
 sub add_filter{ return shift->filter_manager->add_filter(shift); }
 
 sub render
@@ -69,21 +83,18 @@ sub render
     my $self = shift;
     my $context = shift;
     
-    my $value = $self->{'static'} ? 
-        $self->{'variable'}->[0]
-        : $context->get($self->{'variable'});
+    my $value;
+    
+    if( not $self->{'undef'} )
+    {
+        $value = $self->{'static'} ? 
+            $self->{'variable'}->[0]
+            : $context->get($self->{'variable'});
 
-    if( defined $value )
-    {
-        $value = $self->filter_manager->filter($value, $context);
-    }
-    else
-    {
-        # @todo make it clear how to behave on undef value and not existed key
-        cluck sprintf('Variable %s does not exists in current context'
-            , $self->{'original'}
-        ) if not defined $value;
-        $value = '';
+        if( defined $value )
+        {
+            $value = $self->filter_manager->filter($value, $context);
+        }
     }
     
     return $value;

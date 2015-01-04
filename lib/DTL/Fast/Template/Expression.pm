@@ -159,10 +159,10 @@ sub _parse_expression
                     else # got operator but there is no more operands
                     {
                         confess sprintf('No right argument for %s (%s, %s, %s, %s): %s'
-                            , $token
+                            , $token // 'undef'
                             , scalar @result
                             , ref $result[0] // 'undef'
-                            , $result
+                            , $result // 'undef'
                             , $result[0] // 'undef'
                             , $self->{'expression'}
                         );

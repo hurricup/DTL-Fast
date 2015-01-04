@@ -7,14 +7,26 @@ $DTL::Fast::Template::Expression::Operator::KNOWN{'=='} = __PACKAGE__;
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::Utils qw(has_method);
 
+
 # @todo Recurursion protection on deep comparision or one-level comparision
 sub dispatch
 {
     my( $self, $arg1, $arg2) = @_;
     my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
     my $result = 0;
-    
-    if( looks_like_number($arg1) and looks_like_number($arg2))
+
+    if( 
+        not defined $arg1 and defined $arg2 
+        or not defined $arg2 and defined $arg1
+    )
+    {
+        $result = 0;
+    }
+    elsif( not defined $arg1 and not defined $arg2 )
+    {
+        $result = 1; # @todo think about comparing two undefs
+    }
+    elsif( looks_like_number($arg1) and looks_like_number($arg2))
     {
         $result = ($arg1 == $arg2);
     }

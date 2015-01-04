@@ -4,6 +4,9 @@ use Carp qw(confess);
 
 use DTL::Fast::Template::Expression::Operator::Unary::Not;
 
+# not in Django
+use DTL::Fast::Template::Expression::Operator::Unary::Defined;
+
 sub new
 {
     my $proto = shift;

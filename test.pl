@@ -6,6 +6,7 @@ runtests(
     't/context.t',
     't/expression.t',
     't/expression/in.t',
+    't/expression/defined.t',
     't/loader.t',
     't/template.t',
     't/filter/add.t',

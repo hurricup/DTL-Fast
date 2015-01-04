@@ -33,31 +33,20 @@ sub get
     
     my $variable_name = shift @$variable_path;
     
-    # multi-level version, supposed it slower
-    # my $namespace_index = $#{$self->{'ns'}};
-    
-    # my $namespace = $self->{'ns'}->[$namespace_index];
-    # while(
-        # $namespace_index > 0
-        # and not exists $namespace->{$variable_name}
-    # )
-    # {
-        # $namespace = $self->{'ns'}->[--$namespace_index];
-    # }
-
-    # my $variable = exists $namespace->{$variable_name} ? 
-        # $namespace->{$variable_name}
-        # : undef;
-
     # faster version
     my $namespace = $self->{'ns'}->[-1];
     my $variable = exists $namespace->{$variable_name} ? 
         $namespace->{$variable_name}
         : undef; 
+
+    $variable = $variable->($self) 
+        if ref $variable eq 'CODE';
         
     $variable = $self->traverse($variable, $variable_path)
-        if( defined $variable );
-        
+        if 
+            defined $variable 
+            and scalar @$variable_path;
+
     return $variable;
 }
 
@@ -68,8 +57,6 @@ sub traverse
     my $variable = shift;
     my $path = shift;
     
-    $variable = $variable->($self) 
-        if ref $variable eq 'CODE';
 
     foreach my $step (@$path)
     {

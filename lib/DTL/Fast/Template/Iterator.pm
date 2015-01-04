@@ -56,9 +56,13 @@ sub parse_next_chunk
     {
         $chunk = $self->parse_tag_chunk($1, $2);
     }
-    else
+    elsif( $chunk )
     {
         $chunk = DTL::Fast::Template::Text->new( $chunk );
+    }
+    else
+    {
+        $chunk = undef;
     }
     
     return $chunk;

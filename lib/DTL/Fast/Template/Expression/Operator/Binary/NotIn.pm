@@ -5,11 +5,10 @@ use Carp qw(confess);
 
 $DTL::Fast::Template::Expression::Operator::KNOWN{'not in'} = __PACKAGE__;
 
-sub dispatch
+sub render
 {
-    my( $self, $arg1, $arg2) = @_;
-    
-    return !$self->SUPER::dispatch($arg1, $arg2);
+    my $self = shift;
+    return !$self->SUPER::render(@_);
 }
 
 1;
