@@ -7,11 +7,13 @@ use DTL::Fast::Template::Tag::Comment;
 use DTL::Fast::Template::Tag::Cycle;
 use DTL::Fast::Template::Tag::Debug;
 use DTL::Fast::Template::Tag::Filter;
+use DTL::Fast::Template::Tag::Firstof;
 use DTL::Fast::Template::Tag::Include;
 use DTL::Fast::Template::Tag::If;
 use DTL::Fast::Template::Tag::For;
 
 # not from Django
+use DTL::Fast::Template::Tag::Firstofdefined;
 use DTL::Fast::Template::Tag::Uncomment;
 
 1;

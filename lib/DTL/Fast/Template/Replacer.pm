@@ -24,7 +24,7 @@ sub backup_strings
         if not $self->{'replacement'}
             or not $self->{'replacement'}->isa('DTL::Fast::Template::Replacer::Replacement');
     
-    $expression =~ s/(?<!\\)(".+?(?<!\\)")/$self->backup_variable($1)/ge;
+    $expression =~ s/(?<!\\)(".*?(?<!\\)")/$self->backup_variable($1)/ge;
     
     return $expression;
 }
@@ -100,5 +100,23 @@ sub set_replacement
     $self->{'replacement'} = shift;
     return $self;
 }
+
+sub parse_sources
+{
+    my $self = shift;
+    my $source = shift;
+    
+    my $sources = $self->backup_strings($source);
+    
+    warn sprintf(
+        "Comma-separated source values in %s tag are DEPRICATED, please use spaces:\n\t%s"
+        , ref $self
+        , $source
+    ) if $sources =~ /,/;
+        
+    return [map{ $self->get_backup_or_variable($_) } (split /[,\s]+/, $sources)];
+}
+
+
 
 1;

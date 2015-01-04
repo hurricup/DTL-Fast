@@ -19,6 +19,8 @@ runtests(
     't/tag/cycle.t',
     't/tag/debug.t',
     't/tag/filter.t',
+    't/tag/firstof.t',
+    't/tag/firstofdefined.t',
     't/tag/for.t',
     't/tag/if.t',
     't/tag/include.t',

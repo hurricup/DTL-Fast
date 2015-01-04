@@ -23,38 +23,12 @@ sub new
     $parameter =~ /^\s*(.+?)\s*(?:as (.+?)\s*(silent)?)?\s*$/;
     @kwargs{'source', 'destination', 'silent', 'parameter', 'sources', 'current_sources'} = ($1 // '', $2 // '', $3 // '', $parameter, [], []);
     
-#    warn "Got $kwargs{'source'}-$kwargs{'destination'}-$kwargs{'silent'}-$kwargs{'parameter'}";
-    
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
     my $self = $proto->SUPER::new( %kwargs );
 
     # parse source line
-    $self->add_sources();
-    
-    return $self;
-}
-
-sub add_sources
-{
-    my $self = shift;
-
-    my $sources = $self->backup_strings($self->{'source'});
-    warn "Comma-separated values in cycle tag are DEPRICATED, please use spaces:\n\t$self->{'source'}"
-        if $sources =~ /,/;
-        
-    my @sources = split /[,\s]+/, $sources;
-    if( not scalar @sources )
-    {
-        confess "No sources specified in $self->{'parameter'}";
-    }
-    else
-    {
-        foreach my $source (@sources)
-        {
-            push @{$self->{'sources'}}, $self->get_backup_or_variable($source);
-        }
-    }    
+    $self->{'sources'} = $self->parse_sources($self->{'source'});
     
     return $self;
 }

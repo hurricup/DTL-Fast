@@ -27,7 +27,7 @@ sub new
     }
     
     if( 
-        $variable_name =~ /^\"(.+?)\"$/ 
+        $variable_name =~ /^\"(.*?)\"$/ 
     )   
     {
         @variable = ($1);
