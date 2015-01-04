@@ -22,8 +22,8 @@ sub new
 
     # parent class just blesses passed hash with proto. Nothing more. Use it
     # for future compatibility
-    return $proto->SUPER::new(
-        'arguments' => [(
+    return $proto->SUPER::new( $arguments
+        , 'arguments' => [(
             map{
                 DTL::Fast::Template::Variable->new($_)
             } @$arguments
@@ -35,6 +35,7 @@ sub new
 sub filter
 {
     my $self = shift;
+    my $filter_manager = shift;
     my $value = shift;
     my $context = shift // DTL::Fast::Context->new();
     

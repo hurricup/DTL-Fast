@@ -3,6 +3,7 @@ use strict; use utf8; use warnings FATAL => 'all';
 use Carp qw(confess cluck);
 
 use Scalar::Util qw(looks_like_number);
+use DTL::Fast::Template::FilterManager;
 
 sub new
 {
@@ -46,43 +47,22 @@ sub new
     my $self = bless {
         'variable' => [@variable]
         , 'original' => $variable
-        , 'filters' => []
         , 'sign' => $sign
         , 'static' => $static
+        , 'filter_manager' => DTL::Fast::Template::FilterManager->new()
     }, $proto;
-    
-    foreach my $filter (@filters)
+
+    if( scalar @filters )
     {
-        $self->add_filter($filter);
+        $self->filter_manager->add_filters(\@filters);
     }
 
     return $self;
 }
 
-sub add_filter
-{
-    my $self = shift;
-    my $filter = shift;
-
-    if( $filter eq 'safe' )
-    {
-        $self->{'safe'} = 1;
-    }
-    else
-    {
-        my @arguments = split ':', $filter;
-        my $filter_name = shift @arguments;
-
-        if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
-        {
-            push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
-        }
-        else
-        {
-            warn "Unknown filter: $filter_name.";
-        }
-    }
-}
+sub filter_manager{ return shift->{'filter_manager'}; }
+sub is_safe{ return shift->filter_manager->is_safe; }
+sub add_filter{ return shift->filter_manager->add_filter(shift); }
 
 sub render
 {
@@ -95,11 +75,7 @@ sub render
 
     if( defined $value )
     {
-        foreach my $filter (@{$self->{'filters'}})
-        {
-            $value = $filter->filter($value, $context)
-                if defined $filter;
-        }
+        $value = $self->filter_manager->filter($value, $context);
     }
     else
     {

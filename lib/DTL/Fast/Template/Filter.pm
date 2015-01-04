@@ -7,6 +7,7 @@ use DTL::Fast::Template;
 sub new
 {
     my $proto = shift;
+    my $arguments = shift;
     my %kwargs = @_;
     return bless {%kwargs}, $proto;
 }

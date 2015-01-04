@@ -12,6 +12,7 @@ FOR SURE:
 - Implement Django filter plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference
 - Implement Django tag plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference
 - Profiling and optimising using NYTProf
+- Performance testing for old and new context variables work
 
 NEED IDEA:
 - Shouldn't context be pushed on top-level template, to preserve original context?
