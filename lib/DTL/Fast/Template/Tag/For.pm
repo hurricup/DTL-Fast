@@ -38,6 +38,7 @@ sub new
     $kwargs{'renderers'} = [];
     $kwargs{'source_name'} = $source_name;
     $kwargs{'targets'} = [@target_names];
+    $kwargs{'close_tag'} = 'endfor';
     
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
@@ -89,11 +90,7 @@ sub parse_tag_chunk
     
     my $result = undef;
 
-    if( $tag_name eq 'endfor' )
-    {
-        $self->{'raw_chunks'} = [];
-    }
-    elsif( $tag_name eq 'empty' )
+    if( $tag_name eq 'empty' )
     {
         if( scalar @{$self->{'renderers'}} == 2 )
         {

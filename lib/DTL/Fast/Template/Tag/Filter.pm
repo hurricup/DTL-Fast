@@ -21,6 +21,7 @@ sub new
     my %kwargs = @_;
 
     $kwargs{'filter_manager'} = DTL::Fast::Template::FilterManager->new($parameter);
+    $kwargs{'close_tag'} = 'endfilter';
     
     my $self = $proto->SUPER::new( %kwargs );
     
@@ -29,26 +30,6 @@ sub new
 
 sub filter_manager{ return shift->{'filter_manager'}; }
 
-# parse extra tags from if blocks
-sub parse_tag_chunk
-{
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
-    
-    my $result = undef;
-
-    if( $tag_name eq 'endfilter' )
-    {
-        $self->{'raw_chunks'} = [];
-    }
-    else
-    {
-        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
-    }
-    
-    return $result;
-}
 
 # conditional rendering
 sub render

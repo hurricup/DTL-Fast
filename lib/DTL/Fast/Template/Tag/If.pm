@@ -21,6 +21,7 @@ sub new
     
     $kwargs{'condition'} = $condition;
     $kwargs{'conditions'} = [];
+    $kwargs{'close_tag'} = 'endif';
     
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
@@ -62,11 +63,7 @@ sub parse_tag_chunk
     
     my $result = undef;
 
-    if( $tag_name eq 'endif' )
-    {
-        $self->{'raw_chunks'} = [];
-    }
-    elsif( $tag_name eq 'elif' or $tag_name eq 'elsif' )
+    if( $tag_name eq 'elif' or $tag_name eq 'elsif' )
     {
         $self->add_condition($tag_param);
     }

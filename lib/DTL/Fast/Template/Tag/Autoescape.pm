@@ -32,6 +32,8 @@ sub new
     {
         confess "Autoescape tag undertands only on and off parameter";
     }
+
+    $kwargs{'close_tag'} = 'endautoescape';
     
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
@@ -52,27 +54,6 @@ sub render
     $context->push()->set('_dtl_safe' => $self->{'safe'}); 
     my $result = $self->SUPER::render($context);
     $context->pop();
-    
-    return $result;
-}
-
-# parse extra tags from if blocks
-sub parse_tag_chunk
-{
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
-    
-    my $result = undef;
-
-    if( $tag_name eq 'endautoescape' )
-    {
-        $self->{'raw_chunks'} = [];
-    }
-    else
-    {
-        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
-    }
     
     return $result;
 }

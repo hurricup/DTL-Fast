@@ -17,6 +17,8 @@ sub new
     my %kwargs = @_;
     
     $kwargs{'nested_comments'} = 0;
+    $kwargs{'close_tag'} = 'endcomment';
+    
     # parent class just blesses passed hash with proto. Nothing more. 
     # Use it for future compatibility
     my $self = $proto->SUPER::new( %kwargs );
@@ -62,7 +64,7 @@ sub parse_tag_chunk
         }
         else
         {
-            $self->{'raw_chunks'} = [];
+            $self->end_block();
         }
     }
     elsif( $tag_name eq 'comment' )
