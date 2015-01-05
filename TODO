@@ -2,6 +2,7 @@ Inspired by Django templating and Jinja2
 
 FOR SURE:
 - Documentation
+-- Time format uses C rules for time2str, not Django rules. 
 - More tests (especially test blocks re-using, that cacheing works properly)
 - Error exceptions
 - Recursion protection on inheritance
@@ -17,8 +18,11 @@ FOR SURE:
 - Profiling and optimising using NYTProf
 - Performance testing for old and new context variables work
 
+SECURITY:
+- load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
+
 NEED IDEA:
-- load tag can load any module, it's not secure. What can we do?
+- Do we need mappings for date formatting between Django and Date::Format?
 - Compare two undefs. What should we do?
 - Macroses in jinja. What for? What is the difference from include?
 - Shouldn't context be pushed on top-level template, to preserve original context?

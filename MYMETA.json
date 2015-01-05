@@ -31,7 +31,9 @@
          }
       },
       "runtime" : {
-         "requires" : {}
+         "requires" : {
+            "Date::Format" : "2.24"
+         }
       }
    },
    "release_status" : "stable",

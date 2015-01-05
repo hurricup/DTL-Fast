@@ -1,2 +1,4 @@
 /Makefile
 /blib
+MYMETA.json
+MYMETA.yml

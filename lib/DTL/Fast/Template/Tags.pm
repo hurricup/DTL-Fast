@@ -15,6 +15,7 @@ use DTL::Fast::Template::Tag::Ifchanged;
 use DTL::Fast::Template::Tag::Ifequal;
 use DTL::Fast::Template::Tag::Ifnotequal;
 use DTL::Fast::Template::Tag::Load;
+use DTL::Fast::Template::Tag::Now;
 
 # not from Django
 use DTL::Fast::Template::Tag::Firstofdefined;

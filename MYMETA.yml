@@ -17,5 +17,6 @@ no_index:
   directory:
     - t
     - inc
-requires: {}
+requires:
+  Date::Format: '2.24'
 version: '0.01'
