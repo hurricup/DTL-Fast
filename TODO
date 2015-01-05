@@ -4,6 +4,7 @@ FOR SURE:
 - Documentation
 -- Time format uses C rules for time2str, not Django rules. 
 - Implement {# ... #}, decide what to do with verbantim
+- Check how spaceless works with < and > in quotes (single and double)
 - More tests (especially test blocks re-using, that cacheing works properly)
 - Error exceptions
 - Recursion protection on inheritance
