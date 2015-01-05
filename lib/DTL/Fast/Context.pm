@@ -56,7 +56,6 @@ sub traverse
     my $self = shift;
     my $variable = shift;
     my $path = shift;
-    
 
     foreach my $step (@$path)
     {

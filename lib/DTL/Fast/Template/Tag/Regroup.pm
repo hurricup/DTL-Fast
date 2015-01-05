@@ -16,11 +16,10 @@ sub parse_parameters
     {
         @{$self}{qw( source grouper target_name)} = (
             DTL::Fast::Template::Variable->new($1)
-            , $2
+            , [(split /\./, $2)]
             , $3
         );
         
-        confess "Grouper key can't be traversable: $2" if $2 =~ /\./;
         confess "Traget variable can't be traversable: $3" if $3 =~ /\./;
     }
     else
@@ -54,10 +53,9 @@ sub render
                 and ref $source eq 'HASH' 
             )
             {
-                if( 
-                    exists $source->{$self->{'grouper'}}
-                    and defined (my $grouper = $source->{$self->{'grouper'}})
-                )
+                my $grouper = $context->traverse($source, $self->{'grouper'});
+                
+                if( defined $grouper )
                 {
                     if( not exists $groups->{$grouper} )
                     {
@@ -68,7 +66,7 @@ sub render
                 }
                 else
                 {
-                    die "Grouper value MUST exist and be defined in every source list item: $self->{'grouper'}";
+                    die "Grouper value MUST exist and be defined in every source list item: ".join('.', @{$self->{'grouper'}});
                 }
             }
         }
