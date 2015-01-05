@@ -23,6 +23,7 @@ runtests(
     't/tag/firstofdefined.t',
     't/tag/for.t',
     't/tag/if.t',
+    't/tag/ifchanged.t',
     't/tag/include.t',
     't/tag/uncomment.t',
 );

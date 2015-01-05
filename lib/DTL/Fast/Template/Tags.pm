@@ -10,6 +10,7 @@ use DTL::Fast::Template::Tag::Filter;
 use DTL::Fast::Template::Tag::Firstof;
 use DTL::Fast::Template::Tag::Include;
 use DTL::Fast::Template::Tag::If;
+use DTL::Fast::Template::Tag::Ifchanged;
 use DTL::Fast::Template::Tag::For;
 
 # not from Django
