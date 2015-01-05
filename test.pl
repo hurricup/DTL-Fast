@@ -29,5 +29,6 @@ runtests(
     't/tag/include.t',
     't/tag/load.t',
     't/tag/now.t',
+    't/tag/regroup.t',
     't/tag/uncomment.t',
 );

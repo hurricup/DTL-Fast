@@ -3,6 +3,7 @@ Inspired by Django templating and Jinja2
 FOR SURE:
 - Documentation
 -- Time format uses C rules for time2str, not Django rules. 
+- Implement {# ... #}, decide what to do with verbantim
 - More tests (especially test blocks re-using, that cacheing works properly)
 - Error exceptions
 - Recursion protection on inheritance
