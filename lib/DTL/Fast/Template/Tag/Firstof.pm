@@ -40,6 +40,13 @@ sub render
     {
         if( $result = $source->render($context) )
         {
+            if( 
+                not $context->get('_dtl_safe') 
+                and not $source->is_safe()
+            )
+            {
+                $result = DTL::Fast::Utils::html_protect($result);
+            }
             last;
         }
     }

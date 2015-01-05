@@ -107,14 +107,26 @@ sub parse_sources
     my $source = shift;
     
     my $sources = $self->backup_strings($source);
-    
+
     warn sprintf(
         "Comma-separated source values in %s tag are DEPRICATED, please use spaces:\n\t%s"
         , ref $self
         , $source
     ) if $sources =~ /,/;
         
-    return [map{ $self->get_backup_or_variable($_) } (split /[,\s]+/, $sources)];
+    return [map{ 
+        my $result; 
+        if( /^(__BLOCK_.+?)\|(.+)$/ )   # filtered static variable
+        {
+            $result = $self->get_backup_or_variable($1);
+            $result->filter_manager->parse_filters($2);
+        }
+        else
+        {
+            $result = $self->get_backup_or_variable($_) 
+        }
+        $result;
+    } (split /[,\s]+/, $sources)];
 }
 
 

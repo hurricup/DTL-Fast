@@ -17,6 +17,7 @@ $context = DTL::Fast::Context->new({
     , 'var3' => undef
     , 'var4' => 0
     , 'var5' => ''
+    , 'var6' => 'this > escaped'
 });
 
 my $SET = [
@@ -49,6 +50,37 @@ my $SET = [
         'test' => '',
         'template' => '{% firstofdefined undef var3 var5 var3 %}',
         'title' => 'Firstofdefined: empty string variable'
+    },
+
+    {
+        'test' => 'this &gt; escaped',
+        'template' => '{% firstof var3 var6 var4 var5 undef "" var6 var2 var3 %}',
+        'title' => 'Firstofdefined: escaped variable'
+    },
+    {
+        'test' => 'this &lt; escaped',
+        'template' => '{% firstof var3 "this < escaped" var4 var5 undef var6 var2 var3 %}',
+        'title' => 'Firstofdefined: escaped static value'
+    },
+    {
+        'test' => 'this > escaped',
+        'template' => '{% firstof var3 var6|safe var4 var5 undef "" var2 var3 %}',
+        'title' => 'Firstofdefined: escaped variable with safe'
+    },
+    {
+        'test' => 'this < escaped',
+        'template' => '{% firstof var3 "this < escaped"|safe var4 var5 undef var6 var2 var3 %}',
+        'title' => 'Firstofdefined: escaped static value with safe'
+    },
+    {
+        'test' => 'this > escaped',
+        'template' => '{% autoescape off %}{% firstof var3 var6 var4 var5 undef "" var6 var2 var3 %}{% endautoescape %}',
+        'title' => 'Firstofdefined: escaped variable with autoescape off'
+    },
+    {
+        'test' => 'this < escaped',
+        'template' => '{% autoescape off %}{% firstof var3 "this < escaped" var4 var5 undef  var6 var2 var3 %}{% endautoescape %}',
+        'title' => 'Firstofdefined: escaped static value with autoescape off'
     },
 ];
 

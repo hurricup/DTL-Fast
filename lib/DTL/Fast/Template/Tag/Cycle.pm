@@ -52,11 +52,20 @@ sub render
     my $context = shift;
     my $result = '';
   
-    my $current_value = $self->get_next_source()->render($context);
+    my $source = $self->get_next_source();
+    my $current_value = $source->render($context);
   
     if( not $self->{'silent'} )
     {
         $result = $current_value;
+        
+        if( 
+            not $context->get('_dtl_safe') 
+            and not $source->is_safe()
+        )
+        {
+            $result = DTL::Fast::Utils::html_protect($result);
+        }
     }
     
     if( $self->{'destination'} )
