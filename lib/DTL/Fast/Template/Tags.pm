@@ -8,12 +8,13 @@ use DTL::Fast::Template::Tag::Cycle;
 use DTL::Fast::Template::Tag::Debug;
 use DTL::Fast::Template::Tag::Filter;
 use DTL::Fast::Template::Tag::Firstof;
+use DTL::Fast::Template::Tag::For;
 use DTL::Fast::Template::Tag::Include;
 use DTL::Fast::Template::Tag::If;
 use DTL::Fast::Template::Tag::Ifchanged;
 use DTL::Fast::Template::Tag::Ifequal;
 use DTL::Fast::Template::Tag::Ifnotequal;
-use DTL::Fast::Template::Tag::For;
+use DTL::Fast::Template::Tag::Load;
 
 # not from Django
 use DTL::Fast::Template::Tag::Firstofdefined;

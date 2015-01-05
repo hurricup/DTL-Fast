@@ -18,6 +18,7 @@ FOR SURE:
 - Performance testing for old and new context variables work
 
 NEED IDEA:
+- load tag can load any module, it's not secure. What can we do?
 - Compare two undefs. What should we do?
 - Macroses in jinja. What for? What is the difference from include?
 - Shouldn't context be pushed on top-level template, to preserve original context?

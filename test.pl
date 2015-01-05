@@ -27,5 +27,6 @@ runtests(
     't/tag/ifequal.t',
     't/tag/ifnotequal.t',
     't/tag/include.t',
+    't/tag/load.t',
     't/tag/uncomment.t',
 );
