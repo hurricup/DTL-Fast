@@ -9,7 +9,9 @@ sub new
     my $condition = shift;
     my %kwargs = @_;
 
-    $kwargs{'condition'} = DTL::Fast::Template::Expression->new($condition);
+    $kwargs{'condition'} = ref $condition ?
+        $condition
+        : DTL::Fast::Template::Expression->new($condition);
     
     return $proto->SUPER::new(%kwargs);
 }

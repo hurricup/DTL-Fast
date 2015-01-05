@@ -24,6 +24,8 @@ runtests(
     't/tag/for.t',
     't/tag/if.t',
     't/tag/ifchanged.t',
+    't/tag/ifequal.t',
+    't/tag/ifnotequal.t',
     't/tag/include.t',
     't/tag/uncomment.t',
 );
