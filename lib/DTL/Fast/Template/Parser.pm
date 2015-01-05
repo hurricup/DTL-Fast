@@ -1,4 +1,4 @@
-package DTL::Fast::Template::Iterator;
+package DTL::Fast::Template::Parser;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Renderer';
 use Carp qw(confess cluck);
@@ -22,21 +22,17 @@ sub new
     
     $kwargs{'safe'} //= 0;
 
-    my $self = $proto->SUPER::new(%kwargs);
-
-    $self->parse_chunks();
-    
-    return $self;
+    return $proto->SUPER::new(%kwargs)->parse_chunks();
 }
 
 sub parse_chunks
 {
     my $self = shift;
-    
     while( scalar @{$self->{'raw_chunks'}} )
     {
          $self->add_chunk( $self->parse_next_chunk());
     }
+    return $self;
 }
 
 sub parse_next_chunk

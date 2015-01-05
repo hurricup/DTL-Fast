@@ -10,12 +10,10 @@ sub new
 {
     my $proto = shift;
     my %kwargs = @_;
-    
+
     $kwargs{'chunks'} = [];
 
-    my $self = $proto->SUPER::new(%kwargs);
-
-    return $self;
+    return $proto->SUPER::new(%kwargs);
 }
 
 sub add_chunk
@@ -24,6 +22,7 @@ sub add_chunk
     my $chunk = shift;
     
     push @{$self->{'chunks'}}, $chunk if defined $chunk;
+    return $self;
 }
 
 sub render

@@ -1,31 +1,22 @@
 package DTL::Fast::Template::Tag::Comment;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::BlockTag';  
+use parent 'DTL::Fast::Template::Tag';  
 use Carp qw(confess);
 
 $DTL::Fast::Template::TAG_HANDLERS{'comment'} = __PACKAGE__;
 
-# atm gets arguments: 
-# parameter - opening tag params
-# named:
-#   dirs: arrayref of template directories
-#   raw_chunks: current raw chunks queue
-sub new
+#@Override
+sub get_close_tag{return 'endcomment';}
+
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $parameter = shift;  # parameter of the opening tag
-    my %kwargs = @_;
-    
-    $kwargs{'nested_comments'} = 0;
-    $kwargs{'close_tag'} = 'endcomment';
-    
-    # parent class just blesses passed hash with proto. Nothing more. 
-    # Use it for future compatibility
-    my $self = $proto->SUPER::new( %kwargs );
-    
+    my $self = shift;
+    $self->{'nested_comments'} = 0;
     return $self;
 }
 
+#@Override
 sub parse_next_chunk
 {
     my $self = shift;
@@ -46,8 +37,7 @@ sub parse_next_chunk
     return $chunk;
 }
 
-
-# parse extra tags from if blocks
+#@Override
 sub parse_tag_chunk
 {
     my $self = shift;
@@ -56,7 +46,7 @@ sub parse_tag_chunk
     
     my $result = undef;
     
-    if( $tag_name eq 'endcomment' )
+    if( $tag_name eq $self->get_close_tag )
     {
         if( $self->{'nested_comments'} )
         {
@@ -64,7 +54,7 @@ sub parse_tag_chunk
         }
         else
         {
-            $self->end_block();
+            $self->{'raw_chunks'} = [];
         }
     }
     elsif( $tag_name eq 'comment' )

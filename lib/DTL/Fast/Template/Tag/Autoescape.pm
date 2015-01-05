@@ -1,51 +1,34 @@
 package DTL::Fast::Template::Tag::Autoescape;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::BlockTag';  
+use parent 'DTL::Fast::Template::Tag';  
 use Carp qw(confess cluck);
 
 $DTL::Fast::Template::TAG_HANDLERS{'autoescape'} = __PACKAGE__;
 
-use DTL::Fast::Context;
-use DTL::Fast::Template::Expression;
+#@Override
+sub get_close_tag{ return 'endautoescape';}
 
-# atm gets arguments: 
-# parameter - opening tag params
-# named:
-#   dirs: arrayref of template directories
-#   raw_chunks: current raw chunks queue
-sub new
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $condition = shift;  # parameter of the opening tag
-    my %kwargs = @_;
-
-    my $safe = 0;
-    if( $condition eq 'on' )
+    my $self = shift;
+    
+    if( $self->{'parameter'} eq 'on' )
     {
-        $kwargs{'safe'} = 0;
+        $self->{'safe'} = 0;
     }
-    elsif( $condition eq 'off' )
+    elsif( $self->{'parameter'} eq 'off' )
     {
-        $kwargs{'safe'} = 1;
+        $self->{'safe'} = 1;
     }
     else
     {
         confess "Autoescape tag undertands only on and off parameter";
     }
-
-    $kwargs{'close_tag'} = 'endautoescape';
-    
-    # parent class just blesses passed hash with proto. Nothing more. 
-    # Use it for future compatibility
-    my $self = $proto->SUPER::new( 
-        $kwargs{'raw_chunks'}
-        , $kwargs{'dirs'}
-        , %kwargs
-    );    
-    
     return $self;
 }
 
+#@Override
 sub render
 {
     my $self = shift;

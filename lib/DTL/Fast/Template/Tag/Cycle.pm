@@ -1,51 +1,23 @@
 package DTL::Fast::Template::Tag::Cycle;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::SimpleTag';  
+use parent 'DTL::Fast::Template::Tag::Simple';  
 use Carp qw(confess);
 
 $DTL::Fast::Template::TAG_HANDLERS{'cycle'} = __PACKAGE__;
 
-use DTL::Fast::Context;
-use DTL::Fast::Template::Expression;
-use DTL::Fast::Utils qw(has_method);
-
-# atm gets arguments: 
-# parameter - opening tag params
-# named:
-#   dirs: arrayref of template directories
-#   raw_chunks: current raw chunks queue
-sub new
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $parameter = shift;  # parameter of the opening tag
-    my %kwargs = @_;
+    my $self = shift;
     
-    $parameter =~ /^\s*(.+?)\s*(?:as (.+?)\s*(silent)?)?\s*$/;
-    @kwargs{'source', 'destination', 'silent', 'parameter', 'sources', 'current_sources'} = ($1 // '', $2 // '', $3 // '', $parameter, [], []);
-    
-    # parent class just blesses passed hash with proto. Nothing more. 
-    # Use it for future compatibility
-    my $self = $proto->SUPER::new( %kwargs );
-
-    # parse source line
+    $self->{'parameter'} =~ /^\s*(.+?)\s*(?:as (.+?)\s*(silent)?)?\s*$/;
+    @{$self}{'source', 'destination', 'silent', 'sources', 'current_sources'} = ($1 // '', $2 // '', $3 // '', [], []);
     $self->{'sources'} = $self->parse_sources($self->{'source'});
     
     return $self;
 }
 
-sub get_next_source
-{
-    my $self = shift;
-    
-    if( not scalar @{$self->{'current_sources'}} )    # populate for current cycle
-    {
-        push @{$self->{'current_sources'}}, @{$self->{'sources'}}; 
-    }
-    
-    return shift @{$self->{'current_sources'}};
-}
-
-# conditional rendering
+#@Override
 sub render
 {
     my $self = shift;
@@ -74,6 +46,18 @@ sub render
     }
   
     return $result;
+}
+
+sub get_next_source
+{
+    my $self = shift;
+    
+    if( not scalar @{$self->{'current_sources'}} )    # populate for current cycle
+    {
+        push @{$self->{'current_sources'}}, @{$self->{'sources'}}; 
+    }
+    
+    return shift @{$self->{'current_sources'}};
 }
 
 1;

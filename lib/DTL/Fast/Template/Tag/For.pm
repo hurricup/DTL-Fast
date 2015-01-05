@@ -1,27 +1,23 @@
 package DTL::Fast::Template::Tag::For;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::BlockTag';  
+use parent 'DTL::Fast::Template::Tag';
 use Carp qw(confess);
 
 $DTL::Fast::Template::TAG_HANDLERS{'for'} = __PACKAGE__;
 
-use DTL::Fast::Context;
-use DTL::Fast::Template::Expression;
 use DTL::Fast::Utils qw(has_method);
+use DTL::Fast::Template::Variable;
 
-# atm gets arguments: 
-# parameter - opening tag params
-# named:
-#   dirs: arrayref of template directories
-#   raw_chunks: current raw chunks queue
-sub new
+#@Override
+sub get_close_tag{ return 'endfor';}
+
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $condition = shift;  # parameter of the opening tag
-    my %kwargs = @_;
+    my $self = shift;
     
     my(@target_names, $source_name, $reversed);
-    if( $condition =~ /^\s*(.+)\s+in\s+(.+?)\s*(reversed)?\s*$/si )
+    if( $self->{'parameter'} =~ /^\s*(.+)\s+in\s+(.+?)\s*(reversed)?\s*$/si )
     {
         $source_name = $2;
         $reversed = $3;
@@ -32,18 +28,16 @@ sub new
     }
     else
     {
-        confess "Do not understand condition: $condition";
+        confess "Do not understand condition: $self->{'parameter'}";
     }
     
-    $kwargs{'renderers'} = [];
-    $kwargs{'source_name'} = $source_name;
-    $kwargs{'targets'} = [@target_names];
-    $kwargs{'close_tag'} = 'endfor';
-    
-    # parent class just blesses passed hash with proto. Nothing more. 
-    # Use it for future compatibility
-    my $self = $proto->SUPER::new( %kwargs );
+    $self->{'renderers'} = [];
+    $self->add_renderer();
 
+    $self->{'targets'} = [@target_names];
+
+    $self->{'source'} = DTL::Fast::Template::Variable->new($source_name);
+    
     if( $reversed )
     {
         $self->{'source'}->add_filter('reverse');
@@ -57,31 +51,17 @@ sub new
     return $self;
 }
 
-# chunks parsing pre-work
-sub parse_chunks
-{
-    my $self = shift;
-    $self->add_renderer();
-    $self->{'source'} = DTL::Fast::Template::Variable->new($self->{'source_name'});
-    $self->SUPER::parse_chunks();
-}
-
-# add chunk to the last condition
+#@Override
 sub add_chunk
 {
     my $self = shift;
     my $chunk = shift;
     
     $self->{'renderers'}->[-1]->add_chunk($chunk);
+    return $self;
 }
 
-sub add_renderer
-{
-    my $self = shift;
-    push @{$self->{'renderers'}}, DTL::Fast::Template::Renderer->new();
-}
-
-# parse extra tags from if blocks
+#@Override
 sub parse_tag_chunk
 {
     my $self = shift;
@@ -109,7 +89,7 @@ sub parse_tag_chunk
     return $result;
 }
 
-# conditional rendering
+#@Override
 sub render
 {
     my $self = shift;
@@ -279,6 +259,13 @@ sub render_hash
     }
     
     return $result;
+}
+
+sub add_renderer
+{
+    my $self = shift;
+    push @{$self->{'renderers'}}, DTL::Fast::Template::Renderer->new();
+    return $self;
 }
 
 sub get_forloop

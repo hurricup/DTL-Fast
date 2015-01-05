@@ -1,35 +1,20 @@
 package DTL::Fast::Template::Tag::Firstof;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::SimpleTag';  
+use parent 'DTL::Fast::Template::Tag::Simple';  
 
 $DTL::Fast::Template::TAG_HANDLERS{'firstof'} = __PACKAGE__;
 
-use DTL::Fast::Context;
-use DTL::Fast::Template::Variable;
+use DTL::Fast::Utils;
 
-# atm gets arguments: 
-# parameter - opening tag params
-# named:
-#   dirs: arrayref of template directories
-#   raw_chunks: current raw chunks queue
-sub new
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $source = shift;  # parameter of the opening tag
-    my %kwargs = @_;
-    
-    $kwargs{'source'} = $source;
-    
-    # parent class just blesses passed hash with proto. Nothing more. 
-    # Use it for future compatibility
-    my $self = $proto->SUPER::new( %kwargs );
-    
-    $self->{'sources'} = $self->parse_sources($self->{'source'});
-    
+    my $self = shift;
+    $self->{'sources'} = $self->parse_sources($self->{'parameter'});
     return $self;
 }
 
-# conditional rendering
+#@Override
 sub render
 {
     my $self = shift;

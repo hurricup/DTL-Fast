@@ -1,60 +1,36 @@
 package DTL::Fast::Template::Tag::If;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::BlockTag';  
+use parent 'DTL::Fast::Template::Tag';
 
 $DTL::Fast::Template::TAG_HANDLERS{'if'} = __PACKAGE__;
 
-use DTL::Fast::Context;
-use DTL::Fast::Template::Expression;
 use DTL::Fast::Template::Tag::If::Condition;
 
-# atm gets arguments: 
-# parameter - opening tag params
-# named:
-#   dirs: arrayref of template directories
-#   raw_chunks: current raw chunks queue
-sub new
+#@Override
+sub get_close_tag{ return 'endif';}
+
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $condition = shift;  # parameter of the opening tag
-    my %kwargs = @_;
-    
-    $kwargs{'condition'} = $condition;
-    $kwargs{'conditions'} = [];
-    $kwargs{'close_tag'} = 'endif';
-    
-    # parent class just blesses passed hash with proto. Nothing more. 
-    # Use it for future compatibility
-    my $self = $proto->SUPER::new( %kwargs );
+    my $self = shift;
+
+    $self->{'conditions'} = [];
+    $self->add_condition($self->{'parameter'});
     
     return $self;
 }
 
-# chunks parsing pre-work
-sub parse_chunks
-{
-    my $self = shift;
-    $self->add_condition($self->{'condition'});
-    $self->SUPER::parse_chunks();
-}
-
-sub add_condition
-{
-    my $self = shift;
-    my $condition = shift;
-    push @{$self->{'conditions'}}, DTL::Fast::Template::Tag::If::Condition->new($condition);
-}
-
-# add chunk to the last condition
+#@Override
 sub add_chunk
 {
     my $self = shift;
     my $chunk = shift;
     
     $self->{'conditions'}->[-1]->add_chunk($chunk);
+    return $self;
 }
 
-# parse extra tags from if blocks
+#@Override
 sub parse_tag_chunk
 {
     my $self = shift;
@@ -79,7 +55,7 @@ sub parse_tag_chunk
     return $result;
 }
 
-# conditional rendering
+#@Override
 sub render
 {
     my $self = shift;
@@ -95,6 +71,13 @@ sub render
         }
     }
     return $result;
+}
+
+sub add_condition
+{
+    my $self = shift;
+    my $condition = shift;
+    push @{$self->{'conditions'}}, DTL::Fast::Template::Tag::If::Condition->new($condition);
 }
 
 1;

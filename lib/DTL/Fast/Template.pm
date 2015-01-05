@@ -1,6 +1,6 @@
 package DTL::Fast::Template;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::Iterator';
+use parent 'DTL::Fast::Template::Parser';
 
 our $UTF8 = 1;
 
