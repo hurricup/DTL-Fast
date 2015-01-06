@@ -33,11 +33,6 @@ sub new
         $static = 1;
         $sign = 1;
     }
-    elsif( looks_like_number($variable_name) )
-    {
-        @variable = ($variable_name);
-        $static = 1;
-    }
     elsif( 
         $variable_name eq 'undef'
         or $variable_name eq 'None' # python compatibility
@@ -47,6 +42,11 @@ sub new
         $sign = 1;
         $undef = 1;
         @variable = (undef);        
+    }
+    elsif( looks_like_number($variable_name) )
+    {
+        @variable = ($variable_name);
+        $static = 1;
     }
     else
     {
@@ -82,7 +82,7 @@ sub render
     my $self = shift;
     my $context = shift;
     
-    my $value;
+    my $value = undef;
     
     if( not $self->{'undef'} )
     {
@@ -90,8 +90,8 @@ sub render
             $self->{'variable'}->[0]
             : $context->get($self->{'variable'});
 
-        $value = $self->filter_manager->filter($value, $context);
     }
+    $value = $self->filter_manager->filter($value, $context);
     
     return $value;
 }
