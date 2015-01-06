@@ -68,6 +68,8 @@ sub get_template
         my @arguments = ($template, $dirs);
         push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
             if $kwargs{'ssi_dirs'};
+        push @arguments, 'url_source', $kwargs{'url_source'}
+            if $kwargs{'url_source'};
         
         $template = DTL::Fast::Template->new(@arguments)
             if defined $template;

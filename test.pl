@@ -33,5 +33,6 @@ runtests(
     't/tag/spaceless.t',
     't/tag/ssi.t',
     't/tag/templatetag.t',
+    't/tag/url.t',
     't/tag/uncomment.t',
 );

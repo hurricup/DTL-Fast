@@ -20,6 +20,7 @@ use DTL::Fast::Template::Tag::Regroup;
 use DTL::Fast::Template::Tag::Spaceless;
 use DTL::Fast::Template::Tag::Ssi;
 use DTL::Fast::Template::Tag::Templatetag;
+use DTL::Fast::Template::Tag::Url;
 
 # not from Django
 use DTL::Fast::Template::Tag::Firstofdefined;

@@ -30,6 +30,19 @@ Incompatibilities with Django templates
     
   - output from following tags: `cycle`, `firstof`, `firstofdefined` are being
     escaped by default (like in later versions of Django)
+    
+  - `url` tag works a different way. Because there is no framework around, we
+    can't obtain model's path the same way. But you may pass `url_source` 
+    parameter into template constructor or get_template/select_template 
+    function. This parameter MUST be a reference to a function, that will 
+    provide templating engine with url templates by some 'model path' (first
+    parameter of url tag). Second parameter passed to the `url_source` handler
+    will be a reference to array of argument values (in case of positional 
+    arguments) or reference to a hash of arguments (in case of named ones). 
+    Url source handler may just return a regexp template by model path and 
+    templating engine will try to restore it with specified arguments. Or, you 
+    may restore it yourself, alter replacement arguments or do whatever you 
+    want. 
   
 Django templating extensions
 ============================
@@ -94,6 +107,7 @@ DEPENDENCIES
 This module requires these other modules and libraries:
 
   Date::Format
+  URI::Escape::XS
 
 COPYRIGHT AND LICENCE
 

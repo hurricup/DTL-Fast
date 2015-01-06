@@ -60,6 +60,7 @@ sub render
     $context->push();
     
     $context->set('_dtl_ssi_dirs' => $self->{'ssi_dirs'}) if $self->{'ssi_dirs'};
+    $context->set('_dtl_url_source' => $self->{'url_source'}) if $self->{'url_source'};
     
     my $result = $self->SUPER::render($context);
     $context->pop();

@@ -2,6 +2,8 @@ package DTL::Fast::Utils;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'Exporter';
 
+require Date::Format;
+require URI::Escape::XS;
 use Carp qw(confess cluck);
 
 our @EXPORT_OK;
@@ -50,13 +52,22 @@ sub html_protect
 
 # @todo what with timezones?
 push @EXPORT_OK, 'time2str';
-sub time2str
-{
+sub time2str{ 
     my $format = shift;
     my $time = shift;
-    require Date::Format;
-    
     return Date::Format::time2str($format, $time );
 }
+
+push @EXPORT_OK, 'uri_escape';
+sub uri_escape{return URI::Escape::XS::uri_escape(shift);}
+
+push @EXPORT_OK, 'uri_unescape';
+sub uri_unescape{return URI::Escape::XS::uri_unescape(shift);}
+
+push @EXPORT_OK, 'escape';
+sub escape{return URI::Escape::XS::encodeURIComponent(shift);}
+
+push @EXPORT_OK, 'unescape';
+sub unescape{return URI::Escape::XS::decodeURIComponent(shift);}
 
 1;
