@@ -4,11 +4,18 @@ use strict; use utf8; use warnings FATAL => 'all';
 sub new
 {
     my $proto = shift;
-    my $text = shift;
+    my $text = shift // '';
     
-    return bless {'text' => $text}, $proto;
+    return bless {'texts' => [$text]}, $proto;
 }
 
-sub render{ return shift->{'text'};}
+sub append
+{
+    my $self = shift;
+    push @{$self->{'texts'}}, shift;
+    return $self;
+}
+
+sub render{ return join '', @{shift->{'texts'}};}
 
 1;

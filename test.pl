@@ -35,4 +35,5 @@ runtests(
     't/tag/templatetag.t',
     't/tag/url.t',
     't/tag/uncomment.t',
+    't/tag/verbatim.t',
 );

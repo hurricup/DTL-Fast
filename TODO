@@ -11,6 +11,7 @@ FOR SURE:
 - Recursion protection on inheritance
 - Recursion protection on inclusion
 - Recursion protection on deep comparision
+- Error messaging with line numbers and so on
 - Improve url tag regexp reversing
 - Implement cache control options for Template constructor
 - as_string method for variables and operations, useful for good error messaging
@@ -26,6 +27,8 @@ SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
+- Shouldn't dirs be passed as named optional arugument? 
+- Working with localization
 - Shouldn't tags/filters binging be in BEGIN block?
 - Do we need mappings for date formatting between Django and Date::Format?
 - Compare two undefs. What should we do?
