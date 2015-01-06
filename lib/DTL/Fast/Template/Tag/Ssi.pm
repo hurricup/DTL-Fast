@@ -20,7 +20,7 @@ sub parse_parameters
     }
     else
     {
-        confess "Can't parse parameter: $self->{'template'}";
+        confess "Can't parse parameter: $self->{'parameter'}";
     }
     
     return $self;

@@ -32,5 +32,6 @@ runtests(
     't/tag/regroup.t',
     't/tag/spaceless.t',
     't/tag/ssi.t',
+    't/tag/templatetag.t',
     't/tag/uncomment.t',
 );

@@ -25,6 +25,7 @@ SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
+- Shouldn't tags/filters binging be in BEGIN block?
 - Do we need mappings for date formatting between Django and Date::Format?
 - Compare two undefs. What should we do?
 - Macroses in jinja. What for? What is the difference from include?
