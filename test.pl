@@ -37,4 +37,5 @@ runtests(
     't/tag/uncomment.t',
     't/tag/verbatim.t',
     't/tag/widthratio.t',
+    't/tag/with.t',
 );
