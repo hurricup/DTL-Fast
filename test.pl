@@ -13,6 +13,7 @@ runtests(
     't/filter/addslashes.t',
     't/filter/capfirst.t',
     't/filter/center.t',
+    't/filter/cut.t',
     't/filter/escape.t',
     't/filter/join.t',
     't/filter/reverse.t',
