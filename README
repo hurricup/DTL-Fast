@@ -15,16 +15,22 @@ Incompatibilities with Django templates
 
   - Date and time formatting being done using Date::Format module, which 
     is uses C library routines strftime and ctime. Django uses it's own 
-    placehodlers.
+    placeholders.
     
-  - ssi tag in Django uses absolute paths and ALLOWED_INCLUDE_ROOTS
+  - `ssi` tag in Django uses absolute paths and ALLOWED_INCLUDE_ROOTS
     configuration option. This library works separately and may be used
-    with different frameworks. So, ssi tag uses relative paths and 
+    with different frameworks. So, `ssi` tag uses relative paths and 
     you MUST specify additional template constructor parameter: `ssi_dirs`
     which should be an array reference with list of dirs to search in.
     
   - `csrf_token` tag is not implemented, too well connected with Django.
+
+  - `_dtl_*` variable names in context are reserved for internal system 
+    purposes. Don't use them.
     
+  - output from following tags: `cycle`, `firstof`, `firstofdefined` are being
+    escaped by default (like in later versions of Django)
+  
 Django templating extensions
 ============================
 
@@ -61,7 +67,7 @@ Django templating extensions
     - div(operand)      - divides object by operand
     - equal(operand)    - checks if object is equal with operand
     - compare(operand)  - compares object with operand, returns -1, 0, 1 on 
-                          less than, equal or greater than.
+                          less than, equal or greater than respectively
     - in(operand)       - checks if object is in operand
     - contains(operand) - checks if object contains operand
     - minus(operand)    - substitutes operand from object
