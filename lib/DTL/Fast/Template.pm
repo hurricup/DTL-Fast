@@ -31,7 +31,11 @@ sub _get_raw_chunks
 {
     my $template = shift;
 
-    my $reg = qr/(\{[\{\%] .+? [\}\%]\})/;
+    my $reg = qr/(
+        \{\# .*? \#\}
+        |\{\% .+? \%\}
+        |\{\{ .+? \}\}
+    )/x;
     my $result = [split /$reg/s, $template];
     
     return $result;    

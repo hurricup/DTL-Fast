@@ -53,6 +53,13 @@ sub parse_next_chunk
     {
         $chunk = $self->parse_tag_chunk($1, $2);
     }
+    elsif
+    ( 
+        $chunk =~ /^\{\# .* \#\}$/ 
+    )
+    {
+        $chunk = undef;
+    }
     elsif( $chunk )
     {
         $chunk = DTL::Fast::Template::Text->new( $chunk );
@@ -83,7 +90,7 @@ sub parse_tag_chunk
     else
     {
         warn "Unknown tag: $tag_name";
-        $result = DTL::Fast::Template::Text->new( "" );
+        $result = DTL::Fast::Template::Text->new();
     }
     
     return $result;

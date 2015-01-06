@@ -2,10 +2,10 @@ Inspired by Django templating and Jinja2
 
 FOR SURE:
 - Documentation
--- Time format uses C rules for time2str, not Django rules. 
+- Pre-set date and time formats from Django
 - Implement {# ... #}, decide what to do with verbantim
 - Check how spaceless works with < and > in quotes (single and double)
-- More tests (especially test blocks re-using, that cacheing works properly)
+- More tests (especially test blocks re-using, that caching works properly)
 - Debug tag tests
 - Error exceptions
 - Recursion protection on inheritance
@@ -14,6 +14,7 @@ FOR SURE:
 - Error messaging with line numbers and so on
 - Improve url tag regexp reversing
 - Implement cache control options for Template constructor
+- Implement external caching as perl code
 - as_string method for variables and operations, useful for good error messaging
 - Performance testing in comparision of other perl implementations and Django itself
 - DTL::Fast::Utils::html_protect should work using XS module (to take from CDI3)
