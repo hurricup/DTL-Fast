@@ -27,6 +27,5 @@ use DTL::Fast::Template::Tag::With;
 
 # not from Django
 use DTL::Fast::Template::Tag::Firstofdefined;
-use DTL::Fast::Template::Tag::Uncomment;
 
 1;

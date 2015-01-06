@@ -1,9 +1,0 @@
-commented {% comment Some comment %}
-This part
-should 
-    {% comment Some other comment %}
-        This one is nested comment
-    {% endcomment %}
-not 
-be 
-rendered{% endcomment %} test

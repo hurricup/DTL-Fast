@@ -5,16 +5,10 @@ use Carp qw(confess);
 
 $DTL::Fast::Template::TAG_HANDLERS{'comment'} = __PACKAGE__;
 
-#@Override
-sub get_close_tag{return 'endcomment';}
+use DTL::Fast::Template::Text;
 
 #@Override
-sub parse_parameters
-{
-    my $self = shift;
-    $self->{'nested_comments'} = 0;
-    return $self;
-}
+sub get_close_tag{return 'endcomment';}
 
 #@Override
 sub parse_next_chunk
@@ -22,51 +16,18 @@ sub parse_next_chunk
     my $self = shift;
     my $chunk = shift @{$self->{'raw_chunks'}};
     
-    if
-    ( 
-        $chunk =~ /^\{\% ([^\s]+?)(?: (.*?))? \%\}$/ 
-    )
+    if( $chunk eq '{% endcomment %}' )
     {
-        $chunk = $self->parse_tag_chunk($1, $2);
-    }
-    else
-    {
-        $chunk = undef;
+        $self->{'raw_chunks'} = []; # this stops parsing
     }
     
-    return $chunk;
+    return undef;
 }
 
 #@Override
-sub parse_tag_chunk
+sub render
 {
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
-    
-    my $result = undef;
-    
-    if( $tag_name eq $self->get_close_tag )
-    {
-        if( $self->{'nested_comments'} )
-        {
-            $self->{'nested_comments'}--;
-        }
-        else
-        {
-            $self->{'raw_chunks'} = [];
-        }
-    }
-    elsif( $tag_name eq 'comment' )
-    {
-        $self->{'nested_comments'}++;
-    }
-    elsif( $tag_name eq 'uncomment' )
-    {
-        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
-    }
-    
-    return $result;
+    return '';
 }
 
 1;

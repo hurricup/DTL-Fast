@@ -7,10 +7,15 @@ use DTL::Fast::Template;
 sub new
 {
     my $proto = shift;
-    my $arguments = shift;
+    my $parameter = shift;
     my %kwargs = @_;
-    return bless {%kwargs}, $proto;
+    $kwargs{'parameter'} = $parameter;
+    my $self = bless {%kwargs}, $proto;
+    
+    return $self->parse_parameters();
 }
+
+sub parse_parameters{return shift;}
 
 sub filter
 {

@@ -28,8 +28,4 @@ _EOT_
 
 is( get_template( 'comment_top.txt', $dirs)->render($context), $test_string, 'Comment with inclusion');
 
-$test_string = 'commented  test';
-
-is( get_template( 'comment_nested.txt', $dirs)->render($context), $test_string, 'Nested comments');
-
 done_testing();

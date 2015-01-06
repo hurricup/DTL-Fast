@@ -5,39 +5,36 @@ use Carp qw(confess);
 
 $DTL::Fast::Template::FILTER_HANDLERS{'add'} = __PACKAGE__;
 
-use DTL::Fast::Context;
 use DTL::Fast::Template::Variable;
 use Scalar::Util qw(looks_like_number);
 
-sub new
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $arguments = shift;  # this is a single argument. Arrayref with filter arguments splitted by /:/
+    my $self = shift;
     
     confess "No single arguments passed to the add ".__PACKAGE__
         if(
-            ref $arguments ne 'ARRAY'
-            or not scalar @$arguments
+            ref $self->{'parameter'} ne 'ARRAY'
+            or not scalar @{$self->{'parameter'}}
         );
-
-    # parent class just blesses passed hash with proto. Nothing more. Use it
-    # for future compatibility
-    return $proto->SUPER::new( $arguments
-        , 'arguments' => [(
+        
+    $self->{'parameters'} = [(
             map{
                 DTL::Fast::Template::Variable->new($_)
-            } @$arguments
-        )]
-    );    
+            } @{$self->{'parameter'}}
+    )];
+
+    return $self;
 }
 
-# filtering function
+#@Override
 sub filter
 {
     my $self = shift;
     my $filter_manager = shift;
     my $value = shift;
-    my $context = shift // DTL::Fast::Context->new();
+    my $context = shift;
     
     my $result = $value;
     my $value_type = ref $value;
@@ -55,7 +52,7 @@ sub filter
         confess "Don't know how to add anything to $value_type";
     }
     
-    foreach my $argument (@{$self->{'arguments'}})
+    foreach my $argument (@{$self->{'parameters'}})
     {
         $argument = $argument->render($context);
         

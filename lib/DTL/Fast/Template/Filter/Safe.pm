@@ -5,7 +5,7 @@ use Carp qw(confess);
 
 $DTL::Fast::Template::FILTER_HANDLERS{'safe'} = __PACKAGE__;
 
-# filtering function
+#@Override
 sub filter
 {
     shift;

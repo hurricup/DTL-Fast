@@ -47,9 +47,6 @@ Incompatibilities with Django templates
 Django templating extensions
 ============================
 
-  - `comment` block tags can be nested
-  - `uncomment` block tag. New tag that can be used inside a `comment` block
-    in order to render a part of commented block.
   - `firstofdefined` - new tag, that works like `firstof` tag, but checks if 
     value is defined (not true)
   - `defined` logical operator. In logical constructions you may use `defined`

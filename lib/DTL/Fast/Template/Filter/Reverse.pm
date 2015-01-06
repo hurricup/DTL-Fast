@@ -5,17 +5,15 @@ use Carp qw(confess);
 
 $DTL::Fast::Template::FILTER_HANDLERS{'reverse'} = __PACKAGE__;
 
-use DTL::Fast::Context;
-use DTL::Fast::Template::Variable;
 use DTL::Fast::Utils qw(has_method);
 
-# filtering function
+#@Overrde
 sub filter
 {
     my $self = shift;
     my $filter_manager = shift;
     my $value = shift;
-    my $context = shift // DTL::Fast::Context->new();
+    my $context = shift;
     my $result; 
     
     my $value_type = ref $value;
@@ -34,7 +32,7 @@ sub filter
     }
     else
     {
-        confess "Don't know how to reverse $value ($value_type)";
+        die "Don't know how to reverse $value ($value_type)";
     }    
     
     return $result;

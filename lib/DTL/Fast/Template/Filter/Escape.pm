@@ -6,9 +6,7 @@ use Carp qw(confess);
 $DTL::Fast::Template::FILTER_HANDLERS{'escape'} = __PACKAGE__;
 $DTL::Fast::Template::FILTER_HANDLERS{'force_escape'} = __PACKAGE__;
 
-use DTL::Fast::Utils;
-
-# filtering function
+#@Override
 sub filter
 {
     shift;  # self

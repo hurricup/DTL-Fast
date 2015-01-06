@@ -5,34 +5,31 @@ use Carp qw(confess);
 
 $DTL::Fast::Template::FILTER_HANDLERS{'join'} = __PACKAGE__;
 
-use DTL::Fast::Context;
 use DTL::Fast::Template::Variable;
 
-sub new
+#@Override
+sub parse_parameters
 {
-    my $proto = shift;
-    my $arguments = shift;  # this is a single argument. Arrayref with filter arguments splitted by /:/
-    
+    my $self = shift;
+
     confess "No separator passed to the filter ".__PACKAGE__
         if(
-            ref $arguments ne 'ARRAY'
-            or not scalar @$arguments
+            ref $self->{'parameter'} ne 'ARRAY'
+            or not scalar @{$self->{'parameter'}}
         );
-
-    # parent class just blesses passed hash with proto. Nothing more. Use it
-    # for future compatibility
-    return $proto->SUPER::new( $arguments
-        , 'sep' => DTL::Fast::Template::Variable->new($arguments->[0])
-    );    
+        
+    $self->{'sep'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+        
+    return $self;    
 }
 
-# filtering function
+#@Override
 sub filter
 {
     my $self = shift;
     my $filter_manager = shift;
     my $value = shift;
-    my $context = shift // DTL::Fast::Context->new();
+    my $context = shift;
     
     my $value_type = ref $value;
     my $result = undef;
