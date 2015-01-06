@@ -18,6 +18,7 @@ use DTL::Fast::Template::Tag::Load;
 use DTL::Fast::Template::Tag::Now;
 use DTL::Fast::Template::Tag::Regroup;
 use DTL::Fast::Template::Tag::Spaceless;
+use DTL::Fast::Template::Tag::Ssi;
 
 # not from Django
 use DTL::Fast::Template::Tag::Firstofdefined;

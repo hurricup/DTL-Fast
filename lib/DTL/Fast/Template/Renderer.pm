@@ -29,21 +29,8 @@ sub render
 {
     my $self = shift;
     my $context = shift;
+  
 
-    $context //= {};
-    
-    if( ref $context eq 'HASH' )
-    {
-        $context = DTL::Fast::Context->new($context);
-    }
-    elsif( 
-        defined $context 
-        and ref $context ne 'DTL::Fast::Context'
-    )
-    {
-        confess "Context must be a DTL::Fast::Context object or a HASH reference";
-    }
-    
     my $is_safe = $context->get('_dtl_safe') // 0;
   
     return join '', map{ 

@@ -1,18 +1,16 @@
 package DTL::Fast::Template;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Parser';
-
-our $UTF8 = 1;
+use Carp qw(confess);
 
 our %TAG_HANDLERS;
 our %FILTER_HANDLERS;
-    
-use DTL::Fast::Utils qw(has_method);
-use DTL::Fast::Template::Variable;
-use DTL::Fast::Template::Text;
+
+use DTL::Fast::Context;
 use DTL::Fast::Template::Tags;
-use DTL::Fast::Template::Filters;
-    
+use DTL::Fast::Template::Filters;    
+
+#@Override
 sub new
 {
     my $proto = shift;
@@ -37,6 +35,36 @@ sub _get_raw_chunks
     my $result = [split /$reg/s, $template];
     
     return $result;    
+}
+
+#@Override
+sub render
+{
+    my $self = shift;
+    my $context = shift;
+
+    $context //= {};
+    
+    if( ref $context eq 'HASH' )
+    {
+        $context = DTL::Fast::Context->new($context);
+    }
+    elsif( 
+        defined $context 
+        and ref $context ne 'DTL::Fast::Context'
+    )
+    {
+        confess "Context must be a DTL::Fast::Context object or a HASH reference";
+    }
+    
+    $context->push();
+    
+    $context->set('_dtl_ssi_dirs' => $self->{'ssi_dirs'}) if $self->{'ssi_dirs'};
+    
+    my $result = $self->SUPER::render($context);
+    $context->pop();
+    
+    return $result;
 }
 
 1;

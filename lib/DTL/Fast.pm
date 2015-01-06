@@ -16,7 +16,6 @@ Version 0.01
 
 =cut
 
-
 use Cwd;
 use DTL::Fast::Template;
 
@@ -47,10 +46,12 @@ sub get_template
             or not scalar @$dirs
         );
 
-    my $cache_key = sprintf '%s:%s:%s'
+    my $cache_key = sprintf '%s:%s:%s:%s'
         , __PACKAGE__
         , $template_name
-        , join ',', @$dirs;
+        , join( ',', @$dirs )
+        , join( ',', @{$kwargs{'ssi_dirs'}//[]})
+        ;
 
     my $template;
     
@@ -64,8 +65,11 @@ sub get_template
         $template = _read_template($template_name, $dirs);
         $template =~ s/\{\% (?:block|endblock|extends) .*?\%\}//gs;
         
+        my @arguments = ($template, $dirs);
+        push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
+            if $kwargs{'ssi_dirs'};
         
-        $template = DTL::Fast::Template->new($template, $dirs)
+        $template = DTL::Fast::Template->new(@arguments)
             if defined $template;
         $OBJECTS_CACHE{$cache_key} = $template;
     }
@@ -113,32 +117,7 @@ sub _read_template
     }
     else
     {
-        foreach my $dir (@$dirs)
-        {
-            $dir =~ s/[\/\\]+$//gsi;
-            my $template_path = sprintf '%s/%s', $dir, $template_name;
-            if( 
-                -e $template_path
-                and -f $template_path
-                and -r $template_path
-            )
-            {
-                if( open IF, '<', $template_path )
-                {
-                    $template = join '', <IF>;
-                    close IF;
-                    last;
-                }
-                else
-                {
-                    confess sprintf(
-                        'Error opening file %s, %s'
-                        , $template_path
-                        , $!
-                    );
-                }
-            }        
-        }
+        $template = _read_file($template_name, $dirs);
         $template = _apply_inheritance($template, $dirs)
             if defined $template;
             
@@ -149,6 +128,42 @@ sub _read_template
 Unable to find template %s in directories: 
 %s
 _EOT_
+    
+    return $template;
+}
+
+sub _read_file
+{
+    my $template_name = shift;
+    my $dirs = shift;
+    my $template;
+
+    foreach my $dir (@$dirs)
+    {
+        $dir =~ s/[\/\\]+$//gsi;
+        my $template_path = sprintf '%s/%s', $dir, $template_name;
+        if( 
+            -e $template_path
+            and -f $template_path
+            and -r $template_path
+        )
+        {
+            if( open IF, '<', $template_path )
+            {
+                $template = join '', <IF>;
+                close IF;
+                last;
+            }
+            else
+            {
+                confess sprintf(
+                    'Error opening file %s, %s'
+                    , $template_path
+                    , $!
+                );
+            }
+        }        
+    }
     
     return $template;
 }

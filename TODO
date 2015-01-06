@@ -6,6 +6,7 @@ FOR SURE:
 - Implement {# ... #}, decide what to do with verbantim
 - Check how spaceless works with < and > in quotes (single and double)
 - More tests (especially test blocks re-using, that cacheing works properly)
+- Debug tag tests
 - Error exceptions
 - Recursion protection on inheritance
 - Recursion protection on inclusion
@@ -27,7 +28,6 @@ NEED IDEA:
 - Do we need mappings for date formatting between Django and Date::Format?
 - Compare two undefs. What should we do?
 - Macroses in jinja. What for? What is the difference from include?
-- Shouldn't context be pushed on top-level template, to preserve original context?
 - debug tag currently just dumping context. What else? check with Django. Supposedly there should be a template tree
 - csrf_token tag, what to do with it?
 - Control of closing tags and die or warn. 

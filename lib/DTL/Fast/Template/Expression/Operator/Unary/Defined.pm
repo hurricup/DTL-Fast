@@ -4,8 +4,6 @@ use parent 'DTL::Fast::Template::Expression::Operator::Unary';
 
 $DTL::Fast::Template::Expression::Operator::KNOWN{'defined'} = __PACKAGE__;
 
-use DTL::Fast::Utils qw(has_method);
-
 sub render
 {
     my( $self, $context) = @_;

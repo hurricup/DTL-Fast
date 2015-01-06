@@ -4,6 +4,7 @@ use parent 'DTL::Fast::Template::Renderer';
 use Carp qw(confess cluck);
 
 use DTL::Fast::Template::Expression;
+use DTL::Fast::Template::Text;
 
 sub new
 {

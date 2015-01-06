@@ -3,17 +3,77 @@ THIS MODULE IS STILL IN DEVELOPMENT. DO NOT INSTALL IT IN PRODUCTION!
 DTL-Fast version 0.01
 =====================
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+This library is a perl templating system cloned from Django templating
+language and extended after that.
 
-A README file is required for CPAN modules since CPAN extracts the
-README file from a module distribution so that people browsing the
-archive can use it get an idea of the modules uses. It is usually a
-good idea to provide version information here so that people can
-decide whether fixes for the module are worth downloading.
+Some ideas inspired by Java ways. 
 
+This library is 90% compatible with Django templates. 
+
+Incompatibilities with Django templates
+=======================================
+
+  - Date and time formatting being done using Date::Format module, which 
+    is uses C library routines strftime and ctime. Django uses it's own 
+    placehodlers.
+    
+  - ssi tag in Django uses absolute paths and ALLOWED_INCLUDE_ROOTS
+    configuration option. This library works separately and may be used
+    with different frameworks. So, ssi tag uses relative paths and 
+    you MUST specify additional template constructor parameter: `ssi_dirs`
+    which should be an array reference with list of dirs to search in.
+    
+  - `csrf_token` tag is not implemented, too well connected with Django.
+    
+Django templating extensions
+============================
+
+  - `comment` block tags can be nested
+  - `uncomment` block tag. New tag that can be used inside a `comment` block
+    in order to render a part of commented block.
+  - `firstofdefined` - new tag, that works like `firstof` tag, but checks if 
+    value is defined (not true)
+  - `defined` logical operator. In logical constructions you may use `defined`
+    operator, which works exactly like perl's defined
+  - alternatively, in logical expresisons you may compare (==,!=) value to 
+    `undef` or `None` which are synonims
+  - You may use brackets in logical expressions to override natural precedence
+  - `forloop` context hash inside a `for` block tag contains additional fields:
+    `odd`, `odd0`, `even` and `even0`
+  - variables rendering: if any code reference encountered due variable 
+    traversing, is being invoked with context argument. Like:
+    
+        {{ var1.key1.0.func.var2 }} 
+        
+    is being rendered like: 
+    
+        $context->{'var1'}->{'key1'}->[0]->func($context)->{'var2'}
+
+  - you may use filters with static variables. Like:
+  
+        {{ "text > test"|safe }}
+
+  - objects behaviour methods. You may extend your objects, stored in context 
+    to make them work properly with some tags and operations:
+    
+    - and(operand)      - makes logical `and` between object and operand
+    - or(operand)       - makes logical `or` between object and operand
+    - div(operand)      - divides object by operand
+    - equal(operand)    - checks if object is equal with operand
+    - compare(operand)  - compares object with operand, returns -1, 0, 1 on 
+                          less than, equal or greater than.
+    - in(operand)       - checks if object is in operand
+    - contains(operand) - checks if object contains operand
+    - minus(operand)    - substitutes operand from object
+    - plus(operand)     - adds operand to object
+    - mod(operand)      - returns reminder from object division to operand
+    - mul(operand)      - multiplicates object by operand
+    - pow(operand)      - returns object powered by operand
+    - not()             - returns object inversion
+    - reverse()         - returns reversed object
+    - as_array()        - returns array representation of object
+    - as_hash()         - returns hash representation of object
+        
 INSTALLATION
 
 To install this module type the following:
@@ -27,7 +87,7 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  Nothing in here yet.
+  Date::Format
 
 COPYRIGHT AND LICENCE
 

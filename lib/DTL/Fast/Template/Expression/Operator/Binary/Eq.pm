@@ -63,13 +63,13 @@ sub dispatch
             }
         }        
     }
-    elsif( has_method($arg1, 'compare'))
+    elsif( has_method($arg1, 'equal'))
     {
-        $result = ($arg1->compare($arg2) ==  0);
+        $result = $arg1->equal($arg2);
     }
-    elsif( has_method($arg2, 'compare'))
+    elsif( has_method($arg2, 'equal'))
     {
-        $result = ($arg2->compare($arg1) ==  0);
+        $result = $arg2->equal($arg1);
     }
     else
     {

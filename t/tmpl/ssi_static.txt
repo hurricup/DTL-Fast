@@ -1,0 +1,1 @@
+here {% ssi "static.txt" %} is
