@@ -46,7 +46,7 @@ sub render
         {
             $text = DTL::Fast::Utils::html_protect($text);
         }
-        $text // '_UNDEF_'; # temporary solution for catching bugs
+        $text // '';# // '_UNDEF_'; # temporary solution for catching bugs
     } @{$self->{'chunks'}};
 }
 

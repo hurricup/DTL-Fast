@@ -90,10 +90,7 @@ sub render
             $self->{'variable'}->[0]
             : $context->get($self->{'variable'});
 
-        if( defined $value )
-        {
-            $value = $self->filter_manager->filter($value, $context);
-        }
+        $value = $self->filter_manager->filter($value, $context);
     }
     
     return $value;

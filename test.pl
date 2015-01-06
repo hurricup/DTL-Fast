@@ -15,6 +15,7 @@ runtests(
     't/filter/center.t',
     't/filter/cut.t',
     't/filter/date.t',
+    't/filter/default.t',
     't/filter/escape.t',
     't/filter/join.t',
     't/filter/reverse.t',
