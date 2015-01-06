@@ -22,6 +22,7 @@ use DTL::Fast::Template::Tag::Ssi;
 use DTL::Fast::Template::Tag::Templatetag;
 use DTL::Fast::Template::Tag::Url;
 use DTL::Fast::Template::Tag::Verbatim;
+use DTL::Fast::Template::Tag::Widthratio;
 
 # not from Django
 use DTL::Fast::Template::Tag::Firstofdefined;
