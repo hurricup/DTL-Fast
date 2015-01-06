@@ -10,6 +10,7 @@ runtests(
     't/loader.t',
     't/template.t',
     't/filter/add.t',
+    't/filter/addslashes.t',
     't/filter/escape.t',
     't/filter/join.t',
     't/filter/reverse.t',

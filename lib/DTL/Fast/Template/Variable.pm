@@ -26,10 +26,10 @@ sub new
     }
     
     if( 
-        $variable_name =~ /^\"(.*?)\"$/ 
+        $variable_name =~ /^(?<!\\)(["'])(.*?)(?<!\\)\1$/ 
     )   
     {
-        @variable = ($1);
+        @variable = ($2);
         $static = 1;
         $sign = 1;
     }
