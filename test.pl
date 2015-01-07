@@ -33,6 +33,7 @@ runtests(
     't/filter/length_is.t',
     't/filter/linebreaks.t',
     't/filter/linebreaksbr.t',
+    't/filter/linenumbers.t',
     't/filter/reverse.t',
     't/filter/safe.t',
     't/filter/urlencode.t',
