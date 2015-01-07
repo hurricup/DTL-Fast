@@ -12,6 +12,7 @@ use DTL::Fast::Template::Filter::Default;
 use DTL::Fast::Template::Filter::DefaultIfNone;
 use DTL::Fast::Template::Filter::Dictsort;
 use DTL::Fast::Template::Filter::Dictsortreversed;
+use DTL::Fast::Template::Filter::Divisibleby;
 use DTL::Fast::Template::Filter::Escape;
 use DTL::Fast::Template::Filter::Join;
 use DTL::Fast::Template::Filter::Reverse;

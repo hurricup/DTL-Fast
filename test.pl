@@ -19,6 +19,7 @@ runtests(
     't/filter/default_if_none.t',
     't/filter/dictsort.t',
     't/filter/dictsortreversed.t',
+    't/filter/divisibleby.t',
     't/filter/escape.t',
     't/filter/join.t',
     't/filter/reverse.t',
