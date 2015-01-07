@@ -21,6 +21,7 @@ runtests(
     't/filter/dictsortreversed.t',
     't/filter/divisibleby.t',
     't/filter/escape.t',
+    't/filter/escapejs.t',
     't/filter/join.t',
     't/filter/reverse.t',
     't/filter/safe.t',
