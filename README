@@ -38,6 +38,8 @@ Differences from Django templates
   - `fix_ampersands` filter is not implemented, because it's marked as 
     depricated and will beremoved in Django 1.8
 
+  - `iriencode` filter works like `urlencode` for the moment.
+    
   - `url` tag works a different way. Because there is no framework around, we
     can't obtain model's path the same way. But you may pass `url_source` 
     parameter into template constructor or get_template/select_template 

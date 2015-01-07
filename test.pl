@@ -3,12 +3,12 @@
 use Test::Harness;
 
 runtests(
-    't/context.t',
-    't/expression.t',
+    't/core/context.t',
+    't/core/expression.t',
+    't/core/loader.t',
+    't/core/template.t',
     't/expression/in.t',
     't/expression/defined.t',
-    't/loader.t',
-    't/template.t',
     't/filter/add.t',
     't/filter/addslashes.t',
     't/filter/capfirst.t',
@@ -26,9 +26,11 @@ runtests(
     't/filter/first.t',
     't/filter/floatformat.t',
     't/filter/get_digit.t',
+    't/filter/iriencode.t',
     't/filter/join.t',
     't/filter/reverse.t',
     't/filter/safe.t',
+    't/filter/urlencode.t',
     't/tag/autoescape.t',
     't/tag/comment.t',
     't/tag/cycle.t',

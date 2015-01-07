@@ -19,8 +19,10 @@ use DTL::Fast::Template::Filter::Filesizeformat;
 use DTL::Fast::Template::Filter::First;
 use DTL::Fast::Template::Filter::Floatformat;
 use DTL::Fast::Template::Filter::Getdigit;
+use DTL::Fast::Template::Filter::Iriencode;
 use DTL::Fast::Template::Filter::Join;
 use DTL::Fast::Template::Filter::Reverse;
 use DTL::Fast::Template::Filter::Safe;
+use DTL::Fast::Template::Filter::Urlencode;
 
 1;
