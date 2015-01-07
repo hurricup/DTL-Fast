@@ -39,6 +39,8 @@ Differences from Django templates
     depricated and will beremoved in Django 1.8
 
   - `iriencode` filter works like `urlencode` for the moment.
+  
+  - wherever filter in Django returns True/False values, DLT::Fast returns 1/0.
     
   - `url` tag works a different way. Because there is no framework around, we
     can't obtain model's path the same way. But you may pass `url_source` 

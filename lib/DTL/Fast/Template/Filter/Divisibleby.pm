@@ -9,7 +9,6 @@ use DTL::Fast::Template::Variable;
 use Scalar::Util qw(looks_like_number);
 
 #@Override
-#@todo make pre-defined formats from Django
 sub parse_parameters
 {
     my $self = shift;

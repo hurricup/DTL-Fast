@@ -23,6 +23,7 @@ use DTL::Fast::Template::Filter::Iriencode;
 use DTL::Fast::Template::Filter::Join;
 use DTL::Fast::Template::Filter::Last;
 use DTL::Fast::Template::Filter::Length;
+use DTL::Fast::Template::Filter::Lengthis;
 use DTL::Fast::Template::Filter::Reverse;
 use DTL::Fast::Template::Filter::Safe;
 use DTL::Fast::Template::Filter::Urlencode;

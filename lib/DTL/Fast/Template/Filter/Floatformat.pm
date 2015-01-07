@@ -8,7 +8,6 @@ $DTL::Fast::Template::FILTER_HANDLERS{'floatformat'} = __PACKAGE__;
 use DTL::Fast::Template::Variable;
 
 #@Override
-#@todo make pre-defined formats from Django
 sub parse_parameters
 {
     my $self = shift;
