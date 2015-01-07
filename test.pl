@@ -29,6 +29,7 @@ runtests(
     't/filter/iriencode.t',
     't/filter/join.t',
     't/filter/last.t',
+    't/filter/length.t',
     't/filter/reverse.t',
     't/filter/safe.t',
     't/filter/urlencode.t',
