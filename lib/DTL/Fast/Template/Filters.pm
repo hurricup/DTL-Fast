@@ -18,6 +18,7 @@ use DTL::Fast::Template::Filter::Escapejs;
 use DTL::Fast::Template::Filter::Filesizeformat;
 use DTL::Fast::Template::Filter::First;
 use DTL::Fast::Template::Filter::Floatformat;
+use DTL::Fast::Template::Filter::Getdigit;
 use DTL::Fast::Template::Filter::Join;
 use DTL::Fast::Template::Filter::Reverse;
 use DTL::Fast::Template::Filter::Safe;

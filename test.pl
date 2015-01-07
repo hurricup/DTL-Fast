@@ -25,6 +25,7 @@ runtests(
     't/filter/filesizeformat.t',
     't/filter/first.t',
     't/filter/floatformat.t',
+    't/filter/get_digit.t',
     't/filter/join.t',
     't/filter/reverse.t',
     't/filter/safe.t',
