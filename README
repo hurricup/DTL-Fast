@@ -34,6 +34,9 @@ Differences from Django templates
   - `escapejs` filter works other way. It's not translating every non-ASCII 
     character to the codepoint, but just escaping single and double quotes and
     \n \r \t \0. Utf-8 symbols are pretty valid for javascript/json.
+    
+  - `fix_ampersands` filter is not implemented, because it's marked as 
+    depricated and will beremoved in Django 1.8
 
   - `url` tag works a different way. Because there is no framework around, we
     can't obtain model's path the same way. But you may pass `url_source` 

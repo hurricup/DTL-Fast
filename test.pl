@@ -24,6 +24,7 @@ runtests(
     't/filter/escapejs.t',
     't/filter/filesizeformat.t',
     't/filter/first.t',
+    't/filter/floatformat.t',
     't/filter/join.t',
     't/filter/reverse.t',
     't/filter/safe.t',
