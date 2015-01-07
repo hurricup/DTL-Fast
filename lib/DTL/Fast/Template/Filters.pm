@@ -25,6 +25,7 @@ use DTL::Fast::Template::Filter::Last;
 use DTL::Fast::Template::Filter::Length;
 use DTL::Fast::Template::Filter::Lengthis;
 use DTL::Fast::Template::Filter::Linebreaks;
+use DTL::Fast::Template::Filter::Linebreaksbr;
 use DTL::Fast::Template::Filter::Reverse;
 use DTL::Fast::Template::Filter::Safe;
 use DTL::Fast::Template::Filter::Urlencode;
