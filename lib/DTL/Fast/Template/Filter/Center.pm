@@ -30,10 +30,10 @@ sub filter
     
     if( $width =~ /^\d+$/ )
     {
-        my $adjustment = int(($width - length $value) / 2);
+        my $adjustment = ($width - length $value);
         if( $adjustment > 0 )
         {
-            $value = (' 'x $adjustment).$value;
+            $value = $self->adjust($value, $adjustment);
         }
     }
     else
@@ -41,6 +41,14 @@ sub filter
         die "Argument must be a positive number, not '$width'";
     }
     return $value;
+}
+
+sub adjust
+{
+    my $self = shift;
+    my $value = shift;
+    my $adjustment = shift;
+    return (' 'x int($adjustment/2)).$value;
 }
 
 1;

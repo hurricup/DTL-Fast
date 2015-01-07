@@ -34,6 +34,7 @@ runtests(
     't/filter/linebreaks.t',
     't/filter/linebreaksbr.t',
     't/filter/linenumbers.t',
+    't/filter/ljust.t',
     't/filter/reverse.t',
     't/filter/safe.t',
     't/filter/urlencode.t',

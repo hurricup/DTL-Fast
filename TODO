@@ -29,6 +29,7 @@ SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
+- How linenumbers filter should behave on empty lines?
 - Shouldn't we make cmp operator? Could re-use in dictsort for example.
 - Shouldn't dirs be passed as named optional arugument? 
 - Working with localization
@@ -42,6 +43,3 @@ NEED IDEA:
 - Do something about spaces around tags and placeholders. 
 - What to do on not existed context variable. 
 - Deep comparision option to enable/disable multi-level comparision in Operators.
-
-PERL BUG:
-- Not sure if it's bug, but somefunc(shift, shift) with prototype somefunc($;$) throws a error
