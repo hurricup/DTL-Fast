@@ -16,7 +16,7 @@ sub parse_parameters
     {
         @{$self}{qw( source grouper target_name)} = (
             DTL::Fast::Template::Variable->new($1)
-            , [(split /\./, $2)]
+            , [(split /\./, $2)] # do we need to backup strings here ?
             , $3
         );
         

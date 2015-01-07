@@ -28,6 +28,7 @@ SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
+- Shouldn't we make cmp operator? Could re-use in dictsort for example.
 - Shouldn't dirs be passed as named optional arugument? 
 - Working with localization
 - Shouldn't tags/filters binging be in BEGIN block?
