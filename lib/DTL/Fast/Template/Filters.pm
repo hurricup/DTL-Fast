@@ -31,6 +31,7 @@ use DTL::Fast::Template::Filter::Ljust;
 use DTL::Fast::Template::Filter::Lower;
 use DTL::Fast::Template::Filter::Reverse;
 use DTL::Fast::Template::Filter::Safe;
+use DTL::Fast::Template::Filter::Upper;
 use DTL::Fast::Template::Filter::Urlencode;
 
 1;

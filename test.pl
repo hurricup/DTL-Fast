@@ -38,6 +38,7 @@ runtests(
     't/filter/lower.t',
     't/filter/reverse.t',
     't/filter/safe.t',
+    't/filter/upper.t',
     't/filter/urlencode.t',
     't/tag/autoescape.t',
     't/tag/comment.t',
