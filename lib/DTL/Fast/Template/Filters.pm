@@ -40,6 +40,7 @@ use DTL::Fast::Template::Filter::Safe;
 use DTL::Fast::Template::Filter::SafeSeq;
 use DTL::Fast::Template::Filter::Slice;
 use DTL::Fast::Template::Filter::Slugify;
+use DTL::Fast::Template::Filter::Stringformat;
 use DTL::Fast::Template::Filter::Upper;
 use DTL::Fast::Template::Filter::Urlencode;
 
