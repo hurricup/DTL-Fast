@@ -52,6 +52,7 @@ runtests(
     't/filter/time.t',
     't/filter/timesince.t',
     't/filter/timeuntil.t',
+    't/filter/title.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
     't/tag/autoescape.t',
