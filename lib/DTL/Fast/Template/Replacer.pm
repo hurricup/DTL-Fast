@@ -24,19 +24,17 @@ sub backup_strings
         if not $self->{'replacement'}
             or not $self->{'replacement'}->isa('DTL::Fast::Template::Replacer::Replacement');
     
-    $expression =~ s/(?<!\\)(["'])(.*?)(?<!\\)\1/$self->backup_variable($2)/ge;
+    $expression =~ s/(?<!\\)(["'])(.*?)(?<!\\)\1/$self->backup_value($1.$2.$1)/ge;
     
     return $expression;
 }
 
-sub backup_variable
+sub backup_value
 {
     my $self = shift;
-    my $string = shift;
+    my $value = shift;
     
-    return $self->{'replacement'}->add_replacement(
-        DTL::Fast::Template::Variable->new("\"$string\"")
-    );
+    return $self->{'replacement'}->add_replacement($value);
 }
 
 sub backup_expression
@@ -64,9 +62,9 @@ sub get_backup_or_variable
     my $self = shift;
     my $token = shift;
 
-    my $result = $self->get_backup($token)
-        // DTL::Fast::Template::Variable->new($token)
-        ;
+    my $result = DTL::Fast::Template::Variable->new(
+        $self->get_backup($token) // $token
+    );
         
     return $result;
 }

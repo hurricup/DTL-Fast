@@ -1,5 +1,6 @@
 package DTL::Fast::Template::FilterManager;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use parent 'DTL::Fast::Template::Replacer';
 
 use DTL::Fast::Template;
 
@@ -70,13 +71,15 @@ sub add_filter
 {
     my $self = shift;
     my $filter_name = shift;
-    
-    my @arguments = split ':', $filter_name;
+  
+    my @arguments = split ':', $self->backup_strings($filter_name);
     $filter_name = shift @arguments;
 
     if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
     {
-        push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(\@arguments);
+        push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(
+            [(map {$self->get_backup($_) // $_} @arguments)]
+        );
     }
     else
     {
