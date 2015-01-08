@@ -30,6 +30,7 @@ use DTL::Fast::Template::Filter::Linenumbers;
 use DTL::Fast::Template::Filter::Ljust;
 use DTL::Fast::Template::Filter::Lower;
 use DTL::Fast::Template::Filter::MakeList;
+use DTL::Fast::Template::Filter::PhoneToNumeric;
 use DTL::Fast::Template::Filter::Reverse;
 use DTL::Fast::Template::Filter::Rjust;
 use DTL::Fast::Template::Filter::Safe;
