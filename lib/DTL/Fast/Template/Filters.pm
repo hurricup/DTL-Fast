@@ -32,6 +32,7 @@ use DTL::Fast::Template::Filter::Lower;
 use DTL::Fast::Template::Filter::MakeList;
 use DTL::Fast::Template::Filter::PhoneToNumeric;
 use DTL::Fast::Template::Filter::Pluralize;
+use DTL::Fast::Template::Filter::Random;
 use DTL::Fast::Template::Filter::Reverse;
 use DTL::Fast::Template::Filter::Rjust;
 use DTL::Fast::Template::Filter::Safe;

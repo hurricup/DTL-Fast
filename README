@@ -38,6 +38,8 @@ Differences from Django templates
   - `fix_ampersands` filter is not implemented, because it's marked as 
     depricated and will beremoved in Django 1.8
 
+  - `pprint` filter is not implemented.
+
   - `iriencode` filter works like `urlencode` for the moment.
   
   - wherever filter in Django returns True/False values, DLT::Fast returns 1/0.

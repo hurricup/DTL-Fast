@@ -6,7 +6,8 @@ FOR SURE:
 - Implement {# ... #}, decide what to do with verbantim
 - Check how spaceless works with < and > in quotes (single and double)
 - More tests (especially test blocks re-using, that caching works properly)
-- More test for jsescape filter. Works other way than python's version.
+- More tests for `jsescape` filter. Works other way than python's version.
+- More tests for `random` filter.
 - Debug tag tests
 - Error exceptions
 - Recursion protection on inheritance
