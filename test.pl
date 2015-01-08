@@ -51,6 +51,7 @@ runtests(
     't/filter/striptags.t',
     't/filter/time.t',
     't/filter/timesince.t',
+    't/filter/timeuntil.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
     't/tag/autoescape.t',

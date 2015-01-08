@@ -44,6 +44,7 @@ use DTL::Fast::Template::Filter::Stringformat;
 use DTL::Fast::Template::Filter::Striptags;
 use DTL::Fast::Template::Filter::Time;
 use DTL::Fast::Template::Filter::Timesince;
+use DTL::Fast::Template::Filter::Timeuntil;
 use DTL::Fast::Template::Filter::Upper;
 use DTL::Fast::Template::Filter::Urlencode;
 
