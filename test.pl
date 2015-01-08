@@ -36,6 +36,7 @@ runtests(
     't/filter/linenumbers.t',
     't/filter/ljust.t',
     't/filter/lower.t',
+    't/filter/make_list.t',
     't/filter/reverse.t',
     't/filter/safe.t',
     't/filter/upper.t',
