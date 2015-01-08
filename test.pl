@@ -49,6 +49,7 @@ runtests(
     't/filter/slugify.t',
     't/filter/stringformat.t',
     't/filter/striptags.t',
+    't/filter/time.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
     't/tag/autoescape.t',

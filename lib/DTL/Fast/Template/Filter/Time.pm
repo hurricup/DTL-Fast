@@ -1,9 +1,9 @@
-package DTL::Fast::Template::Filter::Date;
+package DTL::Fast::Template::Filter::Time;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
 use Carp qw(confess);
 
-$DTL::Fast::Template::FILTER_HANDLERS{'date'} = __PACKAGE__;
+$DTL::Fast::Template::FILTER_HANDLERS{'time'} = __PACKAGE__;
 
 use DTL::Fast::Template::Variable;
 use DTL::Fast::Utils;
@@ -13,7 +13,7 @@ use DTL::Fast::Utils;
 sub parse_parameters
 {
     my $self = shift;
-    push @{$self->{'parameter'}}, '"DATE_FORMAT"'
+    push @{$self->{'parameter'}}, '"TIME_FORMAT"'
         if not scalar @{$self->{'parameter'}};
     $self->{'format'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
     return $self;

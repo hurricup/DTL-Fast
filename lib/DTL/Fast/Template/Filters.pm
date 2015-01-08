@@ -42,6 +42,7 @@ use DTL::Fast::Template::Filter::Slice;
 use DTL::Fast::Template::Filter::Slugify;
 use DTL::Fast::Template::Filter::Stringformat;
 use DTL::Fast::Template::Filter::Striptags;
+use DTL::Fast::Template::Filter::Time;
 use DTL::Fast::Template::Filter::Upper;
 use DTL::Fast::Template::Filter::Urlencode;
 

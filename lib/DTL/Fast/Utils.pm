@@ -55,6 +55,9 @@ push @EXPORT_OK, 'time2str';
 sub time2str{ 
     my $format = shift;
     my $time = shift;
+    
+    #  TIME_FORMAT, DATE_FORMAT, DATETIME_FORMAT, SHORT_DATE_FORMAT or SHORT_DATETIME_FORMAT
+    
     return Date::Format::time2str($format, $time );
 }
 
