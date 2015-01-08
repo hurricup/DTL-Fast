@@ -25,13 +25,22 @@ sub filter
     shift;  # filter_manager
     my $value = shift;
     my $context = shift;
-    my @suffix = split /\s*,\s*/, $self->{'suffix'}->render($context);
     
-    my $suffix_one = scalar @suffix > 1 ? 
-        shift @suffix
+    return pluralize($value, [
+        split /\s*,\s*/, $self->{'suffix'}->render($context)
+    ]);
+}
+
+sub pluralize
+{
+    my $value = shift;
+    my $suffix = shift;
+    
+    my $suffix_one = scalar @$suffix > 1 ? 
+        shift @$suffix
         : '';
         
-    my $suffix_more = shift @suffix;
+    my $suffix_more = shift @$suffix;
     
     if( $value != 1 )
     {
@@ -43,6 +52,7 @@ sub filter
     }
     
     return $value;
+    
 }
 
 1;
