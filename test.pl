@@ -44,6 +44,7 @@ runtests(
     't/filter/reverse.t',
     't/filter/rjust.t',
     't/filter/safe.t',
+    't/filter/safeseq.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
     't/tag/autoescape.t',

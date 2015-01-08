@@ -6,6 +6,7 @@ use Carp qw(confess);
 $DTL::Fast::Template::FILTER_HANDLERS{'join'} = __PACKAGE__;
 
 use DTL::Fast::Template::Variable;
+use DTL::Fast::Utils qw(html_protect);
 
 #@Override
 sub parse_parameters
@@ -35,13 +36,14 @@ sub filter
     my $result = undef;
     my $separator = $self->{'sep'}->render($context);
     
+    my @source = ();
     if( $value_type eq 'HASH' )
     {
-        $result = join $separator, (%$value);
+        @source = (%$value);
     }
     elsif( $value_type eq 'ARRAY' )
     {
-        $result = join $separator, @$value;
+        @source = @$value;
     }
     else
     {
@@ -50,7 +52,16 @@ sub filter
             , $value_type || 'SCALAR'            
         );
     }    
-    return $result;
+    
+    if( $filter_manager->{'safeseq'} )
+    {
+        $separator = html_protect($separator) 
+            if not $context->get('_dtl_safe');
+            
+        $filter_manager->{'safe'} = 1;
+    }
+    
+    return join $separator, @source;
 }
 
 1;
