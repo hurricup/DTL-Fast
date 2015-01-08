@@ -53,6 +53,8 @@ runtests(
     't/filter/timesince.t',
     't/filter/timeuntil.t',
     't/filter/title.t',
+    't/filter/truncatechars.t',
+    't/filter/truncatechars_html.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
     't/tag/autoescape.t',

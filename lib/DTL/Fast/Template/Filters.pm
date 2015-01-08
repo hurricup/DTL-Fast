@@ -46,6 +46,8 @@ use DTL::Fast::Template::Filter::Time;
 use DTL::Fast::Template::Filter::Timesince;
 use DTL::Fast::Template::Filter::Timeuntil;
 use DTL::Fast::Template::Filter::Title;
+use DTL::Fast::Template::Filter::Truncatechars;
+use DTL::Fast::Template::Filter::Truncatecharshtml;
 use DTL::Fast::Template::Filter::Upper;
 use DTL::Fast::Template::Filter::Urlencode;
 
