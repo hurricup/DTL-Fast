@@ -38,6 +38,7 @@ runtests(
     't/filter/lower.t',
     't/filter/make_list.t',
     't/filter/reverse.t',
+    't/filter/rjust.t',
     't/filter/safe.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
