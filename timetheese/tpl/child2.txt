@@ -1,0 +1,7 @@
+{% extends "child1.txt" %}
+
+{% block "block2" %}
+Inherited block 2
+
+{{ var2 }}
+{% endblock %}

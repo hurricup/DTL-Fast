@@ -4,7 +4,7 @@ use parent 'Exporter';
 use Carp qw(confess);
 
 use 5.018002;
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 use Cwd;
 use DTL::Fast::Template;
@@ -196,7 +196,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.00
+Version 1.01
 
 =head1 SYNOPSIS
 
@@ -442,6 +442,8 @@ is being rendered like:
 =head1 CHANGES
 
 =over
+
+=item * 09/01/2015 - v1.01, fixed bug with C<add> filter repeated usage.
 
 =item * 09/01/2015 - First release, version 1.00
 

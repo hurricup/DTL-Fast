@@ -25,6 +25,7 @@ is( DTL::Fast::Template->new( 'Hello, {{ array1|add:array2|join:sep }}!' )->rend
 is( DTL::Fast::Template->new( 'Hello, {{ array1|add:text1|join:sep }}!' )->render($context), 'Hello, one,two,three,alfa!', 'Array + text and join with context separator');
 is( DTL::Fast::Template->new( 'Hello, {{ array1|add:text1|add:number1|join:sep }}!' )->render($context), 'Hello, one,two,three,alfa,42!', 'Array + text + number and join with context separator');
 is( DTL::Fast::Template->new( 'Hello, {{ text1|add:text2 }}!' )->render($context), 'Hello, alfabeta!', 'Text + text');
+is( DTL::Fast::Template->new( 'Hello, {{ text1|add:text2 }}!' )->render($context), 'Hello, alfabeta!', 'Text + text, again');
 is( DTL::Fast::Template->new( 'Hello, {{ text1|add:text2|add:number1 }}!' )->render($context), 'Hello, alfabeta42!', 'Text + text + number');
 is( DTL::Fast::Template->new( 'Hello, {{ number1|add:number2 }}!' )->render($context), 'Hello, 111!', 'Number + number');
 
