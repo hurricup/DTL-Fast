@@ -7,6 +7,28 @@ $DTL::Fast::Template::FILTER_HANDLERS{'urlize'} = __PACKAGE__;
 
 use DTL::Fast::Utils qw(html_protect unescape);
 
+our $DOMAINS_RE = qr/com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum|travel|ru|рф|[a-z]{2,3}/;
+
+our $URL_RE = qr
+{
+    (?:(?:http|ftp|https)\://)?  # protocol
+    (?:\w+\:\w+\@)?              # username and password
+    (?:(?:www|ftp)\.)?           # domain prefixes
+    (?:[-\w]+\.)+                # domain name
+    (?:$DOMAINS_RE)              # top level domain
+    (?:\:\d{1,5})?               # port number
+    (?:/[-\w~._]*)*?             # directories and files
+    (?:\?[^\s#]+?)?              # query string no spaces or sharp
+    (?:\#[^\s]+?)?               # anchor
+}x;
+
+our $EMAIL_RE = qr
+{
+    (?:[-\w_~\.]+\@)             # user name
+    (?:[-\w]+\.)+                # domain name
+    (?:$DOMAINS_RE)              # top level domain
+}x;
+
 #@Override
 sub filter
 {
@@ -15,20 +37,13 @@ sub filter
     my $value = shift;  # value
     shift;    #context
     
-    $value =~ s{
-        (
-            (?:(?:http|ftp|https)\://)?  # protocol
-            (?:\w+\:\w+\@)?              # username and password
-            (?:(?:www|ftp)\.)?           # domain prefixes
-            (?:[-\w]+\.)+                # domain name
-            (?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum|travel|ru|рф|[a-z]{2,3}) # top level domain
-            (?:\:\d{1,5})?               # port number
-            (?:/[-\w~._]*)*?             # directories and files
-            (?:\?[^\s#]+?)?              # query string no spaces or sharp
-            (?:\#[^\s]+?)?               # anchor
-        )
-        ($|\s|\.|,|!)                    # after link
-        }{$self->wrap_url($1,$2)}xesi;
+    $value =~ s
+    {
+        (?:($EMAIL_RE)|($URL_RE))
+        ($|\s|\.|,|!)                   # after link
+    }{
+        $self->wrap_email($1,$3).$self->wrap_url($2,$3)
+    }gxesi;
     
     $filter_manager->{'safe'} = 1;
     
@@ -39,6 +54,7 @@ sub wrap_url
 {
     my $self = shift;
     my $text = shift;
+    return '' if not $text;
     my $appendix = shift // '';
     
     my $uri = $text;
@@ -46,9 +62,30 @@ sub wrap_url
         $uri !~ m{^(http|ftp|https)://}i;
     return sprintf '<a href="%s" rel="nofollow">%s</a>%s'
         , $uri
-        , html_protect(unescape($text))
+        , html_protect(unescape($self->normalize_text($text)))
         , $appendix
         ;
+}
+
+sub wrap_email
+{
+    my $self = shift;
+    my $text = shift;
+    return '' if not $text;
+    my $appendix = shift // '';
+    
+    my $uri = $text;
+    return sprintf '<a href="mailto:%s" rel="nofollow">%s</a>%s'
+        , $uri
+        , html_protect(unescape($self->normalize_text($text)))
+        , $appendix
+        ;
+}
+
+sub normalize_text
+{
+    shift;
+    return shift;
 }
 
 1;

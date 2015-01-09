@@ -18,6 +18,7 @@ $context = new DTL::Fast::Context({
         'this is www.example.com/?param1=arg1&param2=arg2#anch, text',
         'this is example.com/?param1=arg1&param2=arg2#anch, text',
         'this is example.com, text',
+        'this is example.com, and test@example.com text',
     ]
 });
 
@@ -61,6 +62,11 @@ my $SET = [
         'template' => '{{ list.7|urlize }}',
         'test' => 'this is <a href="http://example.com" rel="nofollow">example.com</a>, text',
         'title' => 'Just domain name',
+    },
+    {
+        'template' => '{{ list.8|urlize }}',
+        'test' => 'this is <a href="http://example.com" rel="nofollow">example.com</a>, and <a href="mailto:test@example.com" rel="nofollow">test@example.com</a> text',
+        'title' => 'Domain name and email',
     },
 ];
 

@@ -30,6 +30,7 @@ SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
+- `urlize` filter should be controllable with target and rel arguments.
 - Check if passsing scalar references would work faster, than scalars themselves
 - How linenumbers filter should behave on empty lines?
 - Shouldn't we make cmp operator? Could re-use in dictsort for example.
