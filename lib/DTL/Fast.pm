@@ -73,7 +73,7 @@ sub _apply_inheritance
 {
     my $template = shift;
     my $dirs = shift;
-    
+
     if( $template =~ s/\s*\{\% extends\s*"(.+?)" \%\}//s ) # template has inheritance
     {
         my $parent_template = _read_template($1, $dirs);

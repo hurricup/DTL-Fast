@@ -52,9 +52,9 @@ sub filter
         confess "Don't know how to add anything to $value_type";
     }
     
-    foreach my $argument (@{$self->{'parameters'}})
+    foreach my $parameter (@{$self->{'parameters'}})
     {
-        $argument = $argument->render($context);
+        my $argument = $parameter->render($context);
         
         my $result_type = ref $result;
         my $argument_type = ref $argument;

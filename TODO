@@ -25,6 +25,7 @@ FOR SURE:
 - Profiling and optimising using NYTProf
 - Performance testing for old and new context variables work
 - urlize target and following should be controlled via parameters
+- Warn if parent template is not available
 
 SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
