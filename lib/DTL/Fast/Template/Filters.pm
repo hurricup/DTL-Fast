@@ -57,6 +57,7 @@ use DTL::Fast::Template::Filter::Urlize;
 use DTL::Fast::Template::Filter::Urlizetrunc;
 use DTL::Fast::Template::Filter::Wordcount;
 use DTL::Fast::Template::Filter::Wordwrap;
+use DTL::Fast::Template::Filter::Yesno;
 
 
 1;

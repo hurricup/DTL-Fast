@@ -4,7 +4,7 @@ use parent 'Exporter';
 use Carp qw(confess);
 
 use 5.018002;
-our $VERSION = '0.01';
+our $VERSION = '1.00';
 
 =head1 NAME
 
