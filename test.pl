@@ -63,6 +63,7 @@ runtests(
     't/filter/urlize.t',
     't/filter/urlizetrunc.t',
     't/filter/wordcount.t',
+    't/filter/wordwrap.t',
     't/tag/autoescape.t',
     't/tag/comment.t',
     't/tag/cycle.t',
