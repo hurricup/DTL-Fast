@@ -1,9 +1,9 @@
-package DTL::Fast::Template::Filter::Truncatecharshtml;
+package DTL::Fast::Template::Filter::Truncatewordshtml;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::Filter::Truncatechars';
+use parent 'DTL::Fast::Template::Filter::Truncatewords';
 use Carp qw(confess);
 
-$DTL::Fast::Template::FILTER_HANDLERS{'truncatechars_html'} = __PACKAGE__;
+$DTL::Fast::Template::FILTER_HANDLERS{'truncatewords_html'} = __PACKAGE__;
 
 #@Override
 sub filter

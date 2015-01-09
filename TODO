@@ -20,9 +20,8 @@ FOR SURE:
 - as_string method for variables and operations, useful for good error messaging
 - Performance testing in comparision of other perl implementations and Django itself
 - DTL::Fast::Utils::html_protect should work using XS module (to take from CDI3)
-- Make compatible comparisions to None, True, False and undef (new)
 - Implement Django filter plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference
-- Implement Django tag plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference
+- Implement internationalization and localization
 - Profiling and optimising using NYTProf
 - Performance testing for old and new context variables work
 
@@ -30,6 +29,7 @@ SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
+- Check if passsing scalar references would work faster, than scalars themselves
 - How linenumbers filter should behave on empty lines?
 - Shouldn't we make cmp operator? Could re-use in dictsort for example.
 - Shouldn't dirs be passed as named optional arugument? 
