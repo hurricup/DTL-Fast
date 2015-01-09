@@ -53,5 +53,6 @@ use DTL::Fast::Template::Filter::Truncatewordshtml;
 use DTL::Fast::Template::Filter::Unorderedlist;
 use DTL::Fast::Template::Filter::Upper;
 use DTL::Fast::Template::Filter::Urlencode;
+use DTL::Fast::Template::Filter::Urlize;
 
 1;

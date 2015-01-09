@@ -60,6 +60,7 @@ runtests(
     't/filter/unordered_list.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
+    't/filter/urlize.t',
     't/tag/autoescape.t',
     't/tag/comment.t',
     't/tag/cycle.t',

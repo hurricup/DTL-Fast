@@ -24,6 +24,7 @@ FOR SURE:
 - Implement internationalization and localization
 - Profiling and optimising using NYTProf
 - Performance testing for old and new context variables work
+- urlize target and following should be controlled via parameters
 
 SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
