@@ -57,6 +57,7 @@ runtests(
     't/filter/truncatechars_html.t',
     't/filter/truncatewords.t',
     't/filter/truncatewords_html.t',
+    't/filter/unordered_list.t',
     't/filter/upper.t',
     't/filter/urlencode.t',
     't/tag/autoescape.t',
