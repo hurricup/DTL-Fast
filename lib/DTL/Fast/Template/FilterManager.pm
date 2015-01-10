@@ -11,7 +11,8 @@ sub new
     
     my $self = bless
     {
-        'filters' => []
+        'filters' => [],
+        'filters_number' => 0,
     }, $proto;
     
     if( $filters )
@@ -80,6 +81,7 @@ sub add_filter
         push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(
             [(map {$self->get_backup($_) // $_} @arguments)]
         );
+        $self->{'filters_number'}++;
     }
     else
     {
@@ -88,7 +90,5 @@ sub add_filter
     
     return $self;
 }
-
-sub is_safe{ return shift->{'safe'}; }
 
 1;

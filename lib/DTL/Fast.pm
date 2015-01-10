@@ -4,7 +4,7 @@ use parent 'Exporter';
 use Carp qw(confess);
 
 use 5.018002;
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 use Cwd;
 use DTL::Fast::Template;
@@ -196,7 +196,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.01
+Version 1.02
 
 =head1 SYNOPSIS
 
@@ -445,16 +445,25 @@ I've compared module speed with previous abandoned implementation: L<C<Dotiac::D
 
 =head2 FCGI/mod_perl
 
-This test rendered test template many times without reloading perl itself:
+Template parsing permormance with software cache wiping on each iteration:
 
-    Benchmark: timing 3000 iterations of Dotiac render , Dotiac reparse, Fast render   , Fast reparse  ...
+    Benchmark: timing 5000 iterations of DTL::Fast  , Dotiac::DTL...
     
-    Dotiac render : 14 wallclock secs (12.95 usr +  0.90 sys = 13.85 CPU) @ 216.58/s (n=3000)
-    Dotiac reparse: 28 wallclock secs (19.17 usr +  8.52 sys = 27.69 CPU) @ 108.34/s (n=3000)
-    Fast render   :  8 wallclock secs ( 8.08 usr +  0.00 sys =  8.08 CPU) @ 371.24/s (n=3000)
-    Fast reparse  : 24 wallclock secs (19.77 usr +  3.70 sys = 23.46 CPU) @ 127.87/s (n=3000)
+    DTL::Fast  :  2 wallclock secs ( 1.31 usr +  0.75 sys =  2.06 CPU) @ 2428.36/s (n=5000)
+    Dotiac::DTL: 26 wallclock secs (11.40 usr + 13.01 sys = 24.41 CPU) @ 204.80/s (n=5000)
 
-Reparsing means wiping internal cache before each iteration. To achieve this with Dotiac::DTL, you need to alter library and change declaration of C<my $cache;> to C<our $cache;>. Tests shows, that C<DTL::Fast> works 71% faster, than L<C<Dotiac::DTL>> in persistent environment.
+C<DTL::Fast> parsing templates almost 12 times faster, than L<C<Dotiac::DTL>>.
+
+To run this test, you need to alter L<C<Dotiac::DTL>> module and change declaration of C<my %cache;> to C<our %cache;>. 
+    
+Rendering of pre-compiled template (software cache):
+
+    Benchmark: timing 3000 iterations of DTL::Fast  , Dotiac::DTL...
+    
+    DTL::Fast  :  7 wallclock secs ( 7.29 usr +  0.00 sys =  7.29 CPU) @ 411.81/s (n=3000)
+    Dotiac::DTL: 13 wallclock secs (12.15 usr +  0.00 sys = 12.15 CPU) @ 246.85/s (n=3000)
+
+Tests shows, that C<DTL::Fast> works 67% faster, than L<C<Dotiac::DTL>> in persistent environment.
 
 =head2 CGI
 
@@ -471,9 +480,31 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =over
 
-=item * 09/01/2015 - v1.01, fixed bug with C<add> filter repeated usage.
+=item * 10/01/2015 - v1.02
 
-=item * 09/01/2015 - First release, version 1.00
+=over
+
+=item * changed some intermediate getters to direct access. Improved rendering performance by 10%. 
+
+=item * added tests for performance measuring and profiling (see C</timethese> directory).
+
+=back
+
+=item * 09/01/2015 - v1.01
+
+=over
+
+=item * fixed bug with C<add> filter repeated usage.
+
+=back
+
+=item * 09/01/2015 - v1.00
+
+=over
+
+=item * First release
+
+=back
 
 =back
 

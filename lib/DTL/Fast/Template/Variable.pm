@@ -66,16 +66,13 @@ sub new
 
     if( scalar @filters )
     {
-        $self->filter_manager->add_filters(\@filters);
+        $self->{'filter_manager'}->add_filters(\@filters);
     }
 
     return $self;
 }
 
-sub filter_manager{ return shift->{'filter_manager'}; }
-sub is_safe{ return shift->filter_manager->is_safe; }
-sub is_undef{ return shift->{'undef'}; }
-sub add_filter{ return shift->filter_manager->add_filter(shift); }
+sub add_filter{ return shift->{'filter_manager'}->add_filter(shift); }
 
 sub render
 {
@@ -91,7 +88,8 @@ sub render
             : $context->get($self->{'variable'});
 
     }
-    $value = $self->filter_manager->filter($value, $context);
+    $value = $self->{'filter_manager'}->filter($value, $context)
+        if $self->{'filter_manager'}->{'filters_number'};
     
     return $value;
 }

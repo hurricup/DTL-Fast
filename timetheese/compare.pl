@@ -24,12 +24,12 @@ my $tpl = get_template(
     'root.txt',
     [ @Dotiac::DTL::TEMPLATE_DIRS ]
 );
-sub dtl_fast
+sub dtl_fast_render
 {
    $tpl->render($context);
 }
 
-sub dtl_fast_nocache
+sub dtl_fast_parse
 {
     %DTL::Fast::TEMPLATES_CACHE = ();
     %DTL::Fast::OBJECTS_CACHE = ();
@@ -37,20 +37,18 @@ sub dtl_fast_nocache
         'root.txt',
         [ @Dotiac::DTL::TEMPLATE_DIRS ]
     );
-   $tpl->render($context);
 }
 
 my $t=Dotiac::DTL::Template('root.txt');
-sub dtl_dotiac
+sub dtl_dotiac_render
 {
     $t->string($context);
 }
 
-sub dtl_dotiac_nocache
+sub dtl_dotiac_parse
 {
     %Dotiac::DTL::cache = ();
     my $t=Dotiac::DTL::Template('root.txt', -1);
-    $t->string($context);
 }
 
 sub dtl_fast_cgi
@@ -68,25 +66,31 @@ print "IMPORTANT: In order to get proper results, you must alter Dotiac::DTL mod
 print "Saving results into files...\n";
 
 open OF, '>', 'dtl_fast.txt';
-print OF dtl_fast();
+print OF dtl_fast_render();
 close OF;
 
 open OF, '>', 'dtl_dotiac.txt';
-print OF dtl_dotiac();
+print OF dtl_dotiac_render();
 close OF;
 
-print "Testing FCGI mode...\n";
+print "Testing FCGI mode rendering...\n";
 
 timethese( 3000, {
-    'Fast render   ' => \&dtl_fast,
-    'Fast reparse  ' => \&dtl_fast_nocache,
-    'Dotiac render ' => \&dtl_dotiac,
-    'Dotiac reparse' => \&dtl_dotiac_nocache,
+    'DTL::Fast  ' => \&dtl_fast_render,
+    'Dotiac::DTL' => \&dtl_dotiac_render,
+});
+
+
+print "Testing FCGI mode parsing...\n";
+
+timethese( 5000, {
+    'DTL::Fast  ' => \&dtl_fast_parse,
+    'Dotiac::DTL' => \&dtl_dotiac_parse,
 });
 
 print "Testing CGI mode...\n";
 
-timethese( 500, {
+timethese( 300, {
     'Fast render   ' => \&dtl_fast_cgi,
     'Dotiac render ' => \&dtl_dotiac_cgi,
 });

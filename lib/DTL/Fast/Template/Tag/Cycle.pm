@@ -33,7 +33,7 @@ sub render
         
         if( 
             not $context->get('_dtl_safe') 
-            and not $source->is_safe()
+            and not $source->{'filter_manager'}->{'safe'}
         )
         {
             $result = DTL::Fast::Utils::html_protect($result);

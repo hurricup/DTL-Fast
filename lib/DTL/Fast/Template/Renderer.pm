@@ -40,7 +40,7 @@ sub render
         
         if(
             $_->isa('DTL::Fast::Template::Variable')
-            and not $_->is_safe()
+            and not $_->{'filter_manager'}->{'safe'}
             and not $is_safe
         )
         {

@@ -117,7 +117,7 @@ sub parse_sources
         if( /^(__BLOCK_.+?)\|(.+)$/ )   # filtered static variable
         {
             $result = $self->get_backup_or_variable($1);
-            $result->filter_manager->parse_filters($2);
+            $result->{'filter_manager'}->parse_filters($2);
         }
         else
         {
