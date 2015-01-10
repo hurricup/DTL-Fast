@@ -439,6 +439,34 @@ is being rendered like:
 
 =back
 
+=head1 BENCHMARKS
+
+I've compared module speed with previous abandoned implementation: L<C<Dotiac::DTL>> in both modes: FCGI and CGI. Test template and scripts are in /timethese directory.
+
+=head2 FCGI/mod_perl
+
+This test rendered test template many times without reloading perl itself:
+
+    Benchmark: timing 3000 iterations of Dotiac render , Dotiac reparse, Fast render   , Fast reparse  ...
+    
+    Dotiac render : 14 wallclock secs (12.95 usr +  0.90 sys = 13.85 CPU) @ 216.58/s (n=3000)
+    Dotiac reparse: 28 wallclock secs (19.17 usr +  8.52 sys = 27.69 CPU) @ 108.34/s (n=3000)
+    Fast render   :  8 wallclock secs ( 8.08 usr +  0.00 sys =  8.08 CPU) @ 371.24/s (n=3000)
+    Fast reparse  : 24 wallclock secs (19.77 usr +  3.70 sys = 23.46 CPU) @ 127.87/s (n=3000)
+
+Reparsing means wiping internal cache before each iteration. To achieve this with Dotiac::DTL, you need to alter library and change declaration of C<my $cache;> to C<our $cache;>. Tests shows, that C<DTL::Fast> works 71% faster, than L<C<Dotiac::DTL>> in persistent environment.
+
+=head2 CGI
+
+This test rendered test template many times by external script, invoked via C<system> call:
+
+    Benchmark: timing 500 iterations of Dotiac render , Fast render   ...
+    
+    Dotiac render : 57 wallclock secs ( 0.16 usr +  0.44 sys =  0.59 CPU) @ 843.17/s (n=500)
+    Fast render   : 62 wallclock secs ( 0.22 usr +  0.53 sys =  0.75 CPU) @ 668.45/s (n=500)
+
+Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI environment.
+    
 =head1 CHANGES
 
 =over
