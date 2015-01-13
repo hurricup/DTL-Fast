@@ -15,13 +15,13 @@ sub parse_parameters
 }
 
 #@Override
-# @todo: recursion protection
 sub render
 {
     my $self = shift;
     my $context = shift;
     
     my $template_name = $self->{'template'}->render($context);
+    
     my $result = DTL::Fast::get_template(
         $template_name
         , $self->{'dirs'}

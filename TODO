@@ -9,8 +9,6 @@ FOR SURE:
 - More tests for `random` filter.
 - Debug tag tests
 - Error exceptions
-- Recursion protection on inheritance
-- Recursion protection on inclusion
 - Recursion protection on deep comparision
 - Error messaging with line numbers and so on
 - Improve url tag regexp reversing

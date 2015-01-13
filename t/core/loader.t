@@ -85,5 +85,8 @@ ok( $@ =~ /_missing_include\.txt/, 'Missing include exception');
 eval{$template = get_template('inherit_recursive0.txt', $dirs2 )->render};
 ok( $@ =~ /Recursive inheritance detected/, "Recursive inheritance");
 
+eval{$template = get_template('include_recursive0.txt', $dirs2 )->render};
+ok( $@ =~ /Recursive inclusion detected/, "Recursive inclusion");
+
 
 done_testing();

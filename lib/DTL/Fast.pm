@@ -51,10 +51,16 @@ sub get_template
     }    
     else
     {
-        $template = _read_template($template_name, $dirs);
+        my $template_path;
+
+        ($template, $template_path) = _read_template($template_name, $dirs);
         $template =~ s/\{\% (?:block|endblock|extends) .*?\%\}//gs;
         
-        my @arguments = ($template, $dirs);
+        my @arguments = (
+            $template
+            , $dirs
+            , 'file_path' => $template_path
+        );
         push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
             if $kwargs{'ssi_dirs'};
         push @arguments, 'url_source', $kwargs{'url_source'}
@@ -77,7 +83,7 @@ sub _apply_inheritance
     if( $template =~ s/\s*\{\% extends\s*"(.+?)" \%\}//s ) # template has inheritance
     {
         my $parent_name = $1;
-        my $parent_template = _read_template($parent_name, $dirs, $inheritance_path);
+        my( $parent_template, $parent_template_path) = _read_template($parent_name, $dirs, $inheritance_path);
         
         if( defined $parent_template )
         {
@@ -130,7 +136,7 @@ sub _read_template
             {
                 die sprintf(
                     "Recursive inheritance detected:\n%s\n" 
-                    , join "\n => ", @{$inheritance_path->{'*path'}}
+                    , join "\n inherited from ", @{$inheritance_path->{'*path'}}, $template_path
                 );
             }
             
@@ -151,7 +157,7 @@ Unable to find template %s in directories:
 %s
 _EOT_
     
-    return $template;
+    return ($template, $template_path);
 }
 
 sub _read_file
@@ -527,6 +533,8 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * Added exception on missing included template in C<include> tag.
 
 =item * Added exception on recursive inheritance (C<extends> tag).
+
+=item * Added exception on recursive inclusion (C<include> tag).
 
 =back
 

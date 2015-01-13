@@ -20,6 +20,7 @@ sub new
     
     $kwargs{'raw_chunks'} = _get_raw_chunks($template);
     $kwargs{'dirs'} = $dirs;
+    $kwargs{'file_path'} //= 'inline';
     
     my $self = $proto->SUPER::new(%kwargs);
   
@@ -63,10 +64,35 @@ sub render
     
     $context->push();
     
-    $context->set('_dtl_ssi_dirs' => $self->{'ssi_dirs'}) if $self->{'ssi_dirs'};
-    $context->set('_dtl_url_source' => $self->{'url_source'}) if $self->{'url_source'};
+    $context->{'ns'}->[-1]->{'_dtl_ssi_dirs'} = $self->{'ssi_dirs'} if $self->{'ssi_dirs'};
+    $context->{'ns'}->[-1]->{'_dtl_url_source'} = $self->{'url_source'} if $self->{'url_source'};
+
+    my $template_path = $self->{'file_path'};
+
+    if( not exists $context->{'ns'}->[-1]->{'_dtl_include_path'} )  # entry point
+    {
+        $context->{'ns'}->[-1]->{'_dtl_include_path'} = [];
+        $context->{'ns'}->[-1]->{'_dtl_include_files'} = {};
+    }
+    else    # check for recursion
+    {
+        if( exists $context->{'ns'}->[-1]->{'_dtl_include_files'}->{$template_path} )
+        {
+            # recursive inclusion
+            die sprintf("Recursive inclusion detected:\n%s\n"
+                , join( "\n includes ", @{$context->{'ns'}->[-1]->{'_dtl_include_path'}}, $template_path)
+            );
+        }
+    }
     
+    $context->{'ns'}->[-1]->{'_dtl_include_files'}->{$template_path} = 1;
+    push @{$context->{'ns'}->[-1]->{'_dtl_include_path'}}, $template_path;
+  
     my $result = $self->SUPER::render($context);
+    
+    pop @{$context->{'ns'}->[-1]->{'_dtl_include_path'}};
+    delete $context->{'ns'}->[-1]->{'_dtl_include_files'}->{$template_path};
+    
     $context->pop();
     
     return $result;
