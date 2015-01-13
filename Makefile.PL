@@ -5,7 +5,7 @@ WriteMakefile(
     AUTHOR              => 'Alexandr Evstigneev <hurricup@evstigneev.com>',
     VERSION_FROM        => 'lib/DTL/Fast.pm', # finds $VERSION
     ABSTRACT_FROM       => 'lib/DTL/Fast.pm', # retrieve abstract from module
-    MIN_PERL_VERSION => 5.006,
+    MIN_PERL_VERSION => 5.010,
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => 0,
     },

@@ -13,8 +13,7 @@ sub filter
     my $value = shift;
     shift;  # context
 
-    no warnings 'deprecated';   # Perl 5.10 compatibility
-    return scalar (split /\s+/s, $value);
+    return scalar (my @tmp = split /\s+/s, $value);    # Perl 5.10 compatibility, marks deprecated implicit split
 }
 
 1;
