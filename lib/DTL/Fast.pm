@@ -3,8 +3,8 @@ use strict; use warnings FATAL => 'all';
 use parent 'Exporter';
 use Carp qw(confess);
 
-use 5.018002;
-our $VERSION = '1.02';
+use 5.010;
+our $VERSION = '1.03';
 
 use Cwd;
 use DTL::Fast::Template;
@@ -196,7 +196,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.02
+Version 1.03
 
 =head1 SYNOPSIS
 
@@ -479,6 +479,16 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =head1 CHANGES
 
 =over
+
+=item * 13/01/2015 - v1.03
+
+=over
+
+=item * Tested with CentOS & Perl 5.10
+
+=item * Added no warnings 'depricated' for split in Wordcount filter
+
+=back
 
 =item * 10/01/2015 - v1.02
 
