@@ -72,11 +72,12 @@ sub _apply_inheritance
 {
     my $template = shift;
     my $dirs = shift;
-
+    my $inheritance_path = shift;
+    
     if( $template =~ s/\s*\{\% extends\s*"(.+?)" \%\}//s ) # template has inheritance
     {
         my $parent_name = $1;
-        my $parent_template = _read_template($parent_name, $dirs);
+        my $parent_template = _read_template($parent_name, $dirs, $inheritance_path);
         
         if( defined $parent_template )
         {
@@ -104,8 +105,10 @@ sub _read_template
 {
     my $template_name = shift;
     my $dirs = shift;
+    my $inheritance_path = shift // { '*path' => [] };
 
     my $template = undef;
+    my $template_path = undef;
 
     my $cache_key = sprintf '%s:%s:%s'
         , __PACKAGE__
@@ -119,9 +122,26 @@ sub _read_template
     }
     else
     {
-        $template = _read_file($template_name, $dirs);
-        $template = _apply_inheritance($template, $dirs)
-            if defined $template;
+        ($template, $template_path) = _read_file($template_name, $dirs);
+        
+        if( defined $template )
+        {
+            if( exists $inheritance_path->{$template_path} )
+            {
+                die sprintf(
+                    "Recursive inheritance detected:\n%s\n" 
+                    , join "\n => ", @{$inheritance_path->{'*path'}}
+                );
+            }
+            
+            push @{$inheritance_path->{'*path'}}, $template_path;
+            $inheritance_path->{$template_path} = 1;
+            
+            $template = _apply_inheritance($template, $dirs, $inheritance_path);
+                
+            pop @{$inheritance_path->{'*path'}};
+            delete $inheritance_path->{$template_path};
+        }
             
         $TEMPLATES_CACHE{$cache_key} = $template;
     }
@@ -139,11 +159,12 @@ sub _read_file
     my $template_name = shift;
     my $dirs = shift;
     my $template;
-
+    my $template_path;
+    
     foreach my $dir (@$dirs)
     {
         $dir =~ s/[\/\\]+$//gsi;
-        my $template_path = sprintf '%s/%s', $dir, $template_name;
+        $template_path = sprintf '%s/%s', $dir, $template_name;
         if( 
             -e $template_path
             and -f $template_path
@@ -167,7 +188,7 @@ sub _read_file
         }        
     }
     
-    return $template;
+    return ($template, $template_path);
 }
 
 # result should be cached with full list of params
@@ -497,11 +518,15 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =item * Tested with CentOS & Perl 5.10
 
-=item * Changed implicit split to explicit in C<wordcount> filter.
+=item * Lowered Perl version requirement to 5.10
+
+=item * Changed implicit split to explicit in C<wordcount> filter (v5.10 considers it depricated).
 
 =item * Added exception on missing parent template in C<extends> tag.
 
 =item * Added exception on missing included template in C<include> tag.
+
+=item * Added exception on recursive inheritance (C<extends> tag).
 
 =back
 

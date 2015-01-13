@@ -50,7 +50,8 @@ sub render
         }
         else
         {
-            $result = DTL::Fast::_read_file(
+            my $ssi_filename;
+            ($result, $ssi_filename) = DTL::Fast::_read_file(
                 $self->{'template'}->render($context)
                 , $ssi_dirs
             );
