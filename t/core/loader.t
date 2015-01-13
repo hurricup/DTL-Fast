@@ -75,4 +75,12 @@ is( $template->render, 'simple3-text', 'Multi-directory template selecting, back
 $template = select_template(['simple.txt', 'simple3.txt'], $dirs2);
 is( $template->render, 'simple', 'Multi-directory template selecting, forward');
 
+
+eval{ $template = get_template('orphan.txt', $dirs2 )};
+ok( $@ =~ /_missing_parent\.txt/, 'Missing parent exception');
+
+eval{$template = get_template('badinclude.txt', $dirs2 )->render};
+ok( $@ =~ /_missing_include\.txt/, 'Missing include exception');
+
+
 done_testing();

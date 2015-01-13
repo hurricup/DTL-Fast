@@ -1,10 +1,9 @@
 Inspired by Django templating and Jinja2
 
 FOR SURE:
-- Documentation
+- Documentation for Tags developers
+- Documentation for Filters developers
 - Pre-set date and time formats from Django
-- Implement {# ... #}, decide what to do with verbantim
-- Check how spaceless works with < and > in quotes (single and double)
 - More tests (especially test blocks re-using, that caching works properly)
 - More tests for `jsescape` filter. Works other way than python's version.
 - More tests for `random` filter.
@@ -18,14 +17,11 @@ FOR SURE:
 - Implement cache control options for Template constructor
 - Implement external caching as perl code
 - as_string method for variables and operations, useful for good error messaging
-- Performance testing in comparision of other perl implementations and Django itself
 - DTL::Fast::Utils::html_protect should work using XS module (to take from CDI3)
-- Implement Django filter plugins from: https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference
 - Implement internationalization and localization
 - Profiling and optimising using NYTProf
 - Performance testing for old and new context variables work
 - urlize target and following should be controlled via parameters
-- Warn if parent template is not available
 
 SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.

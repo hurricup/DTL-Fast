@@ -21,11 +21,18 @@ sub render
     my $self = shift;
     my $context = shift;
     
+    my $template_name = $self->{'template'}->render($context);
     my $result = DTL::Fast::get_template(
-        $self->{'template'}->render($context)
+        $template_name
         , $self->{'dirs'}
     );
-    
+  
+    die sprintf(
+        "Couldn't find included template %s in directories %s"
+        , $template_name
+        , join(', ', @{$self->{'dirs'}})
+    ) if not defined $result;
+  
     return $result->render($context);
 }
 

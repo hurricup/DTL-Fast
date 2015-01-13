@@ -12,7 +12,6 @@ use DTL::Fast::Template;
 our @EXPORT_OK;
 
 # @todo Texts should be tossed by references
-# @todo Protection from cycled ierarchy
 # @todo These should be done via Cache class which can work with last modified date
 our %TEMPLATES_CACHE = ();
 our $TEMPLATES_CACHE_HITS = 0;
@@ -76,15 +75,26 @@ sub _apply_inheritance
 
     if( $template =~ s/\s*\{\% extends\s*"(.+?)" \%\}//s ) # template has inheritance
     {
-        my $parent_template = _read_template($1, $dirs);
+        my $parent_name = $1;
+        my $parent_template = _read_template($parent_name, $dirs);
         
-        my %named_blocks = (
-            $template =~ /\{\% block ([^\s]+) \%\}(.+?)\{\% endblock \%\}/gs
-        );
-        
-        my $block_names = join '|', keys(%named_blocks);
-        $parent_template =~ s/\{\% block ($block_names) \%\}.+?\{\% endblock \%\}/\{\% block $1 \%\}$named_blocks{$1}\{\% endblock \%\}/gsi;
-        $template = $parent_template;
+        if( defined $parent_template )
+        {
+            my %named_blocks = (
+                $template =~ /\{\% block ([^\s]+) \%\}(.+?)\{\% endblock \%\}/gs
+            );
+            
+            my $block_names = join '|', keys(%named_blocks);
+            $parent_template =~ s/\{\% block ($block_names) \%\}.+?\{\% endblock \%\}/\{\% block $1 \%\}$named_blocks{$1}\{\% endblock \%\}/gsi;
+            $template = $parent_template;
+        }
+        else
+        {
+            die sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
+                , $parent_name
+                , join( ', ', @$dirs)
+            );
+        }
     }
     
     return $template;
@@ -442,6 +452,7 @@ is being rendered like:
 =head1 BENCHMARKS
 
 I've compared module speed with previous abandoned implementation: L<C<Dotiac::DTL>> in both modes: FCGI and CGI. Test template and scripts are in /timethese directory.
+Django templating in Python with cache works about 80% slower than C<DTL::Fast>.
 
 =head2 FCGI/mod_perl
 
@@ -486,7 +497,11 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =item * Tested with CentOS & Perl 5.10
 
-=item * Added no warnings 'depricated' for split in Wordcount filter
+=item * Changed implicit split to explicit in C<wordcount> filter.
+
+=item * Added exception on missing parent template in C<extends> tag.
+
+=item * Added exception on missing included template in C<include> tag.
 
 =back
 
@@ -496,7 +511,7 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =item * changed some intermediate getters to direct access. Improved rendering performance by 10%. 
 
-=item * added tests for performance measuring and profiling (see C</timethese> directory).
+=item * added tests for performance measuring and profiling (see C<timethese> directory).
 
 =back
 
