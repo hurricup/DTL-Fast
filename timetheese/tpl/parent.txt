@@ -1,5 +1,18 @@
 {% block "block1" %}
 This is a test {{ var1|add:var2|upper }}
+
+    {% block "block6" %}
+
+        Parent block 6
+    
+        {% block "block7" %}
+        
+            Parent Block 7
+
+        {% endblock %}
+
+    {% endblock %}
+
 {% endblock %}
 
 {% block "block2" %}

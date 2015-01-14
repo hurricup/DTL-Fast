@@ -6,3 +6,7 @@ Inherited block 5
 {{ var5 }}
 
 {% endblock %}
+
+{% block "block6" %}
+block6 from child5
+{% endblock %}
