@@ -528,6 +528,11 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =item * Implemented C<strftime> filter, which works with L<C<Date::Format>> C<str2time>.
 
+=item * Added Russian version of C<pluralize> filter:
+
+    use DTL::Fast;
+    use DTL::Fast::Template::Filter::Ru::Pluralize; # this will override default pluralize with Russian version.
+
 =back
 
 =over

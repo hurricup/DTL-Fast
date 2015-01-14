@@ -38,6 +38,7 @@ runtests(
     't/filter/make_list.t',
     't/filter/phone2numeric.t',
     't/filter/pluralize.t',
+    't/filter/pluralize_ru.t',
     't/filter/random.t',
     't/filter/removetags.t',
     't/filter/reverse.t',

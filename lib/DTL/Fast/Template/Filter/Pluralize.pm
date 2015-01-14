@@ -26,13 +26,14 @@ sub filter
     my $value = shift;
     my $context = shift;
     
-    return pluralize($value, [
+    return $self->pluralize($value, [
         split /\s*,\s*/, $self->{'suffix'}->render($context)
     ]);
 }
 
 sub pluralize
 {
+    my $self = shift;
     my $value = shift;
     my $suffix = shift;
     
