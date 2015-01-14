@@ -6,7 +6,6 @@ use Carp qw(confess);
 $DTL::Fast::Template::FILTER_HANDLERS{'timesince'} = __PACKAGE__;
 
 use DTL::Fast::Template::Variable;
-use DTL::Fast::Template::Filter::Pluralize;
 
 our $MAXSTEPS = 2;
 
@@ -64,7 +63,7 @@ sub time_diff
                 push @diffs, sprintf( '%d %s%s'
                     , $val
                     , $lapse->[0]
-                    , DTL::Fast::Template::Filter::Pluralize::pluralize($val, ['s'])
+                    , $DTL::Fast::Template::FILTER_HANDLERS{'pluralize'}->pluralize($val, ['s'])
                 );
                 
                 if( scalar @diffs == $MAXSTEPS )
