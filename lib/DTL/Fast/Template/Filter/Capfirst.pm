@@ -1,7 +1,6 @@
 package DTL::Fast::Template::Filter::Capfirst;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
 
 $DTL::Fast::Template::FILTER_HANDLERS{'capfirst'} = __PACKAGE__;
 

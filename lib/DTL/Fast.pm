@@ -1,7 +1,7 @@
 package DTL::Fast;
 use strict; use warnings FATAL => 'all'; 
 use parent 'Exporter';
-use Carp qw(confess);
+use Carp;
 
 use 5.010;
 our $VERSION = '1.04';
@@ -25,10 +25,10 @@ sub get_template
     my $dirs = shift // [getcwd()];
     my %kwargs = @_;
     
-    confess "Template name was not specified" 
+    croak  "Template name was not specified" 
         if not $template_name;
     
-    confess "Second parameter must be a dirs array reference" 
+    croak  "Second parameter must be a dirs array reference" 
         if(
             not ref $dirs
             or ref $dirs ne 'ARRAY'
@@ -54,20 +54,33 @@ sub get_template
         my $template_path;
 
         ($template, $template_path) = _read_template($template_name, $dirs);
-        $template =~ s/\{\% (?:block|endblock|extends) .*?\%\}//gs;
         
-        my @arguments = (
-            $template
-            , $dirs
-            , 'file_path' => $template_path
-        );
-        push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
-            if $kwargs{'ssi_dirs'};
-        push @arguments, 'url_source', $kwargs{'url_source'}
-            if $kwargs{'url_source'};
+        if( defined $template )
+        {
         
-        $template = DTL::Fast::Template->new(@arguments)
-            if defined $template;
+            $template =~ s/\{\% (?:block|endblock|extends) .*?\%\}//gs;
+            
+            my @arguments = (
+                $template
+                , $dirs
+                , 'file_path' => $template_path
+            );
+            push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
+                if $kwargs{'ssi_dirs'};
+            push @arguments, 'url_source', $kwargs{'url_source'}
+                if $kwargs{'url_source'};
+            
+            $template = DTL::Fast::Template->new(@arguments)
+                if defined $template;
+        }
+        else
+        {
+            croak  sprintf( <<'_EOT_', $template_name, join("\n", @$dirs)) if not defined $template;
+Unable to find template %s in directories: 
+%s
+_EOT_
+        }
+            
         $OBJECTS_CACHE{$cache_key} = $template;
     }
     
@@ -97,7 +110,7 @@ sub _apply_inheritance
         }
         else
         {
-            die sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
+            croak  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
                 , $parent_name
                 , join( ', ', @$dirs)
             );
@@ -134,7 +147,7 @@ sub _read_template
         {
             if( exists $inheritance_path->{$template_path} )
             {
-                die sprintf(
+                croak  sprintf(
                     "Recursive inheritance detected:\n%s\n" 
                     , join "\n inherited from ", @{$inheritance_path->{'*path'}}, $template_path
                 );
@@ -151,11 +164,6 @@ sub _read_template
             
         $TEMPLATES_CACHE{$cache_key} = $template;
     }
-
-    confess sprintf( <<'_EOT_', $template_name, join("\n", @$dirs)) if not defined $template;
-Unable to find template %s in directories: 
-%s
-_EOT_
     
     return ($template, $template_path);
 }
@@ -185,7 +193,7 @@ sub _read_file
             }
             else
             {
-                confess sprintf(
+                croak  sprintf(
                     'Error opening file %s, %s'
                     , $template_path
                     , $!
@@ -204,7 +212,7 @@ sub select_template
     my $template_names = shift;
     my $dirs = shift // [getcwd()];
     
-    confess "First parameter must be a template names array reference" 
+    croak  "First parameter must be a template names array reference" 
         if(
             not ref $template_names
             or ref $template_names ne 'ARRAY'

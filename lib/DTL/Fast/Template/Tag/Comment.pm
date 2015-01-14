@@ -1,7 +1,6 @@
 package DTL::Fast::Template::Tag::Comment;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Tag';  
-use Carp qw(confess);
 
 $DTL::Fast::Template::TAG_HANDLERS{'comment'} = __PACKAGE__;
 

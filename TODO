@@ -9,6 +9,7 @@ FOR SURE:
 - More tests for `random` filter.
 - Make tests for `date` filter.
 - Debug tag tests
+- Clean up confess/croak/die
 - Error exceptions
 - Recursion protection on deep comparision
 - Error messaging with line numbers and so on

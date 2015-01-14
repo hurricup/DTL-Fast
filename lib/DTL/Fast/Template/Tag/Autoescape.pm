@@ -1,7 +1,7 @@
 package DTL::Fast::Template::Tag::Autoescape;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Tag';  
-use Carp qw(confess cluck);
+use Carp;
 
 $DTL::Fast::Template::TAG_HANDLERS{'autoescape'} = __PACKAGE__;
 
@@ -23,7 +23,7 @@ sub parse_parameters
     }
     else
     {
-        confess "Autoescape tag undertands only on and off parameter";
+        croak "Autoescape tag undertands only on and off parameter";
     }
     return $self;
 }

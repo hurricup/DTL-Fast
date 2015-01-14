@@ -1,7 +1,6 @@
 package DTL::Fast::Template::Tag::Cycle;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Tag::Simple';  
-use Carp qw(confess);
 
 $DTL::Fast::Template::TAG_HANDLERS{'cycle'} = __PACKAGE__;
 
