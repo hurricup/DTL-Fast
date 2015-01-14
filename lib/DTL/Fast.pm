@@ -4,7 +4,7 @@ use parent 'Exporter';
 use Carp qw(confess);
 
 use 5.010;
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 
 use Cwd;
 use DTL::Fast::Template;
@@ -233,7 +233,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.03
+Version 1.04
 
 =head1 SYNOPSIS
 
@@ -380,8 +380,6 @@ This module supports all built-in filters documented on L<official Django site|h
 
 =over
 
-=item * Date and time formatting being done using L<C<Date::Format>> module, which uses C library routines C<strftime> and C<ctime>. Django uses it's own L<placeholders|https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#date>. (Mapping considered atm.)
-
 =item * C<ssi> tag in Django uses absolute paths and C<ALLOWED_INCLUDE_ROOTS> configuration option. This library works separately and may be used with different frameworks. So, C<ssi> tag uses relative paths and you MUST specify additional template constructor parameter: C<ssi_dirs> which should be an array reference with list of dirs to search in.
 
 =item * C<csrf_token> tag is not implemented, too well connected with Django.
@@ -411,6 +409,8 @@ This module supports all built-in filters documented on L<official Django site|h
 May be some of this features implemented in Django itself. Let me know about it.
 
 =over
+
+=item * C<strftime> - new filter. Formatting time using L<C<Date::Format>> module, which is using C functions C<strftime> and C<ctime>.
 
 =item * C<firstofdefined> - new tag, that works like C<firstof> tag, but checks if value is defined (not true)
 
