@@ -45,7 +45,7 @@ sub render
         {
             $result = DTL::Fast::get_template(
                 $self->{'template'}->render($context)
-                , $ssi_dirs
+                , 'dirs' => $ssi_dirs
             )->render($context);
         }
         else

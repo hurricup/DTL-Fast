@@ -33,7 +33,7 @@ This is one-pass cycle val1 example
 This is one-pass depricated cycle val4 example
 _EOT_
 
-is( get_template( 'cycle_simple.txt', $dirs)->render($context), $test_string, 'Simple cycle. Current and depricated versions.');
+is( get_template( 'cycle_simple.txt', 'dirs' => $dirs)->render($context), $test_string, 'Simple cycle. Current and depricated versions.');
 
 $test_string = <<'_EOT_';
 This is cycle val1 example, step 1
@@ -49,7 +49,7 @@ This is depricated cycle val4 example, step 4
 This is depricated cycle Third variable example, step 5
 _EOT_
 
-is( get_template( 'cycle_for.txt', $dirs)->render($context), $test_string, 'Cycle inside for with repeats. Current and depricated versions.');
+is( get_template( 'cycle_for.txt', 'dirs' => $dirs)->render($context), $test_string, 'Cycle inside for with repeats. Current and depricated versions.');
 
 $test_string = <<'_EOT_';
 This is cycle val1 example, step 1, pushed val1
@@ -65,7 +65,7 @@ This is depricated cycle val4 example, step 4, pushed val4
 This is depricated cycle Third variable example, step 5, pushed Third variable
 _EOT_
 
-is( get_template( 'cycle_as.txt', $dirs)->render($context), $test_string, 'Cycle inside for with repeats and populating context. Current and depricated versions.');
+is( get_template( 'cycle_as.txt', 'dirs' => $dirs)->render($context), $test_string, 'Cycle inside for with repeats and populating context. Current and depricated versions.');
 
 $test_string = <<'_EOT_';
 This is cycle  example, step 1, pushed val1
@@ -81,7 +81,7 @@ This is depricated cycle  example, step 4, pushed val4
 This is depricated cycle  example, step 5, pushed Third variable
 _EOT_
 
-is( get_template( 'cycle_as_silent.txt', $dirs)->render($context), $test_string, 'Silent cycle inside for with repeats and populating context. Current and depricated versions.');
+is( get_template( 'cycle_as_silent.txt', 'dirs' => $dirs)->render($context), $test_string, 'Silent cycle inside for with repeats and populating context. Current and depricated versions.');
 
 $test_string = <<'_EOT_';
 Here this &lt; escaped
@@ -93,7 +93,7 @@ Here this &quot; escaped
 Here this &lt; escaped
 _EOT_
 
-is( get_template( 'cycle_escape.txt', $dirs)->render($context), $test_string, 'Cycle escaping control.');
+is( get_template( 'cycle_escape.txt', 'dirs' => $dirs)->render($context), $test_string, 'Cycle escaping control.');
 
 $test_string = <<'_EOT_';
 Here this &lt; escaped
@@ -105,7 +105,7 @@ Here this ' escaped
 Here this &quot; escaped
 _EOT_
 
-$template = get_template( 'cycle_escape_safe.txt', $dirs);
+$template = get_template( 'cycle_escape_safe.txt', 'dirs' => $dirs);
 is( $template->render($context), $test_string, 'Cycle escaping control with safe.');
 
 $test_string = <<'_EOT_';
@@ -118,7 +118,7 @@ Here this ' escaped
 Here this " escaped
 _EOT_
 
-is( get_template( 'cycle_escape_autoescape.txt', $dirs)->render($context), $test_string, 'Cycle escaping control with autoescape off.');
+is( get_template( 'cycle_escape_autoescape.txt', 'dirs' => $dirs)->render($context), $test_string, 'Cycle escaping control with autoescape off.');
 
 
 done_testing();

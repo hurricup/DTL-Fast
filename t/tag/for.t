@@ -44,7 +44,7 @@ This is a value2
 
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Array rendering');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Array rendering');
 
 $template = <<'_EOT_';
 {% for val in array reversed %}This is a {{ val }}
@@ -58,7 +58,7 @@ This is a value0
 
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Array rendering reversed');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Array rendering reversed');
 
 $template = <<'_EOT_';
 {% for val in array %}This is a {{ val }}-{{ forloop.counter }}-{{ forloop.counter0 }}-{{ forloop.revcounter }}-{{ forloop.revcounter0 }}-{{ forloop.first }}-{{ forloop.last }}-{{ forloop.odd }}-{{ forloop.odd0 }}-{{ forloop.even }}-{{ forloop.even0 }}
@@ -72,7 +72,7 @@ This is a value2-3-2-1-0-0-1-1-0-0-1
 
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Array rendering with forloop values');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Array rendering with forloop values');
 
 $template = <<'_EOT_';
 {% for a,b ,c in complex_array %}This is a {{ a }}-{{ b }}-{{ c }}
@@ -86,14 +86,14 @@ This is a value20-value21-value22
 
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Array of arrays rendering');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Array of arrays rendering');
 
 $template = <<'_EOT_';
 {% for a,b ,c in complex_array_redundant %}This is a {{ a }}-{{ b }}-{{ c }}
 {% endfor %}
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Array of arrays with redundancy rendering');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Array of arrays with redundancy rendering');
 
 
 $template = <<'_EOT_';
@@ -122,7 +122,7 @@ Still value20-value21-value22
 
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Nested iterations');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Nested iterations');
 
 $template = <<'_EOT_';
 {% for a,b ,c in empty_array %}This is a {{ a }}-{{ b }}-{{ c }}
@@ -135,7 +135,7 @@ Nothing in this array
 
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Nothing block on empty array');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Nothing block on empty array');
 
 
 $template = <<'_EOT_';
@@ -149,7 +149,7 @@ Nothing in this hash
 
 _EOT_
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Nothing block on empty hash');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Nothing block on empty hash');
 
 
 $template = <<'_EOT_';
@@ -166,7 +166,7 @@ foreach my $key (keys %$hash)
 }
 $test_string .= "\n";
 
-is( DTL::Fast::Template->new($template, $dirs)->render($context), $test_string, 'Hash rendering');
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Hash rendering');
 
 # @todo reversed hash rendering
 

@@ -12,17 +12,17 @@ use Dotiac::DTL qw/Template Context/;
 $Dotiac::DTL::CURRENTDIR = './tpl';
 
 my $context = {
-	'var1' => 'This',
-	'var2' => 'is',
-	'var3' => 'SPARTA',
-	'var4' => 'GREEKS',
-	'var5' => 'GO HOME!',
-	'array1' => [qw( this is a text string as array )],
+    'var1' => 'This',
+    'var2' => 'is',
+    'var3' => 'SPARTA',
+    'var4' => 'GREEKS',
+    'var5' => 'GO HOME!',
+    'array1' => [qw( this is a text string as array )],
 };
 
 my $tpl = get_template(
     'root.txt',
-    [ @Dotiac::DTL::TEMPLATE_DIRS ]
+    'dirs' => [ @Dotiac::DTL::TEMPLATE_DIRS ]
 );
 sub dtl_fast_render
 {
@@ -35,7 +35,7 @@ sub dtl_fast_parse
     %DTL::Fast::OBJECTS_CACHE = ();
     my $tpl = get_template(
         'root.txt',
-        [ @Dotiac::DTL::TEMPLATE_DIRS ]
+        'dirs' => [ @Dotiac::DTL::TEMPLATE_DIRS ]
     );
 }
 

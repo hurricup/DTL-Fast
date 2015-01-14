@@ -24,7 +24,7 @@ sub render
     
     my $result = DTL::Fast::get_template(
         $template_name
-        , $self->{'dirs'}
+        , 'dirs' => $self->{'dirs'}
     );
   
     die sprintf(

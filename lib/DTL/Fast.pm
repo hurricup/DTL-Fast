@@ -5,7 +5,7 @@ use Carp;
 use Storable qw(freeze thaw);
 
 use 5.010;
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 use Cwd;
 use DTL::Fast::Template;
@@ -23,25 +23,20 @@ push @EXPORT_OK, 'get_template';
 sub get_template
 {
     my $template_name = shift;
-    my $dirs = shift // [getcwd()];
     my %kwargs = @_;
+    
     
     croak  "Template name was not specified" 
         if not $template_name;
-    
-    croak  "Second parameter must be a dirs array reference" 
-        if(
-            not ref $dirs
-            or ref $dirs ne 'ARRAY'
-            or not scalar @$dirs
-        );
 
-    my $cache_key = sprintf '%s:%s:%s:%s'
-        , __PACKAGE__
-        , $template_name
-        , join( ',', @$dirs )
-        , join( ',', @{$kwargs{'ssi_dirs'}//[]})
+    croak "Template directories array was not specified"
+        if
+            not defined $kwargs{'dirs'}
+            or ref $kwargs{'dirs'} ne 'ARRAY'
+            or not scalar @{$kwargs{'dirs'}}
         ;
+
+    my $cache_key = _get_cache_key( $template_name, %kwargs );
 
     my $template;
     
@@ -52,9 +47,7 @@ sub get_template
     }    
     else
     {
-        my $template_path;
-
-        ($template, $template_path) = _read_template($template_name, $dirs, { '*path' => [] }, %kwargs );
+        $template = read_template($template_name, %kwargs );
         
         if( defined $template )
         {
@@ -62,97 +55,65 @@ sub get_template
         }
         else
         {
-            croak  sprintf( <<'_EOT_', $template_name, join("\n", @$dirs)) if not defined $template;
+            croak  sprintf( <<'_EOT_', $template_name, join("\n", @{$kwargs{'dirs'}}));
 Unable to find template %s in directories: 
 %s
 _EOT_
         }
-            
     }
     
     return $template;
 }
 
-sub _read_template
+sub _get_cache_key
 {
     my $template_name = shift;
-    my $dirs = shift;
-    my $inheritance_path = shift // { '*path' => [] };
+    my %kwargs = @_;
+    
+    return sprintf '%s:%s:%s:%s'
+        , __PACKAGE__
+        , $template_name
+        , join( ',', @{$kwargs{'dirs'}} )
+        , join( ',', @{$kwargs{'ssi_dirs'}//[]})
+        # shouldn't we pass uri_handler here?
+    ;
+}
+
+sub read_template
+{
+    my $template_name = shift;
     my %kwargs = @_;
     
     my $template = undef;
     my $template_path = undef;
 
-    my $cache_key = sprintf '%s:%s:%s'
-        , __PACKAGE__
-        , $template_name
-        , join ',', @$dirs;
+    croak "Template directories array was not specified"
+        if not defined $kwargs{'dirs'}
+            or not ref $kwargs{'dirs'}
+            or not scalar @{$kwargs{'dirs'}}
+        ;
+    
+    my $cache_key = _get_cache_key( $template_name, %kwargs );
 
-    if( exists $TEMPLATES_CACHE{$cache_key} )   # already read template with this parameters
+    if( exists $TEMPLATES_CACHE{$cache_key} )   # already read template with these parameters
     {
         $template = thaw($TEMPLATES_CACHE{$cache_key});
         $TEMPLATES_CACHE_HITS++;
     }
     else
     {
-        ($template, $template_path) = _read_file($template_name, $dirs);
+        ($template, $template_path) = _read_file($template_name, $kwargs{'dirs'});
         
         if( defined $template )
         {
-            if( exists $inheritance_path->{$template_path} )
-            {
-                croak  sprintf(
-                    "Recursive inheritance detected:\n%s\n" 
-                    , join "\n inherited from ", @{$inheritance_path->{'*path'}}, $template_path
-                );
-            }
-
-            my @arguments = (
-                $template
-                , $dirs
-                , 'file_path' => $template_path
-            );
-            push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
-                if $kwargs{'ssi_dirs'};
-            push @arguments, 'url_source', $kwargs{'url_source'}
-                if $kwargs{'url_source'};
-            
-            $template = DTL::Fast::Template->new(@arguments);
-
-            if( $template->{'_extends' })  # template is inherited
-            {
-                push @{$inheritance_path->{'*path'}}, $template_path;
-                $inheritance_path->{$template_path} = 1;
-
-                my ($parent_template, $parent_template_path) = _read_template(
-                    $template->{'_extends' }
-                    , $dirs
-                    , $inheritance_path
-                    , %kwargs
-                );
-                
-                if( defined $parent_template )
-                {
-                    $template = $parent_template->merge_blocks($template);
-                }
-                else
-                {
-                    croak  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
-                        , $template->{'_extends' }
-                        , join( ', ', @$dirs)
-                    );
-                }
-                    
-                pop @{$inheritance_path->{'*path'}};
-                delete $inheritance_path->{$template_path};
-            }
-            
+            $kwargs{'file_path'} = $template_path;
+            $template = DTL::Fast::Template->new( $template, %kwargs);
+          
             $TEMPLATES_CACHE{$cache_key} = freeze($template);
         }
-            
     }
     
-    return ($template, $template_path);
+    return $template;
 }
 
 
@@ -198,7 +159,7 @@ push @EXPORT_OK, 'select_template';
 sub select_template
 {
     my $template_names = shift;
-    my $dirs = shift // [getcwd()];
+    my %kwargs = @_;
     
     croak  "First parameter must be a template names array reference" 
         if(
@@ -211,7 +172,7 @@ sub select_template
     
     foreach my $template_name (@$template_names)
     {
-        if( ref ( $result = get_template( $template_name, $dirs )) eq 'DTL::Fast::Template' )
+        if( ref ( $result = get_template( $template_name, %kwargs )) eq 'DTL::Fast::Template' )
         {
             last;
         }
@@ -229,7 +190,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.04
+Version 1.05
 
 =head1 SYNOPSIS
 
@@ -288,7 +249,7 @@ Using DTL::Fast::Template constructor:
     
     my $tpl = DTL::Fast::Template->new(
         $template_text,                             # template itself
-        [ $dir1, $dir2, ... ],                      # optional, directories list to look for parent templates and includes
+        'dirs' => [ $dir1, $dir2, ... ],            # optional, directories list to look for parent templates and includes
         'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list to look for files included with ssi tag
         'url_source' => \&uri_getter                # optional, reference to a function, that can return url template by model name (necessary for url tag)
     );
@@ -299,7 +260,7 @@ Using DTL::Fast::Template constructor:
     
     my $tpl = get_template(
         $template_path,                             # path to the template, relative to directories from second argument
-        [ $dir1, $dir2, ... ],                      # optional, directories list to look for parent templates and includes
+        'dirs' => [ $dir1, $dir2, ... ],            # mandatory, directories list to look for parent templates and includes
         'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list to look for files included with ssi tag
         'url_source' => \&uri_getter                # optional, reference to a function, that can return url template by model name (necessary for url tag)
     );
@@ -312,7 +273,7 @@ when you are using C<get_template> helper function, framework will try to find t
     
     my $tpl = select_template(
         [ $template_path1, $template_path2, ...],   # paths to templates, relative to directories from second argument
-        [ $dir1, $dir2, ... ],                      # optional, directories list to look for parent templates and includes
+        'dirs' => [ $dir1, $dir2, ... ],            # mandatory, directories list to look for parent templates and includes
         'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list to look for files included with ssi tag
         'url_source' => \&uri_getter                # optional, reference to a function, that can return url template by model name (necessary for url tag)
     );
@@ -327,7 +288,7 @@ After parsing template using one of the methods above, you may render it using c
     
     my $tpl = get_template(
         'hello_template.txt',          
-        [ '/srv/wwww/templates/' ]
+        'dirs' => [ '/srv/wwww/templates/' ]
     );
     
     print $tpl->render({ name => 'Alex' });
@@ -340,7 +301,7 @@ or
     
     my $tpl = get_template(
         'hello_template.txt',          
-        [ '/srv/wwww/templates/' ]
+        'dirs' => [ '/srv/wwww/templates/' ]
     );
     
     my $context = DTL::Fast::Context->new({
@@ -513,6 +474,18 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =head1 CHANGES
 
 =over
+
+=item * In development - v1.05 
+
+=over
+
+=item * Moved inheritance part into Template constructor 
+
+=item * Found bug with inheritance + blocks extension (in development)
+
+=item * Made C<dirs> parameter optional for Template constructor, but it's still mandatory for C<get_template>/C<select_template>
+    
+=back
 
 =item * 14/01/2015 - v1.04
 

@@ -8,7 +8,7 @@ for( my $i = 0; $i < 10000; $i++ )
     %DTL::Fast::OBJECTS_CACHE = ();
     my $tpl = get_template(
         'root.txt',
-        [ './tpl' ]
+        'dirs' => [ './tpl' ]
     );
 }
 

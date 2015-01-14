@@ -67,7 +67,7 @@ for( my $i = 1; $i < 7; $i++ )
 
 foreach my $data (@$SET)
 {
-    is( DTL::Fast::Template->new($data->{'template'}, [])->render($context), $data->{'test'}, $data->{'title'});
+    is( DTL::Fast::Template->new($data->{'template'})->render($context), $data->{'test'}, $data->{'title'});
     
 }
 

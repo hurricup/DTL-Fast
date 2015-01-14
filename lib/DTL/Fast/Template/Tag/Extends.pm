@@ -24,11 +24,11 @@ sub parse_parameters
             or not ($parent_template = DTL::Fast::Template::Variable->new($self->{'parameter'})->render());
             
     carp sprintf("Multiple extends specified in the template:\n\%s\n\%s\n"
-        , $self->{'_parent'}->{'_extends'}
+        , $self->{'_parent'}->{'extends'}
         , $parent_template
-    ) if $self->{'_parent'}->{'_extends'};
+    ) if $self->{'_parent'}->{'extends'};
             
-    $self->{'_parent'}->{'_extends'} = $parent_template;
+    $self->{'_parent'}->{'extends'} = $parent_template;
     
     return undef;
 }

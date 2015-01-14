@@ -61,7 +61,7 @@ foreach my $data (@$SET)
 {
     my $test = $data->{'test'};
     chomp $test;
-    is( DTL::Fast::Template->new($data->{'template'}, [])->render($context), $test, $data->{'title'});
+    is( DTL::Fast::Template->new($data->{'template'})->render($context), $test, $data->{'title'});
 }
 
 done_testing();

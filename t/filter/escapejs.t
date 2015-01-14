@@ -33,7 +33,7 @@ my $SET = [
 
 foreach my $data (@$SET)
 {
-    is( DTL::Fast::Template->new($data->{'template'}, [])->render($context), $data->{'test'}, $data->{'title'});
+    is( DTL::Fast::Template->new($data->{'template'})->render($context), $data->{'test'}, $data->{'title'});
     
 }
 

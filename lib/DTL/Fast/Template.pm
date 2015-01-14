@@ -15,16 +15,48 @@ sub new
 {
     my $proto = shift;
     my $template = shift // '';
-    my $dirs = shift // []; # optional dirs to look up for includes or parents
     my %kwargs = @_;
-    
+
     $kwargs{'raw_chunks'} = _get_raw_chunks($template);
-    $kwargs{'dirs'} = $dirs;
-    $kwargs{'file_path'} //= 'inline';
     $kwargs{'blocks'} = {};
+    $kwargs{'dirs'} //= [];             # optional dirs to look up for includes or parents
+    $kwargs{'file_path'} //= 'inline';  
+    $kwargs{'inherits'} //= {};
+    $kwargs{'inherited'} //= [];
+
+    if( exists $kwargs{'inherits'}->{$kwargs{'file_path'}} )
+    {
+        croak  sprintf(
+            "Recursive inheritance detected:\n%s\n" 
+            , join "\n inherited from ", @{$kwargs{'inherited'}}, $kwargs{'file_path'}
+        );
+    }
+    
+    $kwargs{'inherits'}->{$kwargs{'file_path'}} = 1;
+    push @{$kwargs{'inherited'}}, $kwargs{'file_path'};
     
     my $self = $proto->SUPER::new(%kwargs);
-  
+
+    if( $self->{'extends'} )
+    {
+        my $parent_template = DTL::Fast::read_template(
+            $self->{'extends'}
+            , %kwargs
+        );
+          
+        if( defined $parent_template )
+        {
+            $self = $parent_template->merge_blocks($self);
+        }
+        else
+        {
+            croak  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
+                , $self->{'extends' }
+                , join( ', ', @{$kwargs{'dirs'}})
+            );
+        }
+    }
+    
     return $self;
 }
 

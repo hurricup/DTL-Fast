@@ -15,10 +15,10 @@ $context = new DTL::Fast::Context({
 });
 
 $test_string = 'here this is static {{ template }} as {% for something %} with keys is';
-is( get_template('ssi_static.txt', $dirs, 'ssi_dirs' => $ssi_dirs)->render($context), $test_string, 'SSI static file');
+is( get_template('ssi_static.txt', 'dirs' => $dirs, 'ssi_dirs' => $ssi_dirs)->render($context), $test_string, 'SSI static file');
 
 $test_string = 'here this is parsed one two three  template is';
-is( get_template('ssi_parsed.txt', $dirs, 'ssi_dirs' => $ssi_dirs)->render($context), $test_string, 'SSI parsed file');
+is( get_template('ssi_parsed.txt', 'dirs' => $dirs, 'ssi_dirs' => $ssi_dirs)->render($context), $test_string, 'SSI parsed file');
 
 
 done_testing();

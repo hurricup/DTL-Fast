@@ -26,6 +26,6 @@ $test_string = <<'_EOT_';
 This is commented  test checking  endit
 _EOT_
 
-is( get_template( 'comment_top.txt', $dirs)->render($context), $test_string, 'Comment with inclusion');
+is( get_template( 'comment_top.txt', 'dirs' => $dirs)->render($context), $test_string, 'Comment with inclusion');
 
 done_testing();

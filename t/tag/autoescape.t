@@ -154,6 +154,6 @@ checking here is &quot; value
 checking here is &amp; value
 _EOT_
 
-is( get_template( 'autoescape_top.txt', $dirs)->render($context), $test_string, 'Autoescape management with inclusions');
+is( get_template( 'autoescape_top.txt', 'dirs' => $dirs)->render($context), $test_string, 'Autoescape management with inclusions');
 
 done_testing();
