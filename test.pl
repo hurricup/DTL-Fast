@@ -8,6 +8,7 @@ runtests(
     't/core/loader.t',
     't/core/template.t',
     't/expression/in.t',
+    't/expression/eq.t',
     't/expression/defined.t',
     't/filter/add.t',
     't/filter/addslashes.t',

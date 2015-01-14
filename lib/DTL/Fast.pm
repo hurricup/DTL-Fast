@@ -533,6 +533,8 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
     use DTL::Fast;
     use DTL::Fast::Template::Filter::Ru::Pluralize; # this will override default pluralize with Russian version.
 
+=item * Refactored strings backup and parametrized filters.
+    
 =back
 
 =over

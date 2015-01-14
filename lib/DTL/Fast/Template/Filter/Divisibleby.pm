@@ -1,20 +1,19 @@
 package DTL::Fast::Template::Filter::Divisibleby;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'divisibleby'} = __PACKAGE__;
 
-use DTL::Fast::Template::Variable;
 use Scalar::Util qw(looks_like_number);
 
 #@Override
 sub parse_parameters
 {
     my $self = shift;
-    die "No divider specified"
+    carp "No divider specified"
         if not scalar @{$self->{'parameter'}};
-    $self->{'divider'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'divider'} = $self->{'parameter'}->[0];
     return $self;
 }
 

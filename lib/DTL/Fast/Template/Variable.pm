@@ -1,6 +1,6 @@
 package DTL::Fast::Template::Variable;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp qw(confess cluck);
+use Carp qw(croak cluck);
 
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::Template::FilterManager;
@@ -50,7 +50,7 @@ sub new
     }
     else
     {
-        confess "Variable can't contain brackets: $variable_name" 
+        croak "Variable can't contain brackets: $variable_name" 
             if $variable_name =~ /[()]/;
         @variable = split /\.+/, $variable_name;
     }

@@ -14,7 +14,7 @@ sub parse_parameters
     my $self = shift;
     die "No substitute specified for removing"
         if not scalar @{$self->{'parameter'}};
-    $self->{'remove'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'remove'} = $self->{'parameter'}->[0];
     return $self;
 }
 

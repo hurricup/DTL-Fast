@@ -1,19 +1,17 @@
 package DTL::Fast::Template::Filter::Pluralize;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'pluralize'} = __PACKAGE__;
-
-use DTL::Fast::Template::Variable;
 
 #@Override
 sub parse_parameters
 {
     my $self = shift;
-    push @{$self->{'parameter'}}, '"s"'
+    push @{$self->{'parameter'}}, DTL::Fast::Template::Variable->new('"s"')
         if not scalar @{$self->{'parameter'}};
-    $self->{'suffix'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'suffix'} = $self->{'parameter'}->[0];
     return $self;
 }
 

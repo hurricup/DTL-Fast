@@ -1,7 +1,7 @@
 package DTL::Fast::Template::Filter::Wordwrap;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'wordwrap'} = __PACKAGE__;
 
@@ -9,9 +9,9 @@ $DTL::Fast::Template::FILTER_HANDLERS{'wordwrap'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    die "No wrapping width specified"
+    croak "No wrapping width specified"
         if not scalar @{$self->{'parameter'}};
-    $self->{'maxwidth'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'maxwidth'} = $self->{'parameter'}->[0];
     return $self;
 }
 

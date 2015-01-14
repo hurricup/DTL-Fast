@@ -34,7 +34,9 @@ sub backup_value
     my $self = shift;
     my $value = shift;
     
-    return $self->{'replacement'}->add_replacement($value);
+    return $self->{'replacement'}->add_replacement(
+        DTL::Fast::Template::Variable->new($value)
+    );
 }
 
 sub backup_expression
@@ -62,9 +64,8 @@ sub get_backup_or_variable
     my $self = shift;
     my $token = shift;
 
-    my $result = DTL::Fast::Template::Variable->new(
-        $self->get_backup($token) // $token
-    );
+    my $result = $self->get_backup($token) 
+        // DTL::Fast::Template::Variable->new( $token );
         
     return $result;
 }
@@ -81,7 +82,7 @@ sub get_backup_or_expression
             , 'replacement' => $self->{'replacement'}
             , 'level' => $current_level+1 
         );
-        
+   
     return $result;
 }
 

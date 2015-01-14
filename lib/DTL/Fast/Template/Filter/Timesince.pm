@@ -1,11 +1,9 @@
 package DTL::Fast::Template::Filter::Timesince;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'timesince'} = __PACKAGE__;
-
-use DTL::Fast::Template::Variable;
 
 our $MAXSTEPS = 2;
 
@@ -25,9 +23,9 @@ unshift @LAPSE, ['year', $LAPSE[2]->[1] * 365];
 sub parse_parameters
 {
     my $self = shift;
-    push @{$self->{'parameter'}}, time
+    push @{$self->{'parameter'}}, DTL::Fast::Template::Variable->new(time)
         if not scalar @{$self->{'parameter'}};
-    $self->{'time'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'time'} = $self->{'parameter'}->[0];
     $self->{'suffix'} = DTL::Fast::Template::Variable->new('s');    # this is pluralize related
     
     return $self;

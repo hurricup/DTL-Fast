@@ -1,20 +1,17 @@
 package DTL::Fast::Template::Filter::Center;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'center'} = __PACKAGE__;
-
-use DTL::Fast::Template::Variable;
-
 
 #@Override
 sub parse_parameters
 {
     my $self = shift;
-    die "No width specified for adjusting"
+    croak "No width specified for adjusting"
         if not scalar @{$self->{'parameter'}};
-    $self->{'width'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'width'} = $self->{'parameter'}->[0];
     return $self;
 }
 

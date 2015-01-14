@@ -1,19 +1,17 @@
 package DTL::Fast::Template::Filter::Truncatechars;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'truncatechars'} = __PACKAGE__;
-
-use DTL::Fast::Template::Variable;
 
 #@Override
 sub parse_parameters
 {
     my $self = shift;
-    die "No max string length specified"
+    croak "No max string length specified"
         if not scalar @{$self->{'parameter'}};
-    $self->{'maxlen'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'maxlen'} = $self->{'parameter'}->[0];
     return $self;
 }
 

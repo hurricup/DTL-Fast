@@ -1,17 +1,15 @@
 package DTL::Fast::Template::Filter::Floatformat;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'floatformat'} = __PACKAGE__;
-
-use DTL::Fast::Template::Variable;
 
 #@Override
 sub parse_parameters
 {
     my $self = shift;
-    $self->{'digits'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0])
+    $self->{'digits'} = $self->{'parameter'}->[0]
         if scalar @{$self->{'parameter'}};
     return $self;
 }

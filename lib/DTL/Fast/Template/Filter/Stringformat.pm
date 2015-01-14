@@ -1,7 +1,7 @@
 package DTL::Fast::Template::Filter::Stringformat;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'stringformat'} = __PACKAGE__;
 
@@ -11,9 +11,9 @@ use DTL::Fast::Template::Variable;
 sub parse_parameters
 {
     my $self = shift;
-    die "No format string specified"
+    croak "No format string specified"
         if not scalar @{$self->{'parameter'}};
-    $self->{'format'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'format'} = $self->{'parameter'}->[0];
     return $self;
 }
 

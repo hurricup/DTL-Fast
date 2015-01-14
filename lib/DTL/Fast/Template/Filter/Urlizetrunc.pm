@@ -1,7 +1,7 @@
 package DTL::Fast::Template::Filter::Urlizetrunc;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter::Urlize';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'urlizetrunc'} = __PACKAGE__;
 
@@ -9,9 +9,9 @@ $DTL::Fast::Template::FILTER_HANDLERS{'urlizetrunc'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    die "No max size specified"
+    croak "No max size specified"
         if not scalar @{$self->{'parameter'}};
-    $self->{'maxsize'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'maxsize'} = $self->{'parameter'}->[0];
     return $self;
 }
 

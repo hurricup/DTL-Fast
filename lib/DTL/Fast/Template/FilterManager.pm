@@ -79,7 +79,7 @@ sub add_filter
     if( exists $DTL::Fast::Template::FILTER_HANDLERS{$filter_name} )
     {
         push @{$self->{'filters'}}, $DTL::Fast::Template::FILTER_HANDLERS{$filter_name}->new(
-            [(map {$self->get_backup($_) // $_} @arguments)]
+            [(map {$self->get_backup_or_variable($_) // $_} @arguments)]
         );
         $self->{'filters_number'}++;
     }

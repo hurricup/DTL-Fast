@@ -9,9 +9,9 @@ $DTL::Fast::Template::FILTER_HANDLERS{'yesno'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    push @{$self->{'parameter'}}, '"yes,no,maybe"'
+    push @{$self->{'parameter'}}, DTL::Fast::Template::Variable->new('"yes,no,maybe"')
         if not scalar @{$self->{'parameter'}};
-    $self->{'mappings'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'mappings'} = $self->{'parameter'}->[0];
     return $self;
 }
 

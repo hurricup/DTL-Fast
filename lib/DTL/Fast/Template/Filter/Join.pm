@@ -1,11 +1,10 @@
 package DTL::Fast::Template::Filter::Join;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'join'} = __PACKAGE__;
 
-use DTL::Fast::Template::Variable;
 use DTL::Fast::Utils qw(html_protect);
 
 #@Override
@@ -13,13 +12,13 @@ sub parse_parameters
 {
     my $self = shift;
 
-    confess "No separator passed to the filter ".__PACKAGE__
+    carp "No separator passed to the filter ".__PACKAGE__
         if(
             ref $self->{'parameter'} ne 'ARRAY'
             or not scalar @{$self->{'parameter'}}
         );
         
-    $self->{'sep'} = DTL::Fast::Template::Variable->new($self->{'parameter'}->[0]);
+    $self->{'sep'} = $self->{'parameter'}->[0];
         
     return $self;    
 }

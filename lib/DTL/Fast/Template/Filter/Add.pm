@@ -1,11 +1,10 @@
 package DTL::Fast::Template::Filter::Add;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Filter';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::Template::FILTER_HANDLERS{'add'} = __PACKAGE__;
 
-use DTL::Fast::Template::Variable;
 use Scalar::Util qw(looks_like_number);
 
 #@Override
@@ -13,17 +12,13 @@ sub parse_parameters
 {
     my $self = shift;
     
-    confess "No single arguments passed to the add ".__PACKAGE__
+    croak "No single arguments passed to the add ".__PACKAGE__
         if(
             ref $self->{'parameter'} ne 'ARRAY'
             or not scalar @{$self->{'parameter'}}
         );
         
-    $self->{'parameters'} = [(
-            map{
-                DTL::Fast::Template::Variable->new($_)
-            } @{$self->{'parameter'}}
-    )];
+    $self->{'parameters'} = [@{$self->{'parameter'}}];
 
     return $self;
 }
@@ -49,7 +44,7 @@ sub filter
     }
     elsif( $value_type ) # @todo here we can implement ->add interface
     {
-        confess "Don't know how to add anything to $value_type";
+        croak "Don't know how to add anything to $value_type";
     }
     
     foreach my $parameter (@{$self->{'parameters'}})
@@ -71,7 +66,7 @@ sub filter
             }
             else
             {
-                confess "It's not possible to add a single value to a hash";
+                croak "It's not possible to add a single value to a hash";
             }
         }
         elsif( $result_type eq 'ARRAY' )
