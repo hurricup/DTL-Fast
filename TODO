@@ -10,6 +10,8 @@ FOR SURE:
 - Make tests for `date` filter.
 - Debug tag tests
 - Clean up confess/croak/die
+- Re-factor classes structure
+- Tests for extends and include
 - Error exceptions
 - Recursion protection on deep comparision
 - Error messaging with line numbers and so on

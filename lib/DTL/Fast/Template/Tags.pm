@@ -3,9 +3,11 @@ use strict; use utf8; use warnings FATAL => 'all';
 
 # built in tags
 use DTL::Fast::Template::Tag::Autoescape;
+use DTL::Fast::Template::Tag::Block;
 use DTL::Fast::Template::Tag::Comment;
 use DTL::Fast::Template::Tag::Cycle;
 use DTL::Fast::Template::Tag::Debug;
+use DTL::Fast::Template::Tag::Extends;
 use DTL::Fast::Template::Tag::Filter;
 use DTL::Fast::Template::Tag::Firstof;
 use DTL::Fast::Template::Tag::For;

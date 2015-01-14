@@ -1,7 +1,7 @@
 package DTL::Fast::Template;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Parser';
-use Carp qw(confess);
+use Carp;
 
 our %TAG_HANDLERS;
 our %FILTER_HANDLERS;
@@ -21,12 +21,44 @@ sub new
     $kwargs{'raw_chunks'} = _get_raw_chunks($template);
     $kwargs{'dirs'} = $dirs;
     $kwargs{'file_path'} //= 'inline';
+    $kwargs{'blocks'} = {};
     
     my $self = $proto->SUPER::new(%kwargs);
   
     return $self;
 }
 
+sub add_block
+{
+    my $self = shift;
+    my $block_name = shift;
+    my $block_ref = shift;
+    
+    if( exists $self->{'blocks'}->{$block_name} )
+    {
+        croak "Block $block_name is already registered. Duplicate names are not allowed";
+    }
+    
+    $self->{'blocks'}->{$block_name} = $block_ref;
+    
+    return $self;
+}
+
+sub merge_blocks
+{
+    my $self = shift;
+    my $donor = shift;
+
+    foreach my $block_name ( keys %{$donor->{'blocks'}})
+    {
+        if( $self->{'blocks'}->{$block_name} )
+        {
+            $self->{'blocks'}->{$block_name}->{'chunks'} = $donor->{'blocks'}->{$block_name}->{'chunks'};
+        }
+    }
+    
+    return $self;
+}
 
 sub _get_raw_chunks
 {
@@ -59,7 +91,7 @@ sub render
         and ref $context ne 'DTL::Fast::Context'
     )
     {
-        confess "Context must be a DTL::Fast::Context object or a HASH reference";
+        croak  "Context must be a DTL::Fast::Context object or a HASH reference";
     }
     
     $context->push();

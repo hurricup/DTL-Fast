@@ -18,5 +18,6 @@ WriteMakefile(
         'Date::Format' => 0,
         'URI::Escape::XS' => 0,
         'POSIX' => 0,
+		'Storable' => 0,
     }, 
 );

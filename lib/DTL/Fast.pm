@@ -2,6 +2,7 @@ package DTL::Fast;
 use strict; use warnings FATAL => 'all'; 
 use parent 'Exporter';
 use Carp;
+use Storable qw(freeze thaw);
 
 use 5.010;
 our $VERSION = '1.04';
@@ -53,25 +54,11 @@ sub get_template
     {
         my $template_path;
 
-        ($template, $template_path) = _read_template($template_name, $dirs);
+        ($template, $template_path) = _read_template($template_name, $dirs, { '*path' => [] }, %kwargs );
         
         if( defined $template )
         {
-        
-            $template =~ s/\{\% (?:block|endblock|extends) .*?\%\}//gs;
-            
-            my @arguments = (
-                $template
-                , $dirs
-                , 'file_path' => $template_path
-            );
-            push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
-                if $kwargs{'ssi_dirs'};
-            push @arguments, 'url_source', $kwargs{'url_source'}
-                if $kwargs{'url_source'};
-            
-            $template = DTL::Fast::Template->new(@arguments)
-                if defined $template;
+            $OBJECTS_CACHE{$cache_key} = $template;
         }
         else
         {
@@ -81,40 +68,6 @@ Unable to find template %s in directories:
 _EOT_
         }
             
-        $OBJECTS_CACHE{$cache_key} = $template;
-    }
-    
-    return $template;
-}
-
-sub _apply_inheritance
-{
-    my $template = shift;
-    my $dirs = shift;
-    my $inheritance_path = shift;
-    
-    if( $template =~ s/\s*\{\% extends\s*"(.+?)" \%\}//s ) # template has inheritance
-    {
-        my $parent_name = $1;
-        my( $parent_template, $parent_template_path) = _read_template($parent_name, $dirs, $inheritance_path);
-        
-        if( defined $parent_template )
-        {
-            my %named_blocks = (
-                $template =~ /\{\% block ([^\s]+) \%\}(.+?)\{\% endblock \%\}/gs
-            );
-            
-            my $block_names = join '|', keys(%named_blocks);
-            $parent_template =~ s/\{\% block ($block_names) \%\}.+?\{\% endblock \%\}/\{\% block $1 \%\}$named_blocks{$1}\{\% endblock \%\}/gsi;
-            $template = $parent_template;
-        }
-        else
-        {
-            croak  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
-                , $parent_name
-                , join( ', ', @$dirs)
-            );
-        }
     }
     
     return $template;
@@ -125,7 +78,8 @@ sub _read_template
     my $template_name = shift;
     my $dirs = shift;
     my $inheritance_path = shift // { '*path' => [] };
-
+    my %kwargs = @_;
+    
     my $template = undef;
     my $template_path = undef;
 
@@ -136,7 +90,7 @@ sub _read_template
 
     if( exists $TEMPLATES_CACHE{$cache_key} )   # already read template with this parameters
     {
-        $template = $TEMPLATES_CACHE{$cache_key};
+        $template = thaw($TEMPLATES_CACHE{$cache_key});
         $TEMPLATES_CACHE_HITS++;
     }
     else
@@ -152,21 +106,55 @@ sub _read_template
                     , join "\n inherited from ", @{$inheritance_path->{'*path'}}, $template_path
                 );
             }
+
+            my @arguments = (
+                $template
+                , $dirs
+                , 'file_path' => $template_path
+            );
+            push @arguments, 'ssi_dirs', $kwargs{'ssi_dirs'}
+                if $kwargs{'ssi_dirs'};
+            push @arguments, 'url_source', $kwargs{'url_source'}
+                if $kwargs{'url_source'};
             
-            push @{$inheritance_path->{'*path'}}, $template_path;
-            $inheritance_path->{$template_path} = 1;
-            
-            $template = _apply_inheritance($template, $dirs, $inheritance_path);
+            $template = DTL::Fast::Template->new(@arguments);
+
+            if( $template->{'_extends' })  # template is inherited
+            {
+                push @{$inheritance_path->{'*path'}}, $template_path;
+                $inheritance_path->{$template_path} = 1;
+
+                my ($parent_template, $parent_template_path) = _read_template(
+                    $template->{'_extends' }
+                    , $dirs
+                    , $inheritance_path
+                    , %kwargs
+                );
                 
-            pop @{$inheritance_path->{'*path'}};
-            delete $inheritance_path->{$template_path};
+                if( defined $parent_template )
+                {
+                    $template = $parent_template->merge_blocks($template);
+                }
+                else
+                {
+                    croak  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
+                        , $template->{'_extends' }
+                        , join( ', ', @$dirs)
+                    );
+                }
+                    
+                pop @{$inheritance_path->{'*path'}};
+                delete $inheritance_path->{$template_path};
+            }
+            
+            $TEMPLATES_CACHE{$cache_key} = freeze($template);
         }
             
-        $TEMPLATES_CACHE{$cache_key} = $template;
     }
     
     return ($template, $template_path);
 }
+
 
 sub _read_file
 {
@@ -530,9 +518,9 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =over
 
-=item * Taken C<date> function from L<Dotiac::DTL> to C<DTL::Fast::Utils::time2str_php>
+=item * Taken C<date> function from L<C<Dotiac::DTL>> to C<DTL::Fast::Utils::time2str_php>
 
-=item * C<now> tag and C<date> filter now works with C<time2str_php> function
+=item * C<now> tag and C<date> filter now works with C<time2str_php> function (like Django itself)
 
 =item * Implemented C<strftime> filter, which works with L<C<Date::Format>> C<str2time>.
 
@@ -542,10 +530,12 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
     use DTL::Fast::Template::Filter::Ru::Pluralize; # this will override default pluralize with Russian version.
 
 =item * Refactored strings backup and parametrized filters.
+
+=item * C<block> and C<extends> tags now works as tags.
+
+=item * New dependency added: L<C<Storable>>
     
 =back
-
-=over
 
 =item * 13/01/2015 - v1.03
 

@@ -82,9 +82,11 @@ sub parse_tag_chunk
 
     if( exists $DTL::Fast::Template::TAG_HANDLERS{$tag_name} )
     {        
-        $result = $DTL::Fast::Template::TAG_HANDLERS{$tag_name}->new($tag_param
+        $result = $DTL::Fast::Template::TAG_HANDLERS{$tag_name}->new(
+            $tag_param
             , 'raw_chunks' => $self->{'raw_chunks'}
             , 'dirs' => $self->{'dirs'}
+            , '_parent' => $self->{'_parent'} // $self
         );
     }
     else
