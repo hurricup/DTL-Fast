@@ -518,6 +518,20 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =over
 
+=item * 14/01/2015 - v1.04
+
+=over
+
+=item * Taken C<date> function from L<Dotiac::DTL> to C<DTL::Fast::Utils::time2str_php>
+
+=item * C<now> tag and C<date> filter now works with C<time2str_php> function
+
+=item * Implemented C<strftime> filter, which works with L<C<Date::Format>> C<str2time>.
+
+=back
+
+=over
+
 =item * 13/01/2015 - v1.03
 
 =over

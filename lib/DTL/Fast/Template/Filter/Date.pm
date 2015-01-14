@@ -29,7 +29,7 @@ sub filter
     
     my $format = $self->{'format'}->render($context);
     
-    return DTL::Fast::Utils::time2str($format, $value);
+    return DTL::Fast::Utils::time2str_php($format, $value);
 }
 
 1;

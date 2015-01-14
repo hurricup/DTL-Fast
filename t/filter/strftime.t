@@ -19,14 +19,14 @@ my $var1 = DTL::Fast::Utils::time2str($context->get('var2'), $context->get('var1
 my $SET = [
     {
         'template' => <<'_EOT_',
-Static {{ 1420569840|date:"%B-%y-%Y-%Z-%z" }}
+Static {{ 1420569840|strftime:"%B-%y-%Y-%Z-%z" }}
 _EOT_
         'test' => "Static $var\n",
         'title' => 'Static formatting',
     },
     {
         'template' => <<'_EOT_',
-Dynamic {{ var1|date:var2 }}
+Dynamic {{ var1|strftime:var2 }}
 _EOT_
         'test' => "Dynamic $var1\n",
         'title' => 'Dynamic formatting',

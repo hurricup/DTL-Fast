@@ -24,7 +24,7 @@ sub render
     my $self = shift;
     my $context = shift;
     
-    return DTL::Fast::Utils::time2str( $self->{'format'}->render($context), time);
+    return DTL::Fast::Utils::time2str_php( $self->{'format'}->render($context), time);
 }
 
 
