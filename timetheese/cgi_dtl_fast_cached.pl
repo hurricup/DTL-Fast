@@ -12,9 +12,15 @@ my $context = {
     'array1' => [qw( this is a text string as array )],
 };
 
+my $cache = DTL::Fast::Cache::File->new('./cache');
+
 my $tpl = get_template(
     'root.txt',
     , 'dirs' => [ './tpl' ]
-    , 'cache' => DTL::Fast::Cache::File->new('./cache')
+    , 'cache' => $cache
 );
 $tpl->render($context);
+
+print $cache->{'hits'};
+
+

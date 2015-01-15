@@ -2,7 +2,7 @@ package DTL::Fast::Cache::Serialized;
 use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Cache';
 use Storable qw(freeze thaw);
-use Compress::Zlib;
+#use Compress::Zlib;
 use Carp;
 
 our %CACHE;
@@ -17,7 +17,8 @@ sub read_data
     {
         $result = $self->read_data_serialized($key);
         $result = thaw(
-            Compress::Zlib::memGunzip( $result )
+            $result
+#            Compress::Zlib::memGunzip( $result )
         ) if defined $result;
     };
     croak $@ if $@;
@@ -33,7 +34,8 @@ sub write_data
     
     $self->write_data_serialized(
         $key
-        , Compress::Zlib::memGzip(freeze($data))
+        , freeze($data)
+#        , Compress::Zlib::memGzip(freeze($data))
     );
 }
 
