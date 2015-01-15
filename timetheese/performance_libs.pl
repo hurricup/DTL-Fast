@@ -24,8 +24,8 @@ my @libs = qw(
 
 my $cmd = {
     map{
-        $_ => sub { my $x=shift; sub{ system("perl -M$x -e \"1;\"");} }->($_)
+        $_.(' 'x(25-length($_))) => sub { my $x=shift; sub{ system("perl -e \"use $x;1;\"");} }->($_)
     } @libs
 };
 
-timethese( 100, $cmd );
+timethese( 500, $cmd );
