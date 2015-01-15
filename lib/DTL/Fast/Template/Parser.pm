@@ -1,5 +1,5 @@
 package DTL::Fast::Template::Parser;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Renderer';
 use Carp;
 
