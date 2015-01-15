@@ -14,7 +14,7 @@ sub parse_parameters
 {
     my $self = shift;
     
-    $self->add_block();
+    $self->add_branch();
     $self->{'watches'} = $self->parse_sources($self->{'parameter'});
     
     return $self;
@@ -27,7 +27,7 @@ sub add_chunk
     my $self = shift;
     my $chunk = shift;
     
-    $self->{'blocks'}->[-1]->add_chunk($chunk);
+    $self->{'branches'}->[-1]->add_chunk($chunk);
     
     return $self;
 }
@@ -43,7 +43,7 @@ sub parse_tag_chunk
 
     if( $tag_name eq 'else' )
     {
-        $self->add_block();
+        $self->add_branch();
     }
     else
     {
@@ -72,12 +72,12 @@ sub render
         {
             if( $self->watches_changed($context) )
             {
-                $result = $self->{'blocks'}->[0]->render($context);
+                $result = $self->{'branches'}->[0]->render($context);
                 $self->update_preserved($context);
             }
-            elsif( scalar @{$self->{'blocks'}} > 1 )
+            elsif( scalar @{$self->{'branches'}} > 1 )
             {
-                $result = $self->{'blocks'}->[1]->render($context);
+                $result = $self->{'branches'}->[1]->render($context);
             }
         }
     }
@@ -122,12 +122,12 @@ sub update_preserved
     return $self;
 }
 
-sub add_block
+sub add_branch
 {
     my $self = shift;
     
-    $self->{'blocks'} //= [];
-    push @{$self->{'blocks'}}, DTL::Fast::Template::Renderer->new();
+    $self->{'branches'} //= [];
+    push @{$self->{'branches'}}, DTL::Fast::Template::Renderer->new();
     return $self;
 }
 

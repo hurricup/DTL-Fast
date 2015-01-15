@@ -2,6 +2,7 @@ package DTL::Fast::Template::Tag::Block;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Template::Tag';  
 use Carp;
+use Data::Dumper;
 
 $DTL::Fast::Template::TAG_HANDLERS{'block'} = __PACKAGE__;
 
@@ -13,15 +14,75 @@ sub parse_parameters
 {
     my $self = shift;
 
-    croak sprintf("Structure error. Top-level object must be a DTL::Fast::Template, not %s (%s)"
-        , $self->{'_parent'} // 'undef'
-        , ref $self->{'_parent'} || 'SCALAR' 
-    ) if not $self->{'_parent'}
-        or not ref $self->{'_parent'}
-        or not $self->{'_parent'}->isa('DTL::Fast::Template')
+    croak sprintf("Structure error. Top-level object for %s must be a DTL::Fast::Template, not %s (%s)"
+        , __PACKAGE__
+        , $self->{'_template'} // 'undef'
+        , ref $self->{'_template'} || 'SCALAR' 
+    ) if not $self->{'_template'}
+        or not ref $self->{'_template'}
+        or not $self->{'_template'}->isa('DTL::Fast::Template')
     ;
     
-    $self->{'_parent'}->add_block($self->{'parameter'}, $self);
+    if( not $self->{'_container_block'} )
+    {
+        croak "There is no container block defined for: ".Dumper($self);
+    }
+    
+    $self->{'_container'} = $self->{'_container_block'};    # store it for future usage
+    $self->{'_container'}->add_blocks({$self->{'parameter'} => $self});
+    
+    return $self;
+}
+
+#@Override
+sub get_container_block{ return shift; }
+
+# remove subblocks from tree
+sub detach_subblocks
+{
+    my $self = shift;
+
+    foreach my $subblock (keys %{$self->{'blocks'}})
+    {
+        $self->{'blocks'}->{$subblock}->detach();
+    }
+    
+    $self->{'chunks'} = []; # clean up buffer
+
+    return $self;
+}
+
+# remove block from tree
+sub detach 
+{
+    my $self = shift;
+    
+    $self->detach_subblocks();
+    $self->{'_container'}->remove_block($self->{'parameter'});
+    delete $self->{'_container'}; # remove a reference to a parent for proper GC
+    
+    return $self;
+}
+
+# Attaching subblocks from donor block
+sub attach_subblocks_from
+{
+    my $self = shift;
+    my $donor = shift;
+    
+    @{$self}{'chunks','blocks'} = @{$donor}{'chunks','blocks'};
+
+    # re-attaching container from donor to current
+    my $subblocks = $self->{'blocks'};
+    foreach my $subblock (keys %$subblocks)
+    {
+        if( $subblocks->{$subblock}->{'_container'} == $donor )
+        {
+            $subblocks->{$subblock}->{'_container'} = $self;
+        }
+    }
+    
+    $self->{'_container'}->add_blocks($self->{'blocks'});
     
     return $self;
 }

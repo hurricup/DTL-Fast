@@ -481,7 +481,7 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =item * Moved inheritance part into Template constructor 
 
-=item * Found bug with inheritance + blocks extension (in development)
+=item * Fixed bug with inheritance + blocks extension
 
 =item * Made C<dirs> parameter optional for Template constructor, but it's still mandatory for C<get_template>/C<select_template>
     

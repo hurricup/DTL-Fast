@@ -94,6 +94,6 @@ This is level 2
 _EOT_
 
 $template = get_template('included_lvl_2.txt', 'dirs' => $dirs2);
-#is( $template->render, $test_string, 'Multi-level inheritance with blocks extension');
+is( $template->render, $test_string, 'Multi-level inheritance with blocks extension');
 
 done_testing();

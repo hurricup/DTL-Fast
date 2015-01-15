@@ -18,7 +18,6 @@ sub new
     my %kwargs = @_;
 
     $kwargs{'raw_chunks'} = _get_raw_chunks($template);
-    $kwargs{'blocks'} = {};
     $kwargs{'dirs'} //= [];             # optional dirs to look up for includes or parents
     $kwargs{'file_path'} //= 'inline';  
     $kwargs{'inherits'} //= {};
@@ -60,22 +59,6 @@ sub new
     return $self;
 }
 
-sub add_block
-{
-    my $self = shift;
-    my $block_name = shift;
-    my $block_ref = shift;
-    
-    if( exists $self->{'blocks'}->{$block_name} )
-    {
-        croak "Block $block_name is already registered. Duplicate names are not allowed";
-    }
-    
-    $self->{'blocks'}->{$block_name} = $block_ref;
-    
-    return $self;
-}
-
 sub merge_blocks
 {
     my $self = shift;
@@ -83,14 +66,20 @@ sub merge_blocks
 
     foreach my $block_name ( keys %{$donor->{'blocks'}})
     {
-        if( $self->{'blocks'}->{$block_name} )
+        if( my $block = $self->{'blocks'}->{$block_name} )
         {
-            $self->{'blocks'}->{$block_name}->{'chunks'} = $donor->{'blocks'}->{$block_name}->{'chunks'};
+            $block->detach_subblocks()
+                ->attach_subblocks_from(
+                    $donor->{'blocks'}->{$block_name}
+                );
         }
     }
     
     return $self;
 }
+
+#@Override
+sub get_container_block{ return shift; }
 
 sub _get_raw_chunks
 {
