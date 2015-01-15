@@ -31,7 +31,10 @@ sub new
         );
     }
     
-    $kwargs{'inherits'}->{$kwargs{'file_path'}} = 1;
+    $kwargs{'inherits'}->{$kwargs{'file_path'}} = $kwargs{'file_path'} eq 'inline' ? 
+        0: # this should depend on calling script
+        (stat($kwargs{'file_path'}))[9];
+        
     push @{$kwargs{'inherited'}}, $kwargs{'file_path'};
     
     my $self = $proto->SUPER::new(%kwargs);

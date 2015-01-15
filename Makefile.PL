@@ -19,5 +19,7 @@ WriteMakefile(
         'URI::Escape::XS' => 0,
         'POSIX' => 0,
 		'Storable' => 0,
+		'Compress::Zlib' => 0, 
+		'Digest::MD5' => 0, 
     }, 
 );

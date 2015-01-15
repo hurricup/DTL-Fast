@@ -31,8 +31,9 @@ sub dtl_fast_render
 
 sub dtl_fast_parse
 {
-    %DTL::Fast::TEMPLATES_CACHE = ();
-    %DTL::Fast::OBJECTS_CACHE = ();
+    $DTL::Fast::RUNTIME_CACHE->clear();
+    $DTL::Fast::SERIALIZED_CACHE->clear();
+    
     my $tpl = get_template(
         'root.txt',
         'dirs' => [ @Dotiac::DTL::TEMPLATE_DIRS ]

@@ -2,22 +2,22 @@ package DTL::Fast;
 use strict; use warnings FATAL => 'all'; 
 use parent 'Exporter';
 use Carp;
-use Storable qw(freeze thaw);
+use Digest::MD5 qw(md5_hex);
 
 use 5.010;
 our $VERSION = '1.05';
 
-use Cwd;
 use DTL::Fast::Template;
+use DTL::Fast::Cache::Runtime;
+use DTL::Fast::Cache::Serialized;
+
+our $RUNTIME_CACHE = DTL::Fast::Cache::Runtime->new();
+our $SERIALIZED_CACHE = DTL::Fast::Cache::Serialized->new();
 
 our @EXPORT_OK;
 
 # @todo Texts should be tossed by references
 # @todo These should be done via Cache class which can work with last modified date
-our %TEMPLATES_CACHE = ();
-our $TEMPLATES_CACHE_HITS = 0;
-our %OBJECTS_CACHE = ();
-our $OBJECTS_CACHE_HITS = 0;
 
 push @EXPORT_OK, 'get_template';
 sub get_template
@@ -39,19 +39,14 @@ sub get_template
     my $cache_key = _get_cache_key( $template_name, %kwargs );
 
     my $template;
-    
-    if( exists $OBJECTS_CACHE{$cache_key} ) # already has object with this source parameters
-    {
-        $template = $OBJECTS_CACHE{$cache_key};
-        $OBJECTS_CACHE_HITS++;
-    }    
-    else
+
+    if( not defined ( $template = $RUNTIME_CACHE->get($cache_key)))
     {
         $template = read_template($template_name, %kwargs );
         
         if( defined $template )
         {
-            $OBJECTS_CACHE{$cache_key} = $template;
+            $RUNTIME_CACHE->put($cache_key, $template);
         }
         else
         {
@@ -70,12 +65,15 @@ sub _get_cache_key
     my $template_name = shift;
     my %kwargs = @_;
     
-    return sprintf '%s:%s:%s:%s'
-        , __PACKAGE__
-        , $template_name
-        , join( ',', @{$kwargs{'dirs'}} )
-        , join( ',', @{$kwargs{'ssi_dirs'}//[]})
-        # shouldn't we pass uri_handler here?
+    return md5_hex(
+        sprintf( '%s:%s:%s:%s'
+            , __PACKAGE__
+            , $template_name
+            , join( ',', @{$kwargs{'dirs'}} )
+            , join( ',', @{$kwargs{'ssi_dirs'}//[]})
+            # shouldn't we pass uri_handler here?
+        )
+    )
     ;
 }
 
@@ -95,22 +93,36 @@ sub read_template
     
     my $cache_key = _get_cache_key( $template_name, %kwargs );
 
-    if( exists $TEMPLATES_CACHE{$cache_key} )   # already read template with these parameters
+    if( 
+        not defined ( $template = $SERIALIZED_CACHE->get($cache_key))   # runtime serialized cache reading
+    )
     {
-        $template = thaw($TEMPLATES_CACHE{$cache_key});
-        $TEMPLATES_CACHE_HITS++;
-    }
-    else
-    {
-        ($template, $template_path) = _read_file($template_name, $kwargs{'dirs'});
-        
-        if( defined $template )
+        if( 
+            not exists $kwargs{'cache'} 
+            or not $kwargs{'cache'}
+            or not $kwargs{'cache'}->isa('DTL::Fast::Cache')
+            or not defined ($template = $kwargs{'cache'}->get($cache_key))
+        )
         {
-            $kwargs{'file_path'} = $template_path;
-            $template = DTL::Fast::Template->new( $template, %kwargs);
-          
-            $TEMPLATES_CACHE{$cache_key} = freeze($template);
+            ($template, $template_path) = _read_file($template_name, $kwargs{'dirs'});
+            
+            if( defined $template )
+            {
+                $kwargs{'file_path'} = $template_path;
+                $template = DTL::Fast::Template->new( $template, %kwargs);
+        
+                $kwargs{'cache'}->put( $cache_key, $template )
+                    if 
+                        defined $template
+                        and exists $kwargs{'cache'}
+                        and $kwargs{'cache'}
+                        and $kwargs{'cache'}->isa('DTL::Fast::Cache')
+                    ;
+            }
         }
+        
+        $SERIALIZED_CACHE->put($cache_key, $template)
+            if defined $template;
     }
     
     return $template;
@@ -314,6 +326,19 @@ or
 
     $context->set('name' => 'Sergey');
     print $tpl->render($context);
+
+=head2 Cache classes
+
+To do...
+
+=head2 Custom tags
+
+To do...
+
+=head2 Custom filters
+
+To do...
+
     
 =head1 TEMPLATING LANGUAGE
 
@@ -484,6 +509,10 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * Fixed bug with inheritance + blocks extension
 
 =item * Made C<dirs> parameter optional for Template constructor, but it's still mandatory for C<get_template>/C<select_template>
+
+=item * Implemented cache classes: C<DTL::Fast::Cache>, C<DTL::Fast::Runtime>, C<DTL::Fast::Serialized>. 
+
+=item * New dependencies added: L<C<Compress::Zlib>>, L<C<Digest::MD5>>
     
 =back
 

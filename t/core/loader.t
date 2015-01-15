@@ -55,8 +55,8 @@ is($template->render, $test_string, 'Two-level of inheritance, both blocks');
 
 $template = get_template('child0.txt', 'dirs' => $dirs);
 
-is( $DTL::Fast::TEMPLATES_CACHE_HITS, 3, 'Templates cache');
-is( $DTL::Fast::OBJECTS_CACHE_HITS, 1, 'Objecst cache');
+is( $DTL::Fast::SERIALIZED_CACHE->{'hits'}, 3, 'Serialized cache');
+is( $DTL::Fast::RUNTIME_CACHE->{'hits'}, 1, 'Runtime cache');
 
 $template = get_template('simple2.txt', 'dirs' => $dirs2);
 is( $template->render, 'simple2-text', 'Multiple directories search');

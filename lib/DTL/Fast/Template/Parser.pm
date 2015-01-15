@@ -26,7 +26,7 @@ sub new
 
     my $self = $proto->SUPER::new(%kwargs)->parse_chunks();
     
-    delete @{$self}{'_template', '_container_block'};
+    delete @{$self}{'_template', '_container_block', 'raw_chunks'};
     
     return $self;
 }

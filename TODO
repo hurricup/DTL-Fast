@@ -1,6 +1,8 @@
 Inspired by Django templating and Jinja2
 
 FOR SURE:
+- Cached template validation
+- Documentation about Cache system
 - Documentation for Tags developers
 - Documentation for Filters developers
 - Pre-set date and time formats from Django
