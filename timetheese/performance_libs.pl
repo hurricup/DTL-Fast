@@ -5,13 +5,27 @@ use DTL::Fast qw(get_template);
 use Storable qw(freeze thaw);
 use Compress::Zlib;
 
-timethese( 300, {
-    'Data::Dumper    ' => sub{system 'perl use_data_dumper.pl';},
-    'DBI             ' => sub{system 'perl use_dbi.pl';},
-    'Cache::Memcached' => sub{system 'perl use_cache_memcached.pl';},
-    'warnings        ' => sub{system 'perl use_warnings.pl';},
-    'strict          ' => sub{system 'perl use_strict.pl';},
-    'Storable        ' => sub{system 'perl use_storable.pl';},
-    'Digest::MD5     ' => sub{system 'perl use_digest_md5.pl';},
-    'Compress::Zlib  ' => sub{system 'perl use_compress_zlib.pl';},
-});
+my @libs = qw(
+    Data::Dumper
+    DBI
+    Cache::Memcached
+    Cache::Memcached::Fast
+    warnings
+    strict
+    Storable
+    Digest::MD5
+    Compress::Zlib
+    Encode
+    Carp
+    URI::Escape
+    URI::Escape::XS
+    JSON::XS
+);
+
+my $cmd = {
+    map{
+        $_ => sub { my $x=shift; sub{ system("perl -M$x -e \"1;\"");} }->($_)
+    } @libs
+};
+
+timethese( 100, $cmd );
