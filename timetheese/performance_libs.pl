@@ -8,6 +8,8 @@ use Compress::Zlib;
 my @libs = qw(
     Data::Dumper
     DBI
+    DTL::Fast
+    Dotiac::DTL
     Cache::Memcached
     Cache::Memcached::Fast
     warnings
@@ -28,4 +30,8 @@ my $cmd = {
     } @libs
 };
 
-timethese( 500, $cmd );
+
+my $alluse = join '', map{ "use $_;" } @libs;
+$cmd->{'All libs                 '} = sub { system("perl -e \"$alluse;1;\"");};
+
+timethese( 300, $cmd );
