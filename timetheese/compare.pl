@@ -57,6 +57,11 @@ sub dtl_fast_cgi
     system('perl cgi_dtl_fast.pl');
 }
 
+sub dtl_fast_cgi_cached
+{
+    system('perl cgi_dtl_fast_cached.pl');
+}
+
 sub dtl_dotiac_cgi
 {
     system('perl cgi_dtl_dotiac.pl');
@@ -92,6 +97,7 @@ timethese( 5000, {
 print "Testing CGI mode...\n";
 
 timethese( 300, {
-    'Fast render   ' => \&dtl_fast_cgi,
-    'Dotiac render ' => \&dtl_dotiac_cgi,
+    'Fast render       ' => \&dtl_fast_cgi,
+    'Fast cached render' => \&dtl_fast_cgi_cached,
+    'Dotiac render     ' => \&dtl_dotiac_cgi,
 });
