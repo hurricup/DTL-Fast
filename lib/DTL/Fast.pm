@@ -524,6 +524,8 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * Fixed bug with inheritance + blocks extension
 
 =item * Fixed bug with logic on arrays/hashes/scalars reference, object method as_bool support added. Tested.
+
+=item * Fixed bug with setting value to C<undef> using C<DTL::Fast::Context::set>
     
 =item * Made C<dirs> parameter optional for Template constructor, but it's still mandatory for C<get_template>/C<select_template>
 

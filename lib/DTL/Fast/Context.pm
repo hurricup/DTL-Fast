@@ -100,11 +100,10 @@ sub set
     my $self = shift;
     my @sets = @_;
     
-    while( 
-        defined (my $key = shift @sets)
-        and defined (my $val = shift @sets)
-    )
+    while( scalar @sets > 1 )
     {
+        my $key = shift @sets;
+        my $val = shift @sets;
         if( $key =~ /\./ )  # traversed set
         {
             my @key = split /\.+/, $key;

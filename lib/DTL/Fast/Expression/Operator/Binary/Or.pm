@@ -9,9 +9,11 @@ use DTL::Fast::Utils qw(has_method);
 sub dispatch
 {
     my( $self, $arg1, $arg2) = @_;
-    my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
-    
-    if( has_method($arg1, 'or') )
+
+    if( 
+        ref $arg1
+        and has_method($arg1, 'or') 
+    )
     {
         return $arg1->or($arg2);
     }

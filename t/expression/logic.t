@@ -86,36 +86,83 @@ my %TPL = (
             'template' => '{% if var %}1{% else %}0{% endif %}'
             , 'validate' => sub{
                 my $var = shift;
-                return $var->{'positive'};
+                return $var->{'positive'} ? 1: 0;
             }
             , 'title' => sub
             {
                 my $var = shift;
-                return sprintf 'Positive: %s', lc($var->{'title'});
+                return sprintf '%s', lc($var->{'title'});
             }
         },
         {
             'template' => '{% if not var %}1{% else %}0{% endif %}'
             , 'validate' => sub{
                 my $var = shift;
-                return $var->{'negative'};
+                return $var->{'negative'} ? 1: 0;
             }
             , 'title' => sub
             {
                 my $var = shift;
-                return sprintf 'Negative: %s', lc($var->{'title'});
+                return sprintf 'not %s', lc($var->{'title'});
             }
         },
     ],
-    # 2 => [
-    # ]
+    2 => [
+        {
+            'template' => '{% if varx and vary %}1{% else %}0{% endif %}'
+            , 'validate' => sub{
+                my ($varx, $vary) = @_;
+                return $varx->{'positive'} && $vary->{'positive'} ? 1: 0;
+            }
+            , 'title' => sub
+            {
+                my ($varx, $vary) = @_;
+                return sprintf '%s and %s', lc($varx->{'title'}), lc($vary->{'title'});
+            }
+        },
+        {
+            'template' => '{% if varx or vary %}1{% else %}0{% endif %}'
+            , 'validate' => sub{
+                my ($varx, $vary) = @_;
+                return $varx->{'positive'} || $vary->{'positive'} ? 1: 0;
+            }
+            , 'title' => sub
+            {
+                my ($varx, $vary) = @_;
+                return sprintf '%s or %s', lc($varx->{'title'}), lc($vary->{'title'});
+            }
+        },
+        {
+            'template' => '{% if varx and not vary %}1{% else %}0{% endif %}'
+            , 'validate' => sub{
+                my ($varx, $vary) = @_;
+                return $varx->{'positive'} && !$vary->{'positive'} ? 1: 0;
+            }
+            , 'title' => sub
+            {
+                my ($varx, $vary) = @_;
+                return sprintf '%s and not %s', lc($varx->{'title'}), lc($vary->{'title'});
+            }
+        },
+        {
+            'template' => '{% if not varx or vary %}1{% else %}0{% endif %}'
+            , 'validate' => sub{
+                my ($varx, $vary) = @_;
+                return !$varx->{'positive'} || $vary->{'positive'} ? 1: 0;
+            }
+            , 'title' => sub
+            {
+                my ($varx, $vary) = @_;
+                return sprintf 'not %s or %s', lc($varx->{'title'}), lc($vary->{'title'});
+            }
+        },
+    ]
 );
 
 subtest 'One parameter tests' => sub{
     foreach my $tpl (@{$TPL{1}})
     {
         my $template = DTL::Fast::Template->new($tpl->{'template'});
-#        use Data::Dumper;        print Dumper($template);exit;
         foreach my $data (@DATA)
         {
             $context->set('var' => $data->{'var'});
@@ -124,5 +171,22 @@ subtest 'One parameter tests' => sub{
     }
 };
 
+subtest 'Two parameters tests' => sub{
+    foreach my $tpl (@{$TPL{2}})
+    {
+        my $template = DTL::Fast::Template->new($tpl->{'template'});
+        foreach my $datax (@DATA)
+        {
+            foreach my $datay (@DATA)
+            {
+                $context->set(
+                    'varx' => $datax->{'var'},
+                    'vary' => $datay->{'var'},
+                );
+                is( $template->render($context), $tpl->{'validate'}->($datax, $datay), $tpl->{'title'}->($datax, $datay) );
+            }
+        }
+    }
+};
 
 done_testing();
