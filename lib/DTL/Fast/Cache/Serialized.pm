@@ -1,70 +1,51 @@
 package DTL::Fast::Cache::Serialized;
 use strict; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Cache';
+use parent 'DTL::Fast::Cache::Runtime';
 use Carp;
-
-our %CACHE;
-
-#@Override
-sub new
-{
-    my $proto = shift;
-    require Compress::Zlib;
-    require Storable;
-
-    return $proto->SUPER::new(@_);
-}
+use Storable;
 
 #@Override
 sub read_data
 {
     my $self = shift;
-    my $key = shift;
-    my $result;
     
-    eval
-    {
-        $result = $self->read_data_serialized($key);
-        $result = Storable::thaw(
-            Compress::Zlib::memGunzip( $result )
-        ) if defined $result;
-    };
-    croak $@ if $@;
-    return $result;
+    return 
+        $self->deserialize(
+            $self->read_serialized_data(
+                shift
+            )
+        );
 }
 
 #@Override
 sub write_data
 {
     my $self = shift;
-    my $key = shift;
-    my $data = shift;
-
-    $self->write_data_serialized(
-        $key
-        , Compress::Zlib::memGzip(
-            Storable::freeze($data)
+    
+    $self->write_serialized_data(
+        shift,
+        $self->serialize(
+            shift
         )
-    );
+    ) if defined $_[1]; # don't store undef values
 }
 
-#@Override
-sub clear{%CACHE = ();}
+sub read_serialized_data{ return shift->SUPER::read_data(@_) };
 
-sub read_data_serialized
+sub write_serialized_data{ return shift->SUPER::write_data(@_) };
+
+sub serialize
 {
     shift;
-    my $key = shift;
-    return exists $CACHE{$key} ? $CACHE{$key}: undef;
+    return if not defined $_[0];
+    return Storable::freeze(shift);
 }
 
-sub write_data_serialized
+sub deserialize
 {
     shift;
-    my $key = shift;
-    my $data = shift;
-    $CACHE{$key} = $data;
+    return if not defined $_[0];
+    return Storable::thaw(shift);
 }
-
 
 1;

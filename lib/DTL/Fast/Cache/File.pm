@@ -1,6 +1,6 @@
 package DTL::Fast::Cache::File;
 use strict; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Cache::Serialized';
+use parent 'DTL::Fast::Cache::Compressed';
 use Carp;
 
 #@Override
@@ -31,7 +31,7 @@ sub new
 }
 
 #@Override
-sub read_data_serialized
+sub read_compressed_data
 {
     my $self = shift;
     my $key = shift;
@@ -57,7 +57,7 @@ sub read_data_serialized
 }
 
 #@Override
-sub write_data_serialized
+sub write_compressed_data
 {
     my $self = shift;
     my $key = shift;

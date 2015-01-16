@@ -5,26 +5,37 @@ use Carp;
 
 # Runtime cache for compiled templates
 
-our %CACHE;
-
 #@Override
+sub new
+{
+    my $proto = shift;
+    my %kwargs = @_;
+    
+    $kwargs{'cache'} = {};
+
+    return $proto->SUPER::new(%kwargs);
+}
+
 sub read_data
 {
-    shift;
+    my $self = shift;
     my $key = shift;
-    return exists $CACHE{$key} ? $CACHE{$key}: undef;
+    return if not defined $key;
+    return exists $self->{'cache'}->{$key} ? $self->{'cache'}->{$key}: undef;
 }
 
-#@Override
+
 sub write_data
 {
-    shift;
+    my $self = shift;
     my $key = shift;
     my $data = shift;
-    $CACHE{$key} = $data;
+    return if not defined $key;
+    return if not defined $data;
+    $self->{'cache'}->{$key} = $data;
 }
 
 #@Override
-sub clear{%CACHE = ();}
+sub clear{shift->{'cache'} = {};}
 
 1;

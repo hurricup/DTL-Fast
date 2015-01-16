@@ -9,6 +9,7 @@ sub new
     my %kwargs = @_;
     
     @kwargs{'hits','misses'} = (0,0);
+    
     return bless{ %kwargs }, $proto;
 }
 
