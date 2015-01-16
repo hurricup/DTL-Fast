@@ -65,7 +65,7 @@ sub parse_next_chunk
     {
         $chunk = undef;
     }
-    elsif( $chunk )
+    elsif( $chunk ne '' )
     {
         $chunk = DTL::Fast::Text->new( $chunk );
     }
