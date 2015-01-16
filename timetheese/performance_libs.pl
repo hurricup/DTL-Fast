@@ -26,12 +26,12 @@ my @libs = qw(
 
 my $cmd = {
     map{
-        $_.(' 'x(25-length($_))) => sub { my $x=shift; sub{ system("perl -e \"use $x;1;\"");} }->($_)
+        $_.(' 'x(25-length($_))) => sub { my $x=shift; sub{ system("perl -I../lib -e \"use $x;1;\"");} }->($_)
     } @libs
 };
 
 
 my $alluse = join '', map{ "use $_;" } @libs;
-$cmd->{'All libs                 '} = sub { system("perl -e \"$alluse;1;\"");};
+$cmd->{'All libs                 '} = sub { system("perl -I../lib -e \"$alluse;1;\"");};
 
 timethese( 300, $cmd );

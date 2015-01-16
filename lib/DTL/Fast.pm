@@ -11,8 +11,8 @@ use DTL::Fast::Template;
 use DTL::Fast::Cache::Runtime;
 use DTL::Fast::Cache::Serialized;
 
-our $RUNTIME_CACHE = DTL::Fast::Cache::Runtime->new();
-our $SERIALIZED_CACHE = DTL::Fast::Cache::Serialized->new();
+our $RUNTIME_CACHE;
+our $SERIALIZED_CACHE;
 
 our @EXPORT_OK;
 
@@ -24,7 +24,6 @@ sub get_template
 {
     my $template_name = shift;
     my %kwargs = @_;
-    
     
     croak  "Template name was not specified" 
         if not $template_name;
@@ -40,6 +39,8 @@ sub get_template
 
     my $template;
 
+    $RUNTIME_CACHE //= DTL::Fast::Cache::Runtime->new();
+    
     if( not defined ( $template = $RUNTIME_CACHE->get($cache_key)))
     {
         $template = read_template($template_name, %kwargs );
@@ -93,6 +94,8 @@ sub read_template
     
     my $cache_key = _get_cache_key( $template_name, %kwargs );
 
+    $SERIALIZED_CACHE //= DTL::Fast::Cache::Serialized->new();
+    
     if( 
         not defined ( $template = $SERIALIZED_CACHE->get($cache_key))   # runtime serialized cache reading
     )
