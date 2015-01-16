@@ -2,7 +2,7 @@
 use strict; use warnings FATAL => 'all'; 
 use Test::More;
 
-use DTL::Fast::Template::Expression;
+use DTL::Fast::Expression;
 use DTL::Fast::Context;
 use Data::Dumper;
 
@@ -336,7 +336,7 @@ my $samples = [
 
 foreach my $sample (@$samples)
 {
-    $exp = new DTL::Fast::Template::Expression($sample->{'template'});
+    $exp = new DTL::Fast::Expression($sample->{'template'});
 
     if( ref $sample->{'context'} eq 'HASH' )
     {

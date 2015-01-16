@@ -4,7 +4,7 @@ use Test::More;
 
 use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
-use DTL::Fast::Template::Filter::Ru::Pluralize;
+use DTL::Fast::Filter::Ru::Pluralize;
 use Data::Dumper;
 
 my( $template, $test_string, $context);

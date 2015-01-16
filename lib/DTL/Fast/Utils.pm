@@ -6,6 +6,8 @@ require Date::Format;
 require URI::Escape::XS;
 use Carp qw(confess cluck);
 
+our $VERSION = '1.00';
+
 our @EXPORT_OK;
 
 push @EXPORT_OK, 'is_object';

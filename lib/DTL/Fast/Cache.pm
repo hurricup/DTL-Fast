@@ -64,6 +64,10 @@ sub validate_template
     
     # here we check if template is still valid
     
+    # check perl version
+    # check files modification
+    # check modules version
+    
     return $template;
 }
 

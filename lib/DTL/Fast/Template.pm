@@ -1,14 +1,14 @@
 package DTL::Fast::Template;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::Parser';
+use parent 'DTL::Fast::Parser';
 use Carp;
 
 our %TAG_HANDLERS;
 our %FILTER_HANDLERS;
 
 use DTL::Fast::Context;
-use DTL::Fast::Template::Tags;
-use DTL::Fast::Template::Filters;    
+use DTL::Fast::Tags;
+use DTL::Fast::Filters;    
 
 #@Override
 sub new
@@ -22,6 +22,10 @@ sub new
     $kwargs{'file_path'} //= 'inline';  
     $kwargs{'inherits'} //= {};
     $kwargs{'inherited'} //= [];
+    $kwargs{'perl'} = $];
+    $kwargs{'modules'} //= {
+        'DTL::Fast' => $DTL::Fast::VERSION,
+    };
 
     if( exists $kwargs{'inherits'}->{$kwargs{'file_path'}} )
     {
@@ -77,6 +81,9 @@ sub merge_blocks
                 );
         }
     }
+
+    my @modules = keys %{$donor->{'modules'}};
+    @{$self->{'modules'}}{@modules} = @{$donor->{'modules'}}{@modules};
     
     return $self;
 }

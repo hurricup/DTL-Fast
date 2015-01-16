@@ -23,6 +23,9 @@ This is a test {{ var2|add:var3|lower }}
 This is a test {{ var3|add:var4|title }}
 {% endblock %}
 
+{% if 3 > 2 and not 1 < 2 %}
+hehe
+{% endif %}
 {% block "block4" %}
 This is a test {{ var4|add:var5|rjust:10 }}
 {% endblock %}

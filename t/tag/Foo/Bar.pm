@@ -1,8 +1,8 @@
 package Foo::Bar;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use parent 'DTL::Fast::Template::Tag::Simple';
+use parent 'DTL::Fast::Tag::Simple';
 
-$DTL::Fast::Template::TAG_HANDLERS{'foobar'} = __PACKAGE__;
+$DTL::Fast::TAG_HANDLERS{'foobar'} = __PACKAGE__;
 
 #@Override
 sub render

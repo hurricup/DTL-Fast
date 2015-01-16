@@ -14,7 +14,7 @@ isa_ok($template, 'DTL::Fast::Template');
 my $chunks = $template->{'chunks'};
 isa_ok($chunks, 'ARRAY', 'Chunks generated');
 my $chunk = $chunks->[0];
-isa_ok($chunk, 'DTL::Fast::Template::Text', 'Text element');
+isa_ok($chunk, 'DTL::Fast::Text', 'Text element');
 is($chunk->render, 'simple', 'Simple template loading');
 
 $test_string = <<'_EOT_';
