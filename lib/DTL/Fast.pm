@@ -57,7 +57,11 @@ Unable to find template %s in directories:
 _EOT_
         }
     }
-    $template->{'cache'} = $kwargs{'cache'} if $kwargs{'cache'};
+    
+    $template->{'cache'} = $kwargs{'cache'}
+        if
+            defined $template
+            and $kwargs{'cache'};
     
     return $template;
 }
@@ -128,8 +132,11 @@ sub read_template
         $SERIALIZED_CACHE->put($cache_key, $template)
             if defined $template;
     }
-
-    $template->{'cache'} = $kwargs{'cache'} if $kwargs{'cache'};
+    
+    $template->{'cache'} = $kwargs{'cache'} 
+        if 
+            defined $template 
+            and $kwargs{'cache'};
     
     return $template;
 }
