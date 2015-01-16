@@ -33,12 +33,13 @@ sub get
 sub put
 {
     my $self = shift;
+    my $key = shift;
     my $template = shift;
     
     if( defined $template )
     {
         delete $template->{'cache'};
-        $self->write_data($template, @_);
+        $self->write_data($key, $template, @_);
     }
 }
 
