@@ -1,4 +1,4 @@
-package DTL::Fast::Cache::Compress;
+package DTL::Fast::Cache::Compressed;
 use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Cache::Serialized';
 use Carp;

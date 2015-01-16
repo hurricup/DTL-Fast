@@ -11,6 +11,8 @@ FOR SURE:
 - More tests for `random` filter.
 - Make tests for `date` filter.
 - Make tests for logical operations (set in logic.t)
+- Make tests for Cache::File
+- Make tests for Cache::Memcached
 - Debug tag tests
 - Clean up confess/croak/die
 - Re-factor classes structure
