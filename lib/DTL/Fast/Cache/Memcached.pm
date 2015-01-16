@@ -23,7 +23,7 @@ sub new
         );
     }
     
-    return $proto->SUPER::new({ 'mc' => $memcached });
+    return $proto->SUPER::new( 'mc' => $memcached );
     
 }
 
