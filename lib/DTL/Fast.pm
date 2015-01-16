@@ -435,6 +435,8 @@ is being rendered like:
 
 =over
 
+=item * C<as_bool>           - returns logical representation of object
+
 =item * C<and(operand)>      - makes logical `and` between object and operand
 
 =item * C<or(operand)>       - makes logical `or` between object and operand
@@ -521,12 +523,14 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =item * Fixed bug with inheritance + blocks extension
 
+=item * Fixed bug with logic on arrays/hashes/scalars reference, object method as_bool support added. Tested.
+    
 =item * Made C<dirs> parameter optional for Template constructor, but it's still mandatory for C<get_template>/C<select_template>
 
-=item * Implemented cache classes: C<DTL::Fast::Cache>, C<DTL::Fast::Runtime>, C<DTL::Fast::Serialized>. 
+=item * Implemented cache classes: C<DTL::Fast::Cache>, C<DTL::Fast::Cache::Runtime>, C<DTL::Fast::Cache::Serialized>, C<DTL::Fast::Cache::Compressed>, C<DTL::Fast::Cache::File> and C<DTL::Fast::Cache::Memcached>. 
 
 =item * New dependencies added: L<C<Compress::Zlib>>, L<C<Digest::MD5>>
-    
+
 =back
 
 =item * 14/01/2015 - v1.04
@@ -542,7 +546,7 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * Added Russian version of C<pluralize> filter:
 
     use DTL::Fast;
-    use DTL::Fast::Template::Filter::Ru::Pluralize; # this will override default pluralize with Russian version.
+    use DTL::Fast::Filter::Ru::Pluralize; # this will override default pluralize with Russian version.
 
 =item * Refactored strings backup and parametrized filters.
 

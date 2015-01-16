@@ -294,4 +294,32 @@ sub escape{return URI::Escape::XS::encodeURIComponent(shift);}
 push @EXPORT_OK, 'unescape';
 sub unescape{return URI::Escape::XS::decodeURIComponent(shift);}
 
+our %BOOL_PROCESSORS = (
+    'SCALAR' => sub{ my $value = shift; return $$value; }
+    , 'HASH' => sub{ my $value = shift; return scalar keys(%$value); }
+    , 'ARRAY' => sub{ my $value = shift; return scalar @$value; }
+);
+
+push @EXPORT_OK, 'as_bool';
+sub as_bool
+{
+    my $value = shift;
+    my $value_type = ref $value;
+    
+    if( $value_type )
+    {
+        if( $BOOL_PROCESSORS{$value_type} )
+        {
+            $value = $BOOL_PROCESSORS{$value_type}->($value);
+        }
+        elsif( has_method( $value, 'as_bool' ) )
+        {
+            $value = $value->as_bool();
+        }
+    }
+    
+    return $value;
+}
+
+
 1;

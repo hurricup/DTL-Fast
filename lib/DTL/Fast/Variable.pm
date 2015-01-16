@@ -4,6 +4,7 @@ use Carp qw(croak cluck);
 
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::FilterManager;
+use DTL::Fast::Utils qw(as_bool);
 
 sub new
 {
@@ -92,6 +93,19 @@ sub render
         if $self->{'filter_manager'}->{'filters_number'};
     
     return $value;
+}
+
+our $BOOL_PROCESSORS = {
+    'SCALAR' => sub{ my $value = shift; return $$value; }
+    , 'HASH' => sub{ my $value = shift; return scalar keys(%$value); }
+    , 'ARRAY' => sub{ my $value = shift; return scalar @$value; }
+};
+
+sub render_bool
+{
+    my $self = shift;
+    my $context = shift;
+    return as_bool($self->render($context));
 }
 
 1;

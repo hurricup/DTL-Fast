@@ -24,7 +24,7 @@ sub is_true
 {
     my $self = shift;
     my $context = shift;
-    return $self->{'condition'}->render($context);
+    return $self->{'condition'}->render_bool($context);
 }
 
 1;

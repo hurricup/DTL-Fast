@@ -1,6 +1,7 @@
 package DTL::Fast::Expression::Operator::Unary;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use Carp qw(confess);
+use DTL::Fast::Utils qw(as_bool);
 
 use DTL::Fast::Expression::Operator::Unary::Not;
 
@@ -31,6 +32,13 @@ sub render
     my $context = shift;
 
     return $self->dispatch( $self->render_a($context), $context );
+}
+
+sub render_bool
+{
+    my $self = shift;
+    my $context = shift;
+    return as_bool($self->render($context));
 }
 
 sub dispatch

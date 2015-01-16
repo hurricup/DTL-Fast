@@ -19,7 +19,11 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
+  Compress::Zlib
   Date::Format
+  Digest::MD5
+  POSIX
+  Storable
   URI::Escape::XS
 
 COPYRIGHT AND LICENCE

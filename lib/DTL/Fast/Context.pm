@@ -39,8 +39,10 @@ sub get
         $namespace->{$variable_name}
         : undef; 
 
-    $variable = $variable->($self) 
-        if ref $variable eq 'CODE';
+    while( ref $variable eq 'CODE' )
+    {
+        $variable = $variable->($self) 
+    }
         
     $variable = $self->traverse($variable, $variable_path)
         if 
@@ -84,9 +86,11 @@ sub traverse
             );
         }        
     }
-        
-    $variable = $variable->($self) 
-        if ref $variable eq 'CODE';
+
+    while( ref $variable eq 'CODE' )
+    {
+        $variable = $variable->($self);
+    }
 
     return $variable;
 }
