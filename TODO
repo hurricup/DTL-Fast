@@ -10,6 +10,7 @@ FOR SURE:
 - More tests for `jsescape` filter. Works other way than python's version.
 - More tests for `random` filter.
 - Make tests for `date` filter.
+- Make tests for logical operations (set in logic.t)
 - Debug tag tests
 - Clean up confess/croak/die
 - Re-factor classes structure
