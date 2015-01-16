@@ -36,7 +36,7 @@ sub parse_next_chunk
         $self->{'contents'}->append($chunk);
     }
     
-    return undef;
+    return;
 }
 
 #@Override

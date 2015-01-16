@@ -14,11 +14,12 @@ sub new
     
     foreach my $module (@modules)
     {
-        eval "use $module;";
+        (my $file = "$module.pm") =~ s{::}{/}g;
+        eval { require $file; };
         warn $@ if $@;
     }
     
-    return undef;
+    return;
 }
 
 1;

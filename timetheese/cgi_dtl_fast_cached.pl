@@ -20,7 +20,3 @@ my $tpl = get_template(
     , 'cache' => $cache
 );
 $tpl->render($context);
-
-print $cache->{'hits'};
-
-

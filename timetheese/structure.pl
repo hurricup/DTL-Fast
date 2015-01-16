@@ -6,8 +6,7 @@ use Storable qw(freeze);
 use Compress::Zlib;
 
 my $tpl = get_template(
-#    'child5.txt',
-    'parent.txt',
+    'root.txt',
     'dirs' => [ './tpl' ]
 );
 use Data::Dumper;

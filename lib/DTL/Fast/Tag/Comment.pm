@@ -20,7 +20,7 @@ sub parse_next_chunk
         $self->{'raw_chunks'} = []; # this stops parsing
     }
     
-    return undef;
+    return;
 }
 
 #@Override

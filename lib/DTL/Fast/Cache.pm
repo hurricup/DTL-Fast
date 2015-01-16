@@ -5,8 +5,7 @@ use Carp;
 
 sub new
 {
-    my $proto = shift;
-    my %kwargs = @_;
+    my( $proto, %kwargs ) = @_;
     
     @kwargs{'hits','misses'} = (0,0);
     
@@ -15,11 +14,11 @@ sub new
 
 sub get
 {
-    my $self = shift;
+    my( $self, $key ) = @_;
     
     my $template = $self->validate_template(
         $self->read_data(
-            shift
+            $key
         )
     );
     
@@ -32,49 +31,66 @@ sub get
 
 sub put
 {
-    my $self = shift;
-    my $key = shift;
-    my $template = shift;
+    my( $self, $key, $template ) = @_;
     
     if( defined $template )
     {
         delete $template->{'cache'};
         $self->write_data($key, $template, @_);
     }
+    return $self;
 }
 
 sub read_data
 {
-    my $self = shift;
-    my $key = shift;
+    my( $self, $key ) = @_;
     croak "read_data method was not defined in ".(ref $self);
 }
 
 sub clear
 {
-    my $self = shift;
+    my( $self ) = @_;
     croak "clear method was not defined in ".(ref $self);
 }
 
 sub write_data
 {
-    my $self = shift;
-    my $key = shift;
-    my $value = shift;
+    my( $self, $key, $value ) = @_;
     
     croak "write_data method was not defined in ".(ref $self);
 }
 
 sub validate_template
 {
-    my $self = shift;
-    my $template = shift // return;
+    my( $self, $template ) = @_;
+    return if not defined $template;
     
     # here we check if template is still valid
     
     # check perl version
-    # check files modification
+    return if not $template->{'perl'} or $template->{'perl'} != $];
+    
     # check modules version
+    if( my $modules = $template->{'modules'} )
+    {
+        foreach my $module (keys(%$modules))
+        {
+            my $current_version = $module->VERSION // $DTL::Fast::VERSION;
+            return if $modules->{$module} != $current_version;
+        }
+    }
+
+    # check files modification
+    if( my $files = $template->{'inherits'} )
+    {
+        foreach my $file (keys( %$files ))
+        {
+            next if $file eq 'inline';
+            return if
+                not -e $file
+                or $files->{$file} != (stat($file))[9]
+        }
+    }
     
     return $template;
 }

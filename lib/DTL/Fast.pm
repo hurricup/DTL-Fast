@@ -22,8 +22,7 @@ our @EXPORT_OK;
 push @EXPORT_OK, 'get_template';
 sub get_template
 {
-    my $template_name = shift;
-    my %kwargs = @_;
+    my( $template_name, %kwargs ) = @_;
     
     croak  "Template name was not specified" 
         if not $template_name;
@@ -68,8 +67,7 @@ _EOT_
 
 sub _get_cache_key
 {
-    my $template_name = shift;
-    my %kwargs = @_;
+    my( $template_name, %kwargs ) = @_;
     
     return md5_hex(
         sprintf( '%s:%s:%s:%s'
@@ -85,8 +83,7 @@ sub _get_cache_key
 
 sub read_template
 {
-    my $template_name = shift;
-    my %kwargs = @_;
+    my( $template_name, %kwargs ) = @_;
     
     my $template = undef;
     my $template_path = undef;
@@ -141,7 +138,6 @@ sub read_template
     return $template;
 }
 
-
 sub _read_file
 {
     my $template_name = shift;
@@ -159,10 +155,10 @@ sub _read_file
             and -r $template_path
         )
         {
-            if( open IF, '<', $template_path )
+            if( open my $IF, '<', $template_path )
             {
-                $template = join '', <IF>;
-                close IF;
+                $template = join '', <$IF>;
+                close $IF;
                 last;
             }
             else
@@ -183,8 +179,7 @@ sub _read_file
 push @EXPORT_OK, 'select_template';
 sub select_template
 {
-    my $template_names = shift;
-    my %kwargs = @_;
+    my( $template_names, %kwargs ) = @_;
     
     croak  "First parameter must be a template names array reference" 
         if(

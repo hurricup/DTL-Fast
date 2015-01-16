@@ -41,11 +41,11 @@ sub read_compressed_data
     
     if( -e $filename )
     {
-        if( open IF, '<', $filename )
+        if( open my $IF, '<', $filename )
         {
-            binmode IF;
-            $result = join '', <IF>;
-            close IF;
+            binmode $IF;
+            $result = join '', <$IF>;
+            close $IF;
         }
         else
         {
@@ -64,11 +64,11 @@ sub write_compressed_data
     my $data = shift;
     my $filename = sprintf '%s/%s', $self->{'dir'}, $key;
     
-    if( open OF, '>', $filename )
+    if( open my $OF, '>', $filename )
     {
-        binmode OF;
-        print OF $data;
-        close OF;
+        binmode $OF;
+        print $OF $data;
+        close $OF;
     }
     else
     {

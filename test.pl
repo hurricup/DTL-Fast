@@ -3,6 +3,7 @@
 use Test::Harness;
 
 runtests(
+    't/core/critic.t',
     't/core/context.t',
     't/core/expression.t',
     't/core/loader.t',

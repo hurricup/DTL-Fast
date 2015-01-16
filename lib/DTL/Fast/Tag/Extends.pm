@@ -31,7 +31,7 @@ sub parse_parameters
             
     $self->{'_template'}->{'extends'} = $parent_template;
     
-    return undef;
+    return;
 }
 
 1;
