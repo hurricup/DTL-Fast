@@ -33,7 +33,13 @@ sub get
 sub put
 {
     my $self = shift;
-    $self->write_data(@_) if defined $_[1]; # don't store undef values
+    my $template = shift;
+    
+    if( defined $template )
+    {
+        delete $template->{'cache'};
+        $self->write_data($template, @_);
+    }
 }
 
 sub read_data
