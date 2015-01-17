@@ -113,8 +113,7 @@ sub get_container_block{
 
 sub add_blocks
 {
-    my $self = shift;
-    my $blocks = shift;
+    my( $self, $blocks ) = @_;
     
     croak "Blocks must be a HASH reference" if ref $blocks ne 'HASH';
     
@@ -136,21 +135,23 @@ sub add_blocks
     return $self;
 }
 
-sub remove_block
+sub remove_blocks
 {
-    my $self = shift;
-    my $block_name = shift;
-    
-    if( not exists $self->{'blocks'}->{$block_name} )
+    my ($self, $block_names ) = @_;
+
+    croak "Blocks must be an ARRAY reference" if ref $block_names ne 'ARRAY';
+     
+    foreach my $block_name (@$block_names)
     {
-        croak "Sub-block $block_name does not registered in current block.";
+        croak "Sub-block $block_name does not registered in current block."
+            if not exists $self->{'blocks'}->{$block_name};
+            
+        delete $self->{'blocks'}->{$block_name};
     }
-    
-    delete $self->{'blocks'}->{$block_name};
   
     if( $self->{'_container'} )
     {
-        $self->{'_container'}->remove_block($block_name);
+        $self->{'_container'}->remove_blocks($block_names);
     }    
     
     return $self;

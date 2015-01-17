@@ -37,7 +37,7 @@ sub read_compressed_data
     my $key = shift;
     my $result; 
     
-    my $filename = sprintf '%s/%s', $self->{'dir'}, $key;
+    my $filename = sprintf '%s/%s.dtc', $self->{'dir'}, $key;
     
     if( -e $filename )
     {
@@ -62,7 +62,7 @@ sub write_compressed_data
     my $self = shift;
     my $key = shift;
     my $data = shift;
-    my $filename = sprintf '%s/%s', $self->{'dir'}, $key;
+    my $filename = sprintf '%s/%s.dtc', $self->{'dir'}, $key;
     
     if( open my $OF, '>', $filename )
     {

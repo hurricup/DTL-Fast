@@ -15,7 +15,8 @@ my $context = {
 my $cache = DTL::Fast::Cache::File->new('./cache');
 
 my $tpl = get_template(
-    'root.txt',
+#    'root.txt',
+    'child5.txt',
     , 'dirs' => [ './tpl' ]
     , 'cache' => $cache
 );

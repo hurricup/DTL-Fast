@@ -5,7 +5,7 @@ use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.05';
+our $VERSION = '1.05.1';
 
 use DTL::Fast::Template;
 use DTL::Fast::Cache::Runtime;
@@ -521,12 +521,18 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * Fixed bug with logic on arrays/hashes/scalars reference, object method as_bool support added. Tested.
 
 =item * Fixed bug with setting value to C<undef> using C<DTL::Fast::Context::set>
+
+=item * Fixed bug with inheritance path.
+
+=item * Implemented cache validation. Speed now is comparable to Dotiac::DTL.
     
 =item * Made C<dirs> parameter optional for Template constructor, but it's still mandatory for C<get_template>/C<select_template>
 
 =item * Implemented cache classes: C<DTL::Fast::Cache>, C<DTL::Fast::Cache::Runtime>, C<DTL::Fast::Cache::Serialized>, C<DTL::Fast::Cache::Compressed>, C<DTL::Fast::Cache::File> and C<DTL::Fast::Cache::Memcached>. 
 
 =item * New dependencies added: L<C<Compress::Zlib>>, L<C<Digest::MD5>>
+
+=item * Added Perl::Critic testing, complied level 5.
 
 =back
 

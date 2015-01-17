@@ -39,41 +39,25 @@ sub parse_parameters
 #@Override
 sub get_container_block{ return shift; }
 
-# remove subblocks from tree
-sub detach_subblocks
-{
-    my $self = shift;
-
-    foreach my $subblock (keys %{$self->{'blocks'}})
-    {
-        $self->{'blocks'}->{$subblock}->detach();
-    }
-    
-    $self->{'chunks'} = []; # clean up buffer
-
-    return $self;
-}
-
-# remove block from tree
-sub detach 
-{
-    my $self = shift;
-    
-    $self->detach_subblocks();
-    $self->{'_container'}->remove_block($self->{'parameter'});
-    delete $self->{'_container'}; # remove a reference to a parent for proper GC
-    
-    return $self;
-}
-
-# Attaching subblocks from donor block
-sub attach_subblocks_from
+sub replace_with
 {
     my $self = shift;
     my $donor = shift;
     
-    @{$self}{'chunks','blocks'} = @{$donor}{'chunks','blocks'};
+    my @current_subblocks_names = keys %{$self->{'blocks'}};
 
+    # remove current subblocks
+    if( scalar @current_subblocks_names )
+    {
+        $self->remove_blocks(\@current_subblocks_names);
+    }
+    
+    # register subblocks from donor
+    $self->add_blocks($donor->{'blocks'});
+
+    # moving chunks from donor to me
+    $self->{'chunks'} = $donor->{'chunks'}; 
+    
     # re-attaching container from donor to current
     my $subblocks = $self->{'blocks'};
     foreach my $subblock (keys %$subblocks)
@@ -83,10 +67,6 @@ sub attach_subblocks_from
             $subblocks->{$subblock}->{'_container'} = $self;
         }
     }
-    
-    $self->{'_container'}->add_blocks($self->{'blocks'});
-    
-    return $self;
 }
 
 1;

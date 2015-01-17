@@ -76,7 +76,7 @@ sub validate_template
         foreach my $module (keys(%$modules))
         {
             my $current_version = $module->VERSION // $DTL::Fast::VERSION;
-            return if $modules->{$module} != $current_version;
+            return if $modules->{$module} ne $current_version;
         }
     }
 

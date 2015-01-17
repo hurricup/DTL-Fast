@@ -4,12 +4,14 @@ use Benchmark qw(:all);
 use DTL::Fast qw(get_template);
 use Storable qw(freeze);
 use Compress::Zlib;
+use Data::Dumper;
+$Data::Dumper::Sortkeys = 1;
 
 my $tpl = get_template(
-    'root.txt',
+#    'root.txt',
+    'parent.txt',
     'dirs' => [ './tpl' ]
 );
-use Data::Dumper;
 print Dumper($tpl);
 
 open OF, '>', 'structure.cache';

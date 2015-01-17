@@ -52,7 +52,7 @@ sub new
           
         if( defined $parent_template )
         {
-            $self = $parent_template->merge_blocks($self);
+            $self = $parent_template->merge_template($self);
         }
         else
         {
@@ -66,24 +66,24 @@ sub new
     return $self;
 }
 
-sub merge_blocks
+sub merge_template
 {
-    my $self = shift;
-    my $donor = shift;
+    my( $self, $donor ) = @_;
 
     foreach my $block_name ( keys %{$donor->{'blocks'}})
     {
         if( my $block = $self->{'blocks'}->{$block_name} )
         {
-            $block->detach_subblocks()
-                ->attach_subblocks_from(
-                    $donor->{'blocks'}->{$block_name}
-                );
+            $block->replace_with($donor->{'blocks'}->{$block_name});
         }
     }
 
+    # appending module dependencies
     my @modules = keys %{$donor->{'modules'}};
     @{$self->{'modules'}}{@modules} = @{$donor->{'modules'}}{@modules};
+    
+    # appending inheritance path
+    @{$self}{'inherited','inherits'} = @{$donor}{'inherited','inherits'};
     
     return $self;
 }
@@ -93,7 +93,7 @@ sub get_container_block{ return shift; }
 
 sub _get_raw_chunks
 {
-    my $template = shift;
+    my( $template ) = @_;
 
     my $reg = qr/(
         \{\# .*? \#\}
