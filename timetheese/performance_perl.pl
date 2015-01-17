@@ -74,20 +74,21 @@ use Benchmark qw(:all);
 sub val_val
 {
     my( $arg ) = (@_);
+    $arg .= '';
     return $arg;
 }
 
 sub ref_val
 {
     my( $arg ) = (@_);
-    $arg = $$arg;
-    return $arg;
+    ${$arg}.='';
+    return ${$arg};
 }
 
 sub ref_ref
 {
     my( $arg ) = (@_);
-    ${$arg};
+    ${$arg} .= '';
     return $arg;
 }
 
