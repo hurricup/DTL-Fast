@@ -22,10 +22,7 @@ use DTL::Fast::Expression::Operator::Binary::NotIn;
 
 sub new
 {
-    my $proto = shift;
-    my $argument1 = shift;
-    my $argument2 = shift;
-    my %kwargs = @_;
+    my( $proto, $argument1, $argument2, %kwargs ) = @_;
     $kwargs{'b'} = $argument2;
     
     my $self = $proto->SUPER::new($argument1, %kwargs);
@@ -40,8 +37,7 @@ sub render_b
 
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
     
     return $self->dispatch(     # this is bad in or, cause second argument should be calculated only if first is false. But in our situation it doesn't matter
         $self->render_a($context)
@@ -52,9 +48,7 @@ sub render
 
 sub dispatch
 {
-    my $self = shift;
-    my $arg1 = shift;
-    my $arg2 = shift;
+    my( $self, $arg1, $arg2 ) = @_;
     croak  'ABSTRACT: This method should be overriden in subclasses';
 }
 

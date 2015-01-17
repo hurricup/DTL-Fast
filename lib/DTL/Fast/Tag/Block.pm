@@ -14,7 +14,7 @@ sub get_close_tag{return 'endblock';}
 #@Override
 sub parse_parameters
 {
-    my $self = shift;
+    my( $self ) = @_;
 
     croak sprintf("Structure error. Top-level object for %s must be a DTL::Fast::Template, not %s (%s)"
         , __PACKAGE__
@@ -41,8 +41,7 @@ sub get_container_block{ return shift; }
 
 sub replace_with
 {
-    my $self = shift;
-    my $donor = shift;
+    my( $self, $donor ) = @_;
     
     my @current_subblocks_names = keys %{$self->{'blocks'}};
 
@@ -67,6 +66,7 @@ sub replace_with
             $subblocks->{$subblock}->{'_container'} = $self;
         }
     }
+    return $self;
 }
 
 1;

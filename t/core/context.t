@@ -16,18 +16,18 @@ $context = new DTL::Fast::Context({
 });
 
 is( $context->get('key2'), 'val2', 'Constructor assignment');
-$context->push();
+$context->push_scope();
 is( $context->get('key2'), 'val2', 'Scoping');
 $context->set('key2' => 'val3');
 is( $context->get('key2'), 'val3', 'Shadowing');
-$context->pop();
+$context->pop_scope();
 is( $context->get('key2'), 'val2', 'Unshadowing');
 
 $context->set('key1' => 'val10', 'key3' => 'val3');
 is( $context->get('key1'), 'val10', 'Multiply assignment, var 1');
 is( $context->get('key3'), 'val3', 'Multiply assignment, var 2');
 
-eval{ $context->pop();};
+eval{ $context->pop_scope();};
 if( $@ ){
     ok( 1, 'Scope levels control');
 } else

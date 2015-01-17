@@ -31,12 +31,12 @@ sub get
 
 sub put
 {
-    my( $self, $key, $template ) = @_;
+    my( $self, $key, $template, %kwargs ) = @_;
     
     if( defined $template )
     {
         delete $template->{'cache'};
-        $self->write_data($key, $template, @_);
+        $self->write_data($key, $template, %kwargs);
     }
     return $self;
 }

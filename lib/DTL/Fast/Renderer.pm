@@ -8,8 +8,7 @@ use DTL::Fast::Context;
 
 sub new
 {
-    my $proto = shift;
-    my %kwargs = @_;
+    my( $proto, %kwargs ) = @_;
 
     $kwargs{'chunks'} = [];
 
@@ -18,8 +17,7 @@ sub new
 
 sub add_chunk
 {
-    my $self = shift;
-    my $chunk = shift;
+    my( $self, $chunk ) = @_;
     
     push @{$self->{'chunks'}}, $chunk if defined $chunk;
     return $self;
@@ -27,8 +25,7 @@ sub add_chunk
 
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
   
 
     my $is_safe = $context->get('_dtl_safe') // 0;

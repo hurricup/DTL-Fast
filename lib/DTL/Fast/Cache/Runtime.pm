@@ -8,8 +8,7 @@ use Carp;
 #@Override
 sub new
 {
-    my $proto = shift;
-    my %kwargs = @_;
+    my( $proto, %kwargs ) = @_;
     
     $kwargs{'cache'} = {};
 
@@ -18,8 +17,7 @@ sub new
 
 sub read_data
 {
-    my $self = shift;
-    my $key = shift;
+    my( $self, $key ) = @_;
     return if not defined $key;
     return exists $self->{'cache'}->{$key} ? $self->{'cache'}->{$key}: undef;
 }
@@ -27,15 +25,19 @@ sub read_data
 
 sub write_data
 {
-    my $self = shift;
-    my $key = shift;
-    my $data = shift;
+    my( $self, $key, $data ) = @_;
     return if not defined $key;
     return if not defined $data;
     $self->{'cache'}->{$key} = $data;
+    return $self;
 }
 
 #@Override
-sub clear{shift->{'cache'} = {};}
+sub clear
+{
+    my( $self ) = @_;
+    $self->{'cache'} = {};
+    return $self;
+}
 
 1;

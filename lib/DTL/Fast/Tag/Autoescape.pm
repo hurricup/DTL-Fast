@@ -34,9 +34,9 @@ sub render
     my $self = shift;
     my $context = shift;
 
-    $context->push()->set('_dtl_safe' => $self->{'safe'}); 
+    $context->push_scope()->set('_dtl_safe' => $self->{'safe'}); 
     my $result = $self->SUPER::render($context);
-    $context->pop();
+    $context->pop_scope();
     
     return $result;
 }

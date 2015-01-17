@@ -43,8 +43,7 @@ sub render
     my $self = shift;
     my $context = shift;
     
-    $context->push();
-    $context->set(
+    $context->push_scope()->set(
         map{
             $_ => $self->{'mappings'}->{$_}->render($context)
         } keys(%{$self->{'mappings'}})
@@ -52,7 +51,7 @@ sub render
    
     my $result = $self->SUPER::render($context);
 
-    $context->pop();
+    $context->pop_scope();
         
     return $result;
 }

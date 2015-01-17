@@ -8,7 +8,7 @@ our %CACHE;
 #@Override
 sub new
 {
-    my $proto = shift;
+    my( $proto ) = @_;
     require Compress::Zlib;
 
     return $proto->SUPER::new(@_);
@@ -17,12 +17,12 @@ sub new
 #@Override
 sub read_serialized_data
 {
-    my $self = shift;
+    my( $self, $key ) = @_;
 
     return 
         $self->decompress(
             $self->read_compressed_data(
-                shift
+                $key
             )
         );
 }
@@ -30,14 +30,15 @@ sub read_serialized_data
 #@Override
 sub write_serialized_data
 {
-    my $self = shift;
+    my( $self, $key, $data ) = @_;
 
     $self->write_compressed_data(
-        shift,
+        $key,
         $self->compress(
-            shift
+            $data
         )
-    ) if defined $_[1]; # don't store undef values
+    ) if defined $data; # don't store undef values
+    return $self;
 }
 
 
@@ -47,16 +48,16 @@ sub write_compressed_data{ return shift->SUPER::write_serialized_data(@_) };
 
 sub compress
 {
-    shift;
-    return if not defined $_[0];
-    return Compress::Zlib::memGzip(shift);
+    my( $self, $data ) = @_;
+    return if not defined $data;
+    return Compress::Zlib::memGzip($data);
 }
 
 sub decompress
 {
-    shift;
-    return if not defined $_[0];
-    return Compress::Zlib::memGunzip(shift);
+    my( $self, $data ) = @_;
+    return if not defined $data;
+    return Compress::Zlib::memGunzip($data);
 }
 
 

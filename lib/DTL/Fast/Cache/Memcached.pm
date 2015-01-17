@@ -11,8 +11,7 @@ our %SUPPORTS = qw(
 #@Override
 sub new
 {
-    my $proto = shift;
-    my $memcached = shift;
+    my( $proto, $memcached ) = @_;
     
     if( not exists $SUPPORTS{ref $memcached} )
     {
@@ -28,9 +27,17 @@ sub new
 }
 
 #@Override
-sub read_data{ return shift->{'mc'}->get(shift); }
+sub read_data
+{ 
+    my( $self, $key ) = @_;
+    return $self->{'mc'}->get($key); 
+}
 
 #@Override
-sub write_data{ shift->{'mc'}->set(shift, shift); }
+sub write_data{ 
+    my( $self, $key, $data ) = @_;
+
+    return $self->{'mc'}->set($key, $data); 
+}
 
 1;

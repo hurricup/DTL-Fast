@@ -15,9 +15,7 @@ our $EXPRESSION_CACHE_HITS = 0;
 # @todo cache mechanism via get_expression
 sub new
 {
-    my $proto = shift;
-    my $expression = shift;
-    my %kwargs = @_;
+    my( $proto, $expression, %kwargs ) = @_;
     my $result = undef;
 
     $expression =~ s/(^\s+|\s+$)//gsi;
@@ -52,8 +50,7 @@ sub new
 
 sub _parse_brackets
 {
-    my $self = shift;
-    my $expression = shift;
+    my( $self, $expression ) = @_;
 
     $expression =~ s/\s+/ /gsi;
     while( $expression =~ s/\(\s*([^()]+)\s*\)/$self->backup_expression($1)/ge ){};
@@ -67,8 +64,7 @@ sub _parse_brackets
 
 sub _parse_expression
 {
-    my $self = shift;
-    my $expression = shift;
+    my( $self, $expression ) = @_;
     
     my $result = undef;
     

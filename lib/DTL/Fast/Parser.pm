@@ -8,8 +8,7 @@ use DTL::Fast::Text;
 
 sub new
 {
-    my $proto = shift;
-    my %kwargs = @_;
+    my( $proto, %kwargs ) = @_;
 
     croak 'No directory arrays passed into constructor'
         if not $kwargs{'dirs'}
@@ -33,7 +32,7 @@ sub new
 
 sub parse_chunks
 {
-    my $self = shift;
+    my( $self ) = @_;
     while( scalar @{$self->{'raw_chunks'}} )
     {
          $self->add_chunk( $self->parse_next_chunk());
@@ -43,7 +42,7 @@ sub parse_chunks
 
 sub parse_next_chunk
 {
-    my $self = shift;
+    my( $self ) = @_;
     my $chunk = shift @{$self->{'raw_chunks'}};
     
 #    warn "Processing chunk $chunk";
@@ -79,9 +78,7 @@ sub parse_next_chunk
 
 sub parse_tag_chunk
 {
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
+    my( $self, $tag_name, $tag_param ) = @_;
     
     my $result = undef;
 
@@ -105,9 +102,10 @@ sub parse_tag_chunk
 }
 
 sub get_container_block{ 
-    return $_[0]->{'_container_block'} 
+    my( $self ) = @_;
+    return $self->{'_container_block'} 
         // croak sprintf(
-            "There is no container block in: %s", $_[0] // 'undef'
+            "There is no container block in: %s", $self // 'undef'
         ); 
 }
 

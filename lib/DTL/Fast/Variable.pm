@@ -8,9 +8,7 @@ use DTL::Fast::Utils qw(as_bool);
 
 sub new
 {
-    my $proto = shift;
-    my $variable = shift;
-    my %kwargs = @_;
+    my( $proto, $variable, %kwargs ) = @_;
     
     $variable =~ s/(^\s+|\s+$)//gsi;
     my @filters = split /\|+/, $variable;
@@ -77,8 +75,7 @@ sub add_filter{ return shift->{'filter_manager'}->add_filter(shift); }
 
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
     
     my $value = undef;
     
@@ -96,15 +93,26 @@ sub render
 }
 
 our $BOOL_PROCESSORS = {
-    'SCALAR' => sub{ my $value = shift; return $$value; }
-    , 'HASH' => sub{ my $value = shift; return scalar keys(%$value); }
-    , 'ARRAY' => sub{ my $value = shift; return scalar @$value; }
+    'SCALAR' => sub
+    { 
+        my( $value ) = @_; 
+        return $$value; 
+    }
+    , 'HASH' => sub
+    { 
+        my( $value ) = @_; 
+        return scalar keys(%$value); 
+    }
+    , 'ARRAY' => sub
+    { 
+        my( $value ) = @_; 
+        return scalar @$value; 
+    }
 };
 
 sub render_bool
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
     return as_bool($self->render($context));
 }
 

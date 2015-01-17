@@ -6,9 +6,7 @@ use Carp;
 #@Override
 sub new
 {
-    my $proto = shift;
-    my $dir = shift;
-    my %kwargs = @_;
+    my( $proto, $dir, %kwargs ) = @_;
 
     croak "You should pass a cache directory to the constructor of ".__PACKAGE__
         if not $dir;
@@ -33,8 +31,7 @@ sub new
 #@Override
 sub read_compressed_data
 {
-    my $self = shift;
-    my $key = shift;
+    my( $self, $key ) = @_;
     my $result; 
     
     my $filename = sprintf '%s/%s.dtc', $self->{'dir'}, $key;
@@ -59,9 +56,7 @@ sub read_compressed_data
 #@Override
 sub write_compressed_data
 {
-    my $self = shift;
-    my $key = shift;
-    my $data = shift;
+    my( $self, $key, $data ) = @_;
     my $filename = sprintf '%s/%s.dtc', $self->{'dir'}, $key;
     
     if( open my $OF, '>', $filename )
@@ -74,6 +69,7 @@ sub write_compressed_data
     {
         croak "Error opening cache file $filename for writing: $!";
     }
+    return $self
 }
 
 

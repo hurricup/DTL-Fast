@@ -4,9 +4,7 @@ use parent 'DTL::Fast::Tag';
 
 sub new
 {
-    my $proto = shift;
-    my $parameter = shift;
-    my %kwargs = @_;
+    my( $proto, $parameter, %kwargs ) = @_;
     $kwargs{'raw_chunks'} = []; # no chunks parsing
     return $proto->SUPER::new($parameter, %kwargs);
 }

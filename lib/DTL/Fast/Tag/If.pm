@@ -12,7 +12,7 @@ sub get_close_tag{ return 'endif';}
 #@Override
 sub parse_parameters
 {
-    my $self = shift;
+    my( $self ) = @_;
 
     $self->{'conditions'} = [];
     $self->add_condition($self->{'parameter'});
@@ -23,8 +23,7 @@ sub parse_parameters
 #@Override
 sub add_chunk
 {
-    my $self = shift;
-    my $chunk = shift;
+    my( $self, $chunk ) = @_;
     
     $self->{'conditions'}->[-1]->add_chunk($chunk);
     return $self;
@@ -33,9 +32,7 @@ sub add_chunk
 #@Override
 sub parse_tag_chunk
 {
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
+    my( $self, $tag_name, $tag_param ) = @_;
     
     my $result = undef;
 
@@ -58,8 +55,8 @@ sub parse_tag_chunk
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
+    
     my $result = '';
     
     foreach my $condition (@{$self->{'conditions'}})
@@ -75,9 +72,9 @@ sub render
 
 sub add_condition
 {
-    my $self = shift;
-    my $condition = shift;
+    my( $self, $condition ) = @_;
     push @{$self->{'conditions'}}, DTL::Fast::Tag::If::Condition->new($condition, '_template' => $self->{'_template'});
+    return $self;
 }
 
 1;

@@ -1,6 +1,6 @@
 package DTL::Fast::Expression::Operator::Unary;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp qw(confess);
+use Carp;
 use DTL::Fast::Utils qw(as_bool);
 
 use DTL::Fast::Expression::Operator::Unary::Not;
@@ -10,9 +10,7 @@ use DTL::Fast::Expression::Operator::Unary::Defined;
 
 sub new
 {
-    my $proto = shift;
-    my $argument = shift;
-    my %kwargs = @_;
+    my( $proto, $argument, %kwargs ) = @_;
     $kwargs{'a'} = $argument;
     $kwargs{'_template'}->{'modules'}->{$proto} //= $proto->VERSION // $DTL::Fast::VERSION;
 
@@ -28,23 +26,19 @@ sub render_a
 
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
 
     return $self->dispatch( $self->render_a($context), $context );
 }
 
 sub render_bool
 {
-    my $self = shift;
-    my $context = shift;
-    return as_bool($self->render($context));
+    return as_bool(shift->render(shift));
 }
 
 sub dispatch
 {
-    my $self = shift;
-    my $arg1 = shift;
-    confess 'ABSTRACT: This method should be overriden in subclasses';
+    my( $self, $arg1 ) = @_;
+    croak 'ABSTRACT: This method should be overriden in subclasses';
 }
 1;

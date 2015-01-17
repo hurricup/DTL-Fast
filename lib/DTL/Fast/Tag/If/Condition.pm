@@ -5,9 +5,7 @@ use parent 'DTL::Fast::Renderer';
 
 sub new
 {
-    my $proto = shift;
-    my $condition = shift;
-    my %kwargs = @_;
+    my( $proto, $condition, %kwargs ) = @_;
 
     $kwargs{'condition'} = ref $condition ?
         $condition
@@ -22,8 +20,7 @@ sub new
 
 sub is_true
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
     return $self->{'condition'}->render_bool($context);
 }
 

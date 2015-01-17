@@ -1,7 +1,7 @@
 package DTL::Fast::Tag::For;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag';
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::TAG_HANDLERS{'for'} = __PACKAGE__;
 
@@ -14,7 +14,7 @@ sub get_close_tag{ return 'endfor';}
 #@Override
 sub parse_parameters
 {
-    my $self = shift;
+    my( $self ) = @_;
     
     my(@target_names, $source_name, $reversed);
     if( $self->{'parameter'} =~ /^\s*(.+)\s+in\s+(.+?)\s*(reversed)?\s*$/si )
@@ -22,13 +22,13 @@ sub parse_parameters
         $source_name = $2;
         $reversed = $3;
         @target_names = map{
-            confess "Iterator variable can't be traversable: $_" if $_ =~ /\./;
+            croak "Iterator variable can't be traversable: $_" if $_ =~ /\./;
             $_;
         } split( /\s*,\s*/, $1 );
     }
     else
     {
-        confess "Do not understand condition: $self->{'parameter'}";
+        croak "Do not understand condition: $self->{'parameter'}";
     }
     
     $self->{'renderers'} = [];
@@ -45,7 +45,7 @@ sub parse_parameters
     
     if( not scalar @{$self->{'targets'}} )
     {
-        confess "There is no target variables defined for iteration";
+        croak "There is no target variables defined for iteration";
     }
     
     return $self;
@@ -54,8 +54,7 @@ sub parse_parameters
 #@Override
 sub add_chunk
 {
-    my $self = shift;
-    my $chunk = shift;
+    my( $self, $chunk ) = @_;
     
     $self->{'renderers'}->[-1]->add_chunk($chunk);
     return $self;
@@ -64,9 +63,7 @@ sub add_chunk
 #@Override
 sub parse_tag_chunk
 {
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
+    my( $self, $tag_name, $tag_param ) = @_;
     
     my $result = undef;
 
@@ -74,7 +71,7 @@ sub parse_tag_chunk
     {
         if( scalar @{$self->{'renderers'}} == 2 )
         {
-            confess "There can be only one empty block";
+            croak "There can be only one empty block";
         }
         else
         {
@@ -92,8 +89,8 @@ sub parse_tag_chunk
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
+    
     my $result = '';
   
     my $source_data = $self->{'source'}->render($context);
@@ -127,7 +124,7 @@ sub render
     }
     else
     {
-        confess sprintf('Do not know how to iterate %s (%s)'
+        croak sprintf('Do not know how to iterate %s (%s)'
             , $source_data
             , $source_type
         );
@@ -138,15 +135,13 @@ sub render
 
 sub render_array
 {
-    my $self = shift;
-    my $context = shift;
-    my $source_data = shift;
+    my( $self, $context, $source_data ) = @_;
 
     my $result = '';
 
     if( scalar @$source_data )
     {
-        $context->push();
+        $context->push_scope();
         
         my $source_size = scalar @$source_data;
         my $forloop = $self->get_forloop($context, $source_size);
@@ -188,7 +183,7 @@ sub render_array
                     }
                     else
                     {
-                        confess sprintf(
+                        croak sprintf(
                             'Sub-array (%s) contains less items than variables number (%s)'
                             , join(', ', @$value)
                             , join(', ', @{$self->{'targets'}})
@@ -197,7 +192,7 @@ sub render_array
                 }
                 else
                 {
-                    confess "Multi-var iteration argument $value ($value_type) is not an ARRAY and has no as_array method";
+                    croak "Multi-var iteration argument $value ($value_type) is not an ARRAY and has no as_array method";
                 }
             }
             $result .= $self->{'renderers'}->[0]->render($context) // '';
@@ -205,22 +200,19 @@ sub render_array
             $self->step_forloop($forloop);
         }
         
-        $context->pop();
+        $context->pop_scope();
     }
     elsif( scalar @{$self->{'renderers'}} == 2 ) # there is an empty block
     {
         $result = $self->{'renderers'}->[1]->render($context);
     }
 
-    
     return $result;
 }
 
 sub render_hash
 {
-    my $self = shift;
-    my $context = shift;
-    my $source_data = shift;
+    my( $self, $context, $source_data ) = @_;
 
     my $result = '';
 
@@ -230,7 +222,7 @@ sub render_hash
     {
         if( scalar @{$self->{'targets'}} == 2 )
         {
-            $context->push();
+            $context->push_scope();
             my $forloop = $self->get_forloop($context, $source_size);
             $context->set('forloop' => $forloop);
           
@@ -246,11 +238,11 @@ sub render_hash
                 $self->step_forloop($forloop);
             }
             
-            $context->pop();
+            $context->pop_scope();
         }
         else
         {
-            confess "Hash can be only iterated with 2 target variables";
+            croak "Hash can be only iterated with 2 target variables";
         }
     }
     elsif( scalar @{$self->{'renderers'}} == 2 ) # there is an empty block
@@ -263,16 +255,14 @@ sub render_hash
 
 sub add_renderer
 {
-    my $self = shift;
+    my( $self ) = @_;
     push @{$self->{'renderers'}}, DTL::Fast::Renderer->new();
     return $self;
 }
 
 sub get_forloop
 {
-    my $self = shift;
-    my $context = shift;
-    my $source_size = shift;
+    my( $self, $context, $source_size ) = @_;
     
     return {
         'parentloop' => $context->get('forloop')
@@ -292,8 +282,7 @@ sub get_forloop
 
 sub step_forloop
 {
-    my $self = shift;
-    my $forloop = shift;
+    my( $self, $forloop ) = @_;
     
     $forloop->{'counter'}++;
     $forloop->{'counter0'}++;
@@ -308,6 +297,7 @@ sub step_forloop
     {
         $forloop->{'last'} = 1;
     }
+    return $self;
 }
 
 1;

@@ -5,9 +5,8 @@ use Carp qw(confess);
 
 sub new
 {
-    my $proto = shift;
-    my $parameter = shift // '';
-    my %kwargs = @_;
+    my( $proto, $parameter, %kwargs ) = @_;
+    $parameter //= '';
     
     $parameter =~ s/(^\s+|\s+$)//gs;
 
@@ -21,14 +20,14 @@ sub parse_parameters{return shift;}
 
 sub parse_chunks
 {
-    my $self = shift;
+    my( $self ) = @_;
     $self->parse_parameters();
     return $self->SUPER::parse_chunks();
 }
 
 sub get_close_tag
 {
-    my $self = shift;
+    my( $self ) = @_;
     confess sprintf(
         "ABSTRACT method get_close_tag, must be overriden in %s"
         , ref $self
@@ -38,9 +37,7 @@ sub get_close_tag
 # Close tag processor
 sub parse_tag_chunk
 {
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
+    my( $self, $tag_name, $tag_param ) = @_;
     
     my $result = undef;
 

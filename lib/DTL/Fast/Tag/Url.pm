@@ -10,7 +10,7 @@ use DTL::Fast::Utils;
 #@Override
 sub parse_parameters
 {
-    my $self = shift;
+    my( $self ) = @_;
 
     if( $self->{'parameter'} =~ /^\s*(.+?)(?:\s+as\s+([^\s]+))?\s*$/s )
     {
@@ -41,8 +41,8 @@ sub parse_parameters
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
+    
     my $result = '';
     
     my $url_source = $context->{'ns'}->[-1]->{'_dtl_url_source'};
@@ -75,9 +75,7 @@ sub render
 
 sub restore_url
 {
-    my $self = shift;
-    my $template = shift;
-    my $arguments = shift;
+    my( $self, $template, $arguments ) = @_;
     
     if( ref $arguments eq 'ARRAY' )
     {
@@ -94,7 +92,7 @@ sub restore_url
     else # MUST be a hash
     {        
         my $replacer =  sub{    
-            my $key = shift;
+            my( $key ) = @_;
             return DTL::Fast::Utils::escape($arguments->{$key});
         };
         $template =~ s/
@@ -120,8 +118,8 @@ sub restore_url
 
 sub render_arguments
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
+    
     my $result = [];
 
     if( $self->{'arguments'} )
@@ -147,8 +145,7 @@ sub render_arguments
 
 sub parse_named_parameters
 {
-    my $self = shift;
-    my $params = shift;
+    my( $self, $params ) = @_;
     
     my $result = {};
     foreach my $param (@$params)
@@ -163,13 +160,12 @@ sub parse_named_parameters
         }
     }
     $self->{'arguments'} = $result;
-    
+    return $self;
 }
 
 sub parse_positional_parameters
 {
-    my $self = shift;
-    my $params = shift;
+    my( $self, $params ) = @_;
     
     my $result = [];
     foreach my $param (@$params)
@@ -180,6 +176,7 @@ sub parse_positional_parameters
         push @$result, $self->get_backup_or_variable($param);
     }
     $self->{'arguments'} = $result;
+    return $self;
 }
 
 1;

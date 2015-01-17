@@ -6,8 +6,8 @@ use DTL::Fast::Utils qw(has_method);
 
 sub new
 {
-    my $proto = shift;
-    my $context = shift // {};
+    my( $proto, $context ) = @_;
+    $context //= {};
     
     croak  "Context should be a HASH reference"
         if ref $context ne 'HASH';
@@ -19,8 +19,7 @@ sub new
 
 sub get
 {
-    my $self = shift;
-    my $variable_path = shift;
+    my( $self, $variable_path ) = @_;
 
     if( ref $variable_path ne 'ARRAY' )    # suppose that raw variable invoked, period separated
     {
@@ -55,9 +54,7 @@ sub get
 # tracing variable path
 sub traverse
 {
-    my $self = shift;
-    my $variable = shift;
-    my $path = shift;
+    my( $self, $variable, $path ) = @_;
 
     foreach my $step (@$path)
     {
@@ -97,8 +94,7 @@ sub traverse
 
 sub set
 {
-    my $self = shift;
-    my @sets = @_;
+    my( $self, @sets ) = @_;
     
     while( scalar @sets > 1 )
     {
@@ -143,17 +139,17 @@ sub set
     return $self;
 }
 
-sub push
+sub push_scope
 {
-    my $self = shift;
+    my( $self ) = @_;
 #    push @{$self->{'ns'}}, {}; # multi-level version, suppose it's slower on reading
     push @{$self->{'ns'}}, {%{$self->{'ns'}->[-1] // {}}};
     return $self;
 }
 
-sub pop
+sub pop_scope
 {
-    my $self = shift;
+    my( $self ) = @_;
     croak  "It's a last context layer available."
         if scalar @{$self->{'ns'}} ==  1;
     pop @{$self->{'ns'}};

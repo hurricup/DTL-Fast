@@ -13,9 +13,8 @@ use DTL::Fast::Filters;
 #@Override
 sub new
 {
-    my $proto = shift;
-    my $template = shift // '';
-    my %kwargs = @_;
+    my( $proto, $template, %kwargs ) = @_;
+    $template //= '';
 
     $kwargs{'raw_chunks'} = _get_raw_chunks($template);
     $kwargs{'dirs'} //= [];             # optional dirs to look up for includes or parents
@@ -108,8 +107,7 @@ sub _get_raw_chunks
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context ) = @_;
 
     $context //= {};
     
@@ -125,7 +123,7 @@ sub render
         croak  "Context must be a DTL::Fast::Context object or a HASH reference";
     }
     
-    $context->push();
+    $context->push_scope();
     
     $context->{'ns'}->[-1]->{'_dtl_ssi_dirs'} = $self->{'ssi_dirs'} if $self->{'ssi_dirs'};
     $context->{'ns'}->[-1]->{'_dtl_url_source'} = $self->{'url_source'} if $self->{'url_source'};
@@ -156,7 +154,7 @@ sub render
     pop @{$context->{'ns'}->[-1]->{'_dtl_include_path'}};
     delete $context->{'ns'}->[-1]->{'_dtl_include_files'}->{$template_path};
     
-    $context->pop();
+    $context->pop_scope();
     
     return $result;
 }

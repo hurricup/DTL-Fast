@@ -1,6 +1,6 @@
 package DTL::Fast::Expression::Operator;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp qw(confess);
+use Carp;
 
 our $VERSION = '1.00';
 
@@ -23,18 +23,18 @@ use DTL::Fast::Expression::Operator::Binary;
 
 sub new
 {
-    my $proto = shift;
-    my $operator = lc(shift);
+    my( $proto, $operator, @args ) = @_;
+    $operator = lc($operator);
     
     my $result = undef;
 
     if( $DTL::Fast::Expression::Operator::KNOWN{$operator} )
     {
-        $result = $DTL::Fast::Expression::Operator::KNOWN{$operator}->new(@_);
+        $result = $DTL::Fast::Expression::Operator::KNOWN{$operator}->new(@args);
     }
     else
     {
-        confess "Unknown operator '$operator'";
+        croak "Unknown operator '$operator'";
     }
     
     return $result;

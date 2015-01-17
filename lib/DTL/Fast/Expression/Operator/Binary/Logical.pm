@@ -11,6 +11,9 @@ sub render_b
     return shift->{'b'}->render_bool(shift);
 }
 
-sub render_bool{ return shift->render(@_); }
+sub render_bool{ 
+    my( $self, @params ) = @_;
+    return $self->render(@params); 
+}
 
 1;

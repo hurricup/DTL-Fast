@@ -9,8 +9,7 @@ our $VERSION = '1.00';
 
 sub new
 {
-    my $proto = shift;
-    my %kwargs = @_;
+    my( $proto, %kwargs ) = @_;
 
     my $self = bless {%kwargs}, $proto;
 
@@ -19,8 +18,7 @@ sub new
 
 sub backup_strings
 {
-    my $self = shift;
-    my $expression = shift;
+    my( $self, $expression ) = @_;
 
     $self->clean_replacement($expression)
         if not $self->{'replacement'}
@@ -33,8 +31,7 @@ sub backup_strings
 
 sub backup_value
 {
-    my $self = shift;
-    my $value = shift;
+    my( $self, $value ) = @_;
     
     return $self->{'replacement'}->add_replacement(
         DTL::Fast::Variable->new($value)
@@ -43,8 +40,7 @@ sub backup_value
 
 sub backup_expression
 {
-    my $self = shift;
-    my $expression = shift;
+    my( $self, $expression ) = @_;
 
     return $self->{'replacement'}->add_replacement(
         DTL::Fast::Expression->new(
@@ -64,8 +60,7 @@ sub get_backup
 
 sub get_backup_or_variable
 {
-    my $self = shift;
-    my $token = shift;
+    my( $self, $token ) = @_;
 
     my $result = $self->get_backup($token) 
         // DTL::Fast::Variable->new( $token );
@@ -75,9 +70,8 @@ sub get_backup_or_variable
 
 sub get_backup_or_expression
 {
-    my $self = shift;
-    my $token = shift;
-    my $current_level = shift // -1;
+    my( $self, $token, $current_level ) = @_;
+    $current_level //= -1;
 
     my $result = $self->get_backup($token)
         // DTL::Fast::Expression->new(
@@ -99,15 +93,14 @@ sub clean_replacement
 
 sub set_replacement
 {
-    my $self = shift;
-    $self->{'replacement'} = shift;
+    my( $self, $replacement ) = @_;
+    $self->{'replacement'} = $replacement;
     return $self;
 }
 
 sub parse_sources
 {
-    my $self = shift;
-    my $source = shift;
+    my( $self, $source ) = @_;
     
     my $sources = $self->backup_strings($source);
 

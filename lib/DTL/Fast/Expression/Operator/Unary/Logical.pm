@@ -7,6 +7,10 @@ sub render_a
     return shift->{'a'}->render_bool(shift);
 }
 
-sub render_bool{ return shift->render(@_); }
+sub render_bool
+{ 
+    my( $self, @args ) = @_;
+    return $self->render(@args); 
+}
 
 1;

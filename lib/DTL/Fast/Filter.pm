@@ -6,13 +6,12 @@ use DTL::Fast::Template;
 
 sub new
 {
-    my $proto = shift;
-    my $parameter = shift // [];
-    my %kwargs = @_;
-    $kwargs{'parameter'} = $parameter;
+    my( $proto, $parameter, %kwargs)  = @_;
+    
+    $kwargs{'parameter'} = $parameter // [];
     
     die "Parameter must be an ARRAY reference" 
-        if ref $parameter ne 'ARRAY';
+        if ref $kwargs{'parameter'} ne 'ARRAY';
     
     my $self = bless {%kwargs}, $proto;
     

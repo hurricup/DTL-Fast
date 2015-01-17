@@ -7,12 +7,12 @@ use Storable;
 #@Override
 sub read_data
 {
-    my $self = shift;
+    my( $self, $key ) = @_;
     
     return 
         $self->deserialize(
             $self->read_serialized_data(
-                shift
+                $key
             )
         );
 }
@@ -20,32 +20,41 @@ sub read_data
 #@Override
 sub write_data
 {
-    my $self = shift;
+    my( $self, $key, $data ) = @_;
     
     $self->write_serialized_data(
-        shift,
+        $key,
         $self->serialize(
-            shift
+            $data
         )
-    ) if defined $_[1]; # don't store undef values
+    ) if defined $data; # don't store undef values
+    return $self;
 }
 
-sub read_serialized_data{ return shift->SUPER::read_data(@_) };
+sub read_serialized_data
+{ 
+    my( $self, $key ) = @_;
+    return $self->SUPER::read_data($key) 
+};
 
-sub write_serialized_data{ return shift->SUPER::write_data(@_) };
+sub write_serialized_data
+{ 
+    my( $self, $key, $data ) = @_;
+    return $self->SUPER::write_data($key, $data) 
+};
 
 sub serialize
 {
-    shift;
-    return if not defined $_[0];
-    return Storable::freeze(shift);
+    my( $self, $data ) = @_;
+    return if not defined $data;
+    return Storable::freeze($data);
 }
 
 sub deserialize
 {
-    shift;
-    return if not defined $_[0];
-    return Storable::thaw(shift);
+    my( $self, $data ) = @_;
+    return if not defined $data;
+    return Storable::thaw($data);
 }
 
 1;
