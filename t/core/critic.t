@@ -10,7 +10,7 @@ if ( not $ENV{TEST_AUTHOR} ) {
 eval { 
     require Test::Perl::Critic; 
     Test::Perl::Critic->import(
-        -severity => 4
+        -severity => 3
     );
 };
 

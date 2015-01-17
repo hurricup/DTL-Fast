@@ -18,7 +18,7 @@ sub new
     my( $proto, $expression, %kwargs ) = @_;
     my $result = undef;
 
-    $expression =~ s/(^\s+|\s+$)//gsi;
+    $expression =~ s/(^\s+|\s+$)//xgsi;
     
     if( 
         not $kwargs{'replacement'}          # cache only top-level expressions
@@ -52,8 +52,12 @@ sub _parse_brackets
 {
     my( $self, $expression ) = @_;
 
-    $expression =~ s/\s+/ /gsi;
-    while( $expression =~ s/\(\s*([^()]+)\s*\)/$self->backup_expression($1)/ge ){};
+    $expression =~ s/\s+/ /xgsi;
+    while( $expression =~ s/
+            \(\s*([^()]+)\s*\)
+        /
+            $self->backup_expression($1)
+        /xge ){};
     
     confess 'Unpaired brackets in: '.$self->{'expression'}
         if $expression =~ /[()]/;
@@ -74,7 +78,11 @@ sub _parse_expression
         my( $operators, $handler ) = @$precedence;
 
         my @result = ();
-        my @source = split /(?:^|\s+)($operators)(?:$|\s+)/, $expression;
+        my @source = split /
+                (?:^|\s+)
+                    ($operators)
+                (?:$|\s+)
+            /x, $expression;
 
         if( scalar @source > 1 ) 
         {
@@ -85,7 +93,7 @@ sub _parse_expression
             {
                 next if $token eq ''; 
                 
-                if( $token =~ /$operators/ ) # operation
+                if( $token =~ /$operators/x ) # operation
                 {
                     push @result, $token;
                 }

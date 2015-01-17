@@ -41,7 +41,8 @@ sub read_compressed_data
         if( open my $IF, '<', $filename )
         {
             binmode $IF;
-            $result = join '', <$IF>;
+            local $/ = undef;
+            $result = <$IF>;
             close $IF;
         }
         else

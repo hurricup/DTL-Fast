@@ -147,7 +147,7 @@ sub _read_file
     
     foreach my $dir (@$dirs)
     {
-        $dir =~ s/[\/\\]+$//gsi;
+        $dir =~ s/[\/\\]+$//xgsi;
         $template_path = sprintf '%s/%s', $dir, $template_name;
         if( 
             -e $template_path
@@ -157,7 +157,8 @@ sub _read_file
         {
             if( open my $IF, '<', $template_path )
             {
-                $template = join '', <$IF>;
+                local $/ = undef;
+                $template = <$IF>;
                 close $IF;
                 last;
             }

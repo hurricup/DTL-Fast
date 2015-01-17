@@ -10,7 +10,7 @@ our $OPERATORS = [
     , ['==|!=|<>|<=|>=|<|>', 'DTL::Fast::Expression::Operator::Binary']
     , ['[+-]', 'DTL::Fast::Expression::Operator::Binary']
     , ['[*/%]|mod', 'DTL::Fast::Expression::Operator::Binary']
-    , ['not in|in', 'DTL::Fast::Expression::Operator::Binary'] # not sure if priority is right
+    , ['not\ in|in', 'DTL::Fast::Expression::Operator::Binary'] # not sure if priority is right
     , ['not', 'DTL::Fast::Expression::Operator::Unary']
     , ['defined', 'DTL::Fast::Expression::Operator::Unary']
     , ['[*]{2}', 'DTL::Fast::Expression::Operator::Binary']

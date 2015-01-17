@@ -23,7 +23,7 @@ sub get
 
     if( ref $variable_path ne 'ARRAY' )    # suppose that raw variable invoked, period separated
     {
-        $variable_path = [split /\.+/, $variable_path];
+        $variable_path = [split /\.+/x, $variable_path];
     }
     else
     {
@@ -65,7 +65,7 @@ sub traverse
         }
         elsif( 
             $current_type eq 'ARRAY'
-            and $step =~ /^\-?\d+$/
+            and $step =~ /^\-?\d+$/x
         )
         {
             $variable = $variable->[$step];
@@ -100,9 +100,9 @@ sub set
     {
         my $key = shift @sets;
         my $val = shift @sets;
-        if( $key =~ /\./ )  # traversed set
+        if( $key =~ /\./x )  # traversed set
         {
-            my @key = split /\.+/, $key;
+            my @key = split /\.+/x, $key;
             my $variable_name = pop @key;
             my $variable = $self->get([@key]);
             
@@ -118,7 +118,7 @@ sub set
             }
             elsif( 
                 $variable_type eq 'ARRAY'
-                and $variable_name =~ /^\-?\d+$/
+                and $variable_name =~ /^\-?\d+$/x
             )
             {
                 $variable->[$variable_name] = $val;
