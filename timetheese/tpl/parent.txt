@@ -1,18 +1,6 @@
 {% block "block1" %}
 This is a test {{ var1|add:var2|upper }}
 
-    {% block "block6" %}
-
-        Parent block 6
-    
-        {% block "block7" %}
-        
-            Parent Block 7
-
-        {% endblock %}
-
-    {% endblock %}
-
 {% endblock %}
 
 {% block "block2" %}
@@ -37,3 +25,15 @@ This is a test {{ var5|add:var1|ljust:10 }}
 {% for v in array1 %}
 	<li>{{ v|upper|lower|title|ljust:10|rjust:20 }}</li>
 {% endfor %}
+
+    {% block "block6" %}
+
+        Parent block 6
+    
+        {% block "block7" %}
+        
+            Parent Block 7
+
+        {% endblock %}
+
+    {% endblock %}

@@ -64,7 +64,8 @@ sub uri_source
 
 my $tpl = get_template(
     'root.txt',
-    'dirs' => [ @Dotiac::DTL::TEMPLATE_DIRS ]
+    'dirs' => [ @Dotiac::DTL::TEMPLATE_DIRS ],
+    'url_source' => \&uri_source
 );
 sub dtl_fast_render
 {
@@ -78,7 +79,8 @@ sub dtl_fast_parse
     
     my $tpl = get_template(
         'root.txt',
-        'dirs' => [ @Dotiac::DTL::TEMPLATE_DIRS ]
+        'dirs' => [ @Dotiac::DTL::TEMPLATE_DIRS ],
+        'url_source' => \&uri_source
     );
 }
 

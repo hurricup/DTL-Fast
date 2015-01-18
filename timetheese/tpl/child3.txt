@@ -8,5 +8,4 @@ Inherited block 3
 
 {% block "block7" %}
 block7 from child3
-{% include "results.html" %}
 {% endblock %}
