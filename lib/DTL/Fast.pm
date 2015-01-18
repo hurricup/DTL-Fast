@@ -40,7 +40,10 @@ sub get_template
 
     $RUNTIME_CACHE //= DTL::Fast::Cache::Runtime->new();
     
-    if( not defined ( $template = $RUNTIME_CACHE->get($cache_key)))
+    if( 
+        $kwargs{'no_cache'}
+        or not defined ( $template = $RUNTIME_CACHE->get($cache_key))
+    )
     {
         $template = read_template($template_name, %kwargs );
         
@@ -56,12 +59,7 @@ Unable to find template %s in directories:
 _EOT_
         }
     }
-    
-    $template->{'cache'} = $kwargs{'cache'}
-        if
-            defined $template
-            and $kwargs{'cache'};
-    
+   
     return $template;
 }
 
@@ -99,11 +97,13 @@ sub read_template
     $SERIALIZED_CACHE //= DTL::Fast::Cache::Serialized->new();
     
     if( 
-        not defined ( $template = $SERIALIZED_CACHE->get($cache_key))   # runtime serialized cache reading
+        $kwargs{'no_cache'}
+        or not defined ( $template = $SERIALIZED_CACHE->get($cache_key))   # runtime serialized cache reading
     )
     {
         if( 
-            not exists $kwargs{'cache'} 
+            $kwargs{'no_cache'}
+            or not exists $kwargs{'cache'} 
             or not $kwargs{'cache'}
             or not $kwargs{'cache'}->isa('DTL::Fast::Cache')
             or not defined ($template = $kwargs{'cache'}->get($cache_key))
@@ -130,10 +130,11 @@ sub read_template
             if defined $template;
     }
     
-    $template->{'cache'} = $kwargs{'cache'} 
-        if 
-            defined $template 
-            and $kwargs{'cache'};
+    if( defined $template )
+    {
+        $template->{'cache'} = $kwargs{'cache'} if $kwargs{'cache'};
+        $template->{'url_source'} = $kwargs{'url_source'} if $kwargs{'url_source'};
+    }
     
     return $template;
 }
@@ -506,7 +507,19 @@ This test rendered test template many times by external script, invoked via C<sy
     Fast render   : 62 wallclock secs ( 0.22 usr +  0.53 sys =  0.75 CPU) @ 668.45/s (n=500)
 
 Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI environment.
-    
+
+=head2 DTL::Fast steps performance
+
+    1 Cache key  :  0 wallclock secs ( 0.19 usr +  0.00 sys =  0.19 CPU) @ 534759.36/s (n=100000)
+    2 Decompress :  0 wallclock secs ( 0.27 usr +  0.00 sys =  0.27 CPU) @ 377358.49/s (n=100000)
+    3 Serialize  :  4 wallclock secs ( 3.73 usr +  0.00 sys =  3.73 CPU) @ 26824.03/s (n=100000)
+    4 Deserialize:  5 wallclock secs ( 4.26 usr +  0.00 sys =  4.26 CPU) @ 23479.69/s (n=100000)
+    5 Compress   : 10 wallclock secs (10.50 usr +  0.00 sys = 10.50 CPU) @ 9524.72/s (n=100000)
+    6 Validate   : 11 wallclock secs ( 3.12 usr +  8.05 sys = 11.17 CPU) @ 8952.55/s (n=100000)
+
+    7 Parse      :  1 wallclock secs ( 0.44 usr +  0.23 sys =  0.67 CPU) @ 1492.54/s (n=1000)
+    8 Render     : 11 wallclock secs ( 9.30 usr +  1.14 sys = 10.44 CPU) @ 95.82/s (n=1000)    
+
 =head1 CHANGES
 
 =over

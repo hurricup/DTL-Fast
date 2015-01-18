@@ -9,4 +9,5 @@ Inherited block 5
 
 {% block "block6" %}
 block6 from child5
+{% include "django_tutorial_page.html" %}
 {% endblock %}

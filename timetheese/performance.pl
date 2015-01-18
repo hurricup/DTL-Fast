@@ -18,23 +18,28 @@ my $context = {
     'array1' => [qw( this is a text string as array )],
 };
 
-my $tpl = get_template(
+my @params = (
     'root.txt',
     'dirs' => [ './tpl' ]
 );
-sub dtl_fast_render
+
+my $tpl;
+my $serialized;
+my $compressed;
+
+dtl_parse();
+dtl_serialize();
+dtl_compress();
+    
+sub dtl_render
 {
    $tpl->render($context);
 }
-
-my $serialized;
 
 sub dtl_serialize
 {
     $serialized = freeze($tpl);
 }
-
-my $compressed;
 
 sub dtl_compress
 {
@@ -43,32 +48,44 @@ sub dtl_compress
 
 sub dtl_decompress
 {
-    Compress::Zlib::memGunzip($compressed);
+    $serialized = Compress::Zlib::memGunzip($compressed);
 }
 
 sub dtl_deserialize
 {
-    thaw($serialized);
+    $tpl = thaw($serialized);
 }
 
-
-sub dtl_fast_parse
+sub dtl_cache_key
 {
-    %DTL::Fast::TEMPLATES_CACHE = ();
-    %DTL::Fast::OBJECTS_CACHE = ();
-    my $tpl = get_template(
-        'root.txt',
-        'dirs' => [ './tpl' ]
+    DTL::Fast::_get_cache_key(@params);
+}
+
+sub dtl_validate
+{
+    $DTL::Fast::RUNTIME_CACHE->validate_template($tpl);
+}
+
+sub dtl_parse
+{
+    $tpl = get_template( 
+        @params, 
+        'no_cache' => 1,
     );
 }
 
 print "This is a test for optimisation iterations\n";
 
-timethese( 20000, {
-    '1 Parse      ' => \&dtl_fast_parse,
-    '2 Render     ' => \&dtl_fast_render,
+timethese( 100000, {
+    '1 Cache key  ' => \&dtl_cache_key,
+    '2 Decompress ' => \&dtl_decompress,
     '3 Serialize  ' => \&dtl_serialize,
-    '4 Compress   ' => \&dtl_compress,
-    '5 Decompress ' => \&dtl_decompress,
-    '6 Deserialize' => \&dtl_deserialize,
+    '4 Deserialize' => \&dtl_deserialize,
+    '5 Compress   ' => \&dtl_compress,
+    '6 Validate   ' => \&dtl_validate,
+});
+
+timethese( 1000, {
+    '7 Parse      ' => \&dtl_parse,
+    '8 Render     ' => \&dtl_render,
 });

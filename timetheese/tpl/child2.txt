@@ -4,4 +4,6 @@
 Inherited block 2
 
 {{ var2 }}
+{% include "empty_template.html" %}
+
 {% endblock %}

@@ -35,8 +35,11 @@ sub put
     
     if( defined $template )
     {
-        delete $template->{'cache'};
+        my @keys = ('cache','url_source');
+        my @backup = @{$template}{@keys};
+        delete @{$template}{@keys};
         $self->write_data($key, $template, %kwargs);
+        @{$template}{@keys} = @backup;
     }
     return $self;
 }

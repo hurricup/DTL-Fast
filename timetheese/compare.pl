@@ -9,7 +9,6 @@ use Dotiac::DTL qw/Template Context/;
 # and make %cache variable our instead of my
 #
 @Dotiac::DTL::TEMPLATE_DIRS = ('./tpl');
-$Dotiac::DTL::CURRENTDIR = './tpl';
 
 my $context = {
     'var1' => 'This',
@@ -18,7 +17,50 @@ my $context = {
     'var4' => 'GREEKS',
     'var5' => 'GO HOME!',
     'array1' => [qw( this is a text string as array )],
+    "results" =>  
+    {
+        "test" =>  
+        {
+            "time_taken" =>  1, 
+            "per_call" =>  1
+        },
+        "test2" =>  
+        {
+            "time_taken" =>  1, 
+            "per_call" =>  1
+        },
+        "test3" =>  
+        {
+            "time_taken" =>  1, 
+            "per_call" =>  1
+        }
+    },
+    "platform" =>  
+    {
+        "django_version" =>  1,
+        "python_version" =>  2
+    },
+    "error_message" =>  "error!",
+    "poll" =>  
+    {
+        "question" =>  "test_question",
+        "choice_set" =>  
+        {
+            "all" =>  
+            [
+                {"id" => 0, "choice_text" => "choice 0"},
+                {"id" => 1, "choice_text" => "choice 1"},
+                {"id" => 2, "choice_text" => "choice 2"},
+                {"id" => 3, "choice_text" => "choice 3"},
+            ]
+        }
+    }
 };
+
+sub uri_source
+{
+    return '^$';
+}
 
 my $tpl = get_template(
     'root.txt',
@@ -81,7 +123,7 @@ close OF;
 
 print "Testing FCGI mode rendering...\n";
 
-timethese( 3000, {
+timethese( 1000, {
     'DTL::Fast  ' => \&dtl_fast_render,
     'Dotiac::DTL' => \&dtl_dotiac_render,
 });

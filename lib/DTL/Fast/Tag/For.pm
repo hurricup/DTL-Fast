@@ -124,9 +124,10 @@ sub render
     }
     else
     {
-        croak sprintf('Do not know how to iterate %s (%s)'
-            , $source_data
-            , $source_type
+        croak sprintf('Do not know how to iterate %s (%s, %s)'
+            , $self->{'source'}->{'original'} // 'undef'
+            , $source_data // 'undef'
+            , $source_type // 'SCALAR'
         );
     }
     

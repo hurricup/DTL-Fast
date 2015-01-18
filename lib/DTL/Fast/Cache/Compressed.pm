@@ -8,10 +8,10 @@ our %CACHE;
 #@Override
 sub new
 {
-    my( $proto ) = @_;
+    my( $proto, %kwargs ) = @_;
     require Compress::Zlib;
 
-    return $proto->SUPER::new(@_);
+    return $proto->SUPER::new(%kwargs);
 }
 
 #@Override

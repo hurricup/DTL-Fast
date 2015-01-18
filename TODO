@@ -35,6 +35,7 @@ SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
+- Django iterates using 'items'
 - Dynamic filter loading
 - Dynamic tag loading
 - `urlize` filter should be controllable with target and rel arguments.
