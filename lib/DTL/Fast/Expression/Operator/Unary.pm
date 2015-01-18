@@ -1,7 +1,6 @@
 package DTL::Fast::Expression::Operator::Unary;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use Carp;
-use DTL::Fast::Utils qw(as_bool);
 
 use DTL::Fast::Expression::Operator::Unary::Not;
 
@@ -19,21 +18,14 @@ sub new
     return bless {%kwargs}, $proto;
 }
 
-sub render_a
-{
-    return shift->{'a'}->render(shift);
-}
-
 sub render
 {
-    my( $self, $context ) = @_;
-
-    return $self->dispatch( $self->render_a($context), $context );
-}
-
-sub render_bool
-{
-    return as_bool(shift->render(shift));
+    my( $self, $context) = @_;
+    
+    return $self->dispatch( 
+        $self->{'a'}->render($context, 1)
+        , $context 
+    );
 }
 
 sub dispatch

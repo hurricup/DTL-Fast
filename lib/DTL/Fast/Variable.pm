@@ -4,7 +4,7 @@ use Carp qw(croak cluck);
 
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::FilterManager;
-use DTL::Fast::Utils qw(as_bool);
+use DTL::Fast::Utils qw(as_bool html_protect);
 
 sub new
 {
@@ -75,7 +75,7 @@ sub add_filter{ return shift->{'filter_manager'}->add_filter(shift); }
 
 sub render
 {
-    my( $self, $context ) = @_;
+    my( $self, $context, $global_safe ) = @_;
     
     my $value = undef;
     
@@ -89,7 +89,9 @@ sub render
     $value = $self->{'filter_manager'}->filter($value, $context)
         if $self->{'filter_manager'}->{'filters_number'};
     
-    return $value;
+    return ( $global_safe or $self->{'filter_manager'}->{'safe'} ) ?
+        $value
+        : html_protect($value);
 }
 
 our $BOOL_PROCESSORS = {
@@ -109,11 +111,5 @@ our $BOOL_PROCESSORS = {
         return scalar @$value; 
     }
 };
-
-sub render_bool
-{
-    my( $self, $context ) = @_;
-    return as_bool($self->render($context));
-}
 
 1;

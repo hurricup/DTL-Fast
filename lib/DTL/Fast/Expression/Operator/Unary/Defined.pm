@@ -16,7 +16,7 @@ sub render
     }
     else
     {
-        $result = defined $self->render_a($context);
+        $result = defined $self->{'a'}->render($context, 1);
     }
     
     return $result;

@@ -30,19 +30,14 @@ sub new
     return $self;
 }
 
-sub render_b
-{
-    return shift->{'b'}->render(shift);
-}
-
 sub render
 {
     my( $self, $context ) = @_;
     
-    return $self->dispatch(     # this is bad in or, cause second argument should be calculated only if first is false. But in our situation it doesn't matter
-        $self->render_a($context)
-        , $self->render_b($context) 
-        , $context
+    return $self->dispatch( # this is bad in or, cause second argument should be calculated only if first is false. But in our situation it doesn't matter
+        $self->{'a'}->render($context, 1)
+        , $self->{'b'}->render($context, 1)
+        , $context 
     );
 }
 

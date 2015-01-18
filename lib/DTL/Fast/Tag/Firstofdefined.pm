@@ -7,22 +7,14 @@ $DTL::Fast::TAG_HANDLERS{'firstofdefined'} = __PACKAGE__;
 # conditional rendering
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context, $global_safe) = @_;
     my $result = '';
     
     foreach my $source (@{$self->{'sources'}})
     {
-        if( defined ($result = $source->render($context)))
+        if( defined ($result = $source->render($context, $global_safe)))
         {
-            if( 
-                not $context->get('_dtl_safe') 
-                and not $source->{'filter_manager'}->{'safe'}
-            )
-            {
-                $result = DTL::Fast::Utils::html_protect($result);
-            }
-            last;
+              last;
         }
     }
     return $result;

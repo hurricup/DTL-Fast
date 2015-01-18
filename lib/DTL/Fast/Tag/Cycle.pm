@@ -19,24 +19,15 @@ sub parse_parameters
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context, $global_safe) = @_;
     my $result = '';
   
     my $source = $self->get_next_source();
-    my $current_value = $source->render($context);
+    my $current_value = $source->render($context, $global_safe);
   
     if( not $self->{'silent'} )
     {
         $result = $current_value;
-        
-        if( 
-            not $context->get('_dtl_safe') 
-            and not $source->{'filter_manager'}->{'safe'}
-        )
-        {
-            $result = DTL::Fast::Utils::html_protect($result);
-        }
     }
     
     if( $self->{'destination'} )

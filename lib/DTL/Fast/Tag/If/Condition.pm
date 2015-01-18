@@ -3,6 +3,8 @@ use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Renderer';
 # this is a simple condition
 
+use DTL::Fast::Utils qw(as_bool);
+
 sub new
 {
     my( $proto, $condition, %kwargs ) = @_;
@@ -21,7 +23,8 @@ sub new
 sub is_true
 {
     my( $self, $context ) = @_;
-    return $self->{'condition'}->render_bool($context);
+    
+    return as_bool($self->{'condition'}->render($context));
 }
 
 1;

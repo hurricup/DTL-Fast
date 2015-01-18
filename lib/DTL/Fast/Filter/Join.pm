@@ -10,7 +10,7 @@ use DTL::Fast::Utils qw(html_protect);
 #@Override
 sub parse_parameters
 {
-    my $self = shift;
+    my( $self ) = @_;
 
     carp "No separator passed to the filter ".__PACKAGE__
         if(
@@ -26,14 +26,11 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;
-    my $filter_manager = shift;
-    my $value = shift;
-    my $context = shift;
+    my( $self, $filter_manager, $value, $context ) = @_;
     
     my $value_type = ref $value;
     my $result = undef;
-    my $separator = $self->{'sep'}->render($context);
+    my $separator = $self->{'sep'}->render($context, 1);
     
     my @source = ();
     if( $value_type eq 'HASH' )

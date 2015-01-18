@@ -30,6 +30,8 @@ FOR SURE:
 - Performance testing for old and new context variables work
 - urlize target and following should be controlled via parameters
 - Re-factor to comply Perl::Critic severity 4
+- Spaceles tag MUST be re-written in C
+- binary logical operators should eval second argument only if first one is certain value
 
 SECURITY:
 - load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.

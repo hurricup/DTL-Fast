@@ -4,8 +4,6 @@ use parent 'DTL::Fast::Tag::Simple';
 
 $DTL::Fast::TAG_HANDLERS{'firstof'} = __PACKAGE__;
 
-use DTL::Fast::Utils;
-
 #@Override
 sub parse_parameters
 {
@@ -17,21 +15,13 @@ sub parse_parameters
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my( $self, $context, $global_safe) = @_;
     my $result = '';
     
     foreach my $source (@{$self->{'sources'}})
     {
-        if( $result = $source->render($context) )
+        if( $result = $source->render($context, $global_safe) )
         {
-            if( 
-                not $context->get('_dtl_safe') 
-                and not $source->{'filter_manager'}->{'safe'}
-            )
-            {
-                $result = DTL::Fast::Utils::html_protect($result);
-            }
             last;
         }
     }

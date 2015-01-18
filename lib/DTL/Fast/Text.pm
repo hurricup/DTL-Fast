@@ -18,4 +18,5 @@ sub append
 
 sub render{ return join '', @{shift->{'texts'}};}
 
+
 1;
