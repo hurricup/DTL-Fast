@@ -15,10 +15,7 @@ sub render
     
     my $result = $self->SUPER::render($context);
     
-    # @todo make this dumb regexp smarter, consider brackets in quotes
-    $result =~ s/>\s+</></gs;
-    $result =~ s/^\s+</</gs;
-    $result =~ s/>\s+$/>/gs;
+    DTL::Fast::spaceless($result);
     
     return $result;
 }

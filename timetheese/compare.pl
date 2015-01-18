@@ -1,4 +1,4 @@
-#!/usr/bin/perl -I../lib/
+#!/usr/bin/perl -I../blib/lib -I../blib/arch
 
 use Benchmark qw(:all);
 use DTL::Fast qw(get_template);

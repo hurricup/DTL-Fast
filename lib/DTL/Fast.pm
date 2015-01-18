@@ -7,6 +7,9 @@ use Digest::MD5 qw(md5_hex);
 use 5.010;
 our $VERSION = '1.05.2';
 
+require XSLoader;
+XSLoader::load('DTL::Fast', $VERSION);
+
 use DTL::Fast::Template;
 use DTL::Fast::Cache::Runtime;
 use DTL::Fast::Cache::Serialized;
