@@ -5,7 +5,7 @@ use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.05.2';
+our $VERSION = '1.05';
 
 require XSLoader;
 XSLoader::load('DTL::Fast', $VERSION);
@@ -527,7 +527,7 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =over
 
-=item * In development - v1.05 
+=item * 18/01/2015 - v1.05 
 
 =over
 
@@ -550,6 +550,8 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * New dependencies added: L<C<Compress::Zlib>>, L<C<Digest::MD5>>
 
 =item * Added Perl::Critic testing, complies level 4.
+
+=item * Implemented C realization of spaceless tag.
 
 =back
 
