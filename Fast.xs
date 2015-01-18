@@ -3,7 +3,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
-#include "c/spaceless.h"
+#include "src/spaceless.h"
 
 MODULE = DTL::Fast  PACKAGE = DTL::Fast
 
