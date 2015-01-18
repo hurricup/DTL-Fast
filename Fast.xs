@@ -33,46 +33,56 @@ SV* _spaceless(pTHX_ SV* sv_string_ptr)
     unsigned int    src_buffer_length = SvCUR(sv_string_ptr);
     unsigned int    src_offset = 0;
     
-    void*           dst_buffer = malloc(buffer_length);
+    void*           dst_buffer = malloc(src_buffer_length);
     unsigned int    dst_offset = 0;
     
-    bool             remove = true;
-    unsigned int     remove_src_offset = 0;
+    bool            space = true;
+    unsigned int    copy_offset = 0;
     
-    for( src_offset = 0; src_offset < buffer_length; src_offset++ )
+    for( src_offset = 0; src_offset < src_buffer_length; src_offset++ )
     {
         unsigned char symbol = *(unsigned char*)(src_buffer + src_offset);
-        if( symbol == '>' )
+        
+        if( symbol == '<' )
         {
-            remove = true;
-            remove_src_offset = src_offset + 1;
-        }
-        else if( symbol == '<' )
-        {
-            if( remove )
+            if( space )
             {
-                int remove_bytes = src_offset - remove_src_offset;
-                if( remove_bytes > 0 )
-                {
-                    memcpy( src_buffer + remove_src_offset, src_buffer + src_offset, buffer_length - src_offset );
-                    buffer_length -= remove_bytes;
-                    src_offset = remove_src_offset;
-                    remove = false;
-                }
+                copy_offset = src_offset;
             }
+            space = false;
+        }
+        else if( symbol == '>' )
+        {
+            unsigned int copy_bytes = src_offset  + 1 - copy_offset;
+            memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+            dst_offset += copy_bytes;
+
+            copy_offset = src_offset + 1;
+            space = true;
         }
         else if( whitespace[symbol] != 1 ) // non white-space symbol
         {
-            remove = false;
+            space = false;
         }
     }
     
-    if( remove )
+    if( !space )
     {
-        buffer_length = remove_src_offset;
+        unsigned int copy_bytes = src_buffer_length - copy_offset;
+    
+        if( copy_bytes > 0 )
+        {
+            memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+            dst_offset += copy_bytes;
+        }
     }
     
-    SvCUR_set(sv_string_ptr, buffer_length);
+    // freing buffer
+    SV* sv_result = newSVpvn(dst_buffer, dst_offset);
+
+    free(dst_buffer);
+    return(sv_result);
+    
 }
 
 MODULE = DTL::Fast  PACKAGE = DTL::Fast

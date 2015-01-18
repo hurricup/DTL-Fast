@@ -15,9 +15,7 @@ sub render
     
     my $result = $self->SUPER::render($context);
     
-    DTL::Fast::spaceless($result);
-    
-    return $result;
+    return DTL::Fast::spaceless($result);
 }
 
 1;

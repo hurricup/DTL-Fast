@@ -1,4 +1,4 @@
-#!/usr/bin/perl -I../lib/
+#!/usr/bin/perl -I../blib/lib -I../blib/arch
 use Dotiac::DTL qw/Template Context/;
 
 @Dotiac::DTL::TEMPLATE_DIRS = ('./tpl');
