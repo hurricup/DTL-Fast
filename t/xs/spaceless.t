@@ -37,16 +37,20 @@ my $SET = [
         'test' => '<>',
         'title' => 'Both spaces',
     },
-    # {
-        # 'template' => " <blblba> <blfah>  asdf  </blah> ",
-        # 'test' => '<blblba><blfah>  asdf  </blah>',
-        # 'title' => 'Complex',
-    # },
+    {
+        'template' => " <blblba> <blfah>  asdf  </blah> ",
+        'test' => '<blblba><blfah>  asdf  </blah>',
+        'title' => 'Complex',
+    },
 ];
 
 foreach my $data (@$SET)
 {
-    is( DTL::Fast::spaceless($data->{'template'}), $data->{'test'}, $data->{'title'});
+    my $test = sub{
+        DTL::Fast::spaceless($data->{'template'});
+        return $data->{'template'};
+    };
+    is( $test->(), $data->{'test'}, $data->{'title'});
     
 }
 

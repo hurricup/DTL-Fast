@@ -33,7 +33,8 @@ SV* _spaceless(pTHX_ SV* sv_string_ptr)
     unsigned int    src_buffer_length = SvCUR(sv_string_ptr);
     unsigned int    src_offset = 0;
     
-    void*           dst_buffer = malloc(src_buffer_length);
+//    void*           dst_buffer = malloc(src_buffer_length);
+    void*           dst_buffer = src_buffer;
     unsigned int    dst_offset = 0;
     
     bool            space = true;
@@ -54,7 +55,12 @@ SV* _spaceless(pTHX_ SV* sv_string_ptr)
         else if( symbol == '>' )
         {
             unsigned int copy_bytes = src_offset  + 1 - copy_offset;
-            memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+
+            if( dst_offset != copy_offset )
+            {
+                memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+            }
+            
             dst_offset += copy_bytes;
 
             copy_offset = src_offset + 1;
@@ -72,17 +78,22 @@ SV* _spaceless(pTHX_ SV* sv_string_ptr)
     
         if( copy_bytes > 0 )
         {
-            memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+            if( dst_offset != copy_offset )
+            {
+                memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+            }
             dst_offset += copy_bytes;
         }
     }
-    
+
+    SvCUR_set(sv_string_ptr, dst_offset);
     // freing buffer
+    /*
     SV* sv_result = newSVpvn(dst_buffer, dst_offset);
 
     free(dst_buffer);
     return(sv_result);
-    
+    */
 }
 
 MODULE = DTL::Fast  PACKAGE = DTL::Fast
@@ -90,6 +101,4 @@ MODULE = DTL::Fast  PACKAGE = DTL::Fast
 SV*
 spaceless( SV* sv_string_ptr )
     CODE:
-        RETVAL = _spaceless( aTHX_ sv_string_ptr );
-    OUTPUT:
-        RETVAL
+        _spaceless( aTHX_ sv_string_ptr );
