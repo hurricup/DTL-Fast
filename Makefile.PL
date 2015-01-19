@@ -13,7 +13,6 @@ WriteMakefile(
     BUILD_REQUIRES => {
         'Test::Harness' => 0,
         'Test::More' => 0,
-        'Test::Perl::Critic' => 0,
     },
     PREREQ_PM => {
         'Date::Format' => 0,
