@@ -23,15 +23,15 @@ unsigned char whitespace[256] = {
 // not utf safe i belive
 SV* _spaceless(pTHX_ SV* sv_string_ptr)
 {
-    void*           src_buffer = (void*)SvPV_nolen(sv_string_ptr);
-    unsigned int    src_buffer_length = SvCUR(sv_string_ptr);
-    unsigned int    src_offset = 0;
+    void*   src_buffer = (void*)SvPV_nolen(sv_string_ptr);
+    size_t  src_buffer_length = SvCUR(sv_string_ptr);
+    size_t  src_offset = 0;
     
-    void*           dst_buffer = src_buffer;
-    unsigned int    dst_offset = 0;
+    void*   dst_buffer = src_buffer;
+    size_t  dst_offset = 0;
     
-    bool            space = true;
-    unsigned int    copy_offset = 0;
+    bool    space = true;
+    size_t  copy_offset = 0;
     
     for( src_offset = 0; src_offset < src_buffer_length; src_offset++ )
     {
@@ -47,11 +47,11 @@ SV* _spaceless(pTHX_ SV* sv_string_ptr)
         }
         else if( symbol == '>' )
         {
-            unsigned int copy_bytes = src_offset  + 1 - copy_offset;
+            size_t copy_bytes = src_offset  + 1 - copy_offset;
 
             if( dst_offset != copy_offset ) 
             {
-                memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+                memmove( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
             }
             
             dst_offset += copy_bytes;
@@ -67,13 +67,13 @@ SV* _spaceless(pTHX_ SV* sv_string_ptr)
     
     if( !space )
     {
-        unsigned int copy_bytes = src_buffer_length - copy_offset;
+        size_t copy_bytes = src_buffer_length - copy_offset;
     
         if( copy_bytes > 0 )
         {
             if( dst_offset != copy_offset )
             {
-                memcpy( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
+                memmove( dst_buffer + dst_offset, src_buffer + copy_offset, copy_bytes );
             }
             dst_offset += copy_bytes;
         }
