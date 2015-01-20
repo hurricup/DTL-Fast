@@ -531,7 +531,15 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =over
 
-=item * 1.05.4 Unknown block warning now displays template filename
+=item * 1.05.4 
+
+=over
+
+=item Unknown block warning now displays template filename
+
+=item Spaces in control blocks are not mandatory
+
+=back
 
 =item * 1.05.3 Context trying to traverse objects like hash if there is no method
 

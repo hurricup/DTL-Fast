@@ -46,20 +46,20 @@ sub parse_next_chunk
     my $chunk = shift @{$self->{'raw_chunks'}};
     
 #    warn "Processing chunk $chunk";
-    if( $chunk =~ /^\{\{ (.+?) \}\}$/ )
+    if( $chunk =~ /^\{\{\s*(.+?)\s*\}\}$/ )
     {
         $chunk = DTL::Fast::Variable->new($1);
     }
     elsif
     ( 
-        $chunk =~ /^\{\% ([^\s]+?)(?: (.*?))? \%\}$/ 
+        $chunk =~ /^\{\%\s*([^\s]+?)(?: (.*?))?\s*\%\}$/ 
     )
     {
         $chunk = $self->parse_tag_chunk($1, $2);
     }
     elsif
     ( 
-        $chunk =~ /^\{\# .* \#\}$/ 
+        $chunk =~ /^\{\#.*\#\}$/ 
     )
     {
         $chunk = undef;
@@ -94,11 +94,11 @@ sub parse_tag_chunk
     }
     else
     {
-        use Data::Dumper;
+#        use Data::Dumper;
         warn sprintf ('Unknown tag: %s in %s'
             , $tag_name
-            , Dumper($self)
-#            , ($self->{'_template'} // $self)->{'inherited'}->[0] // 'inline'
+#            , Dumper($self)
+            , ($self->{'_template'} // $self)->{'inherited'}->[0] // 'inline'
         );
         $result = DTL::Fast::Text->new();
     }
