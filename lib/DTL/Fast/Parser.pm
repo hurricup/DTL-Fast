@@ -94,7 +94,7 @@ sub parse_tag_chunk
     }
     else
     {
-        warn "Unknown tag: $tag_name";
+        warn "Unknown tag: $tag_name in $self->{'_template'}->{'inherited'}->[0]";
         $result = DTL::Fast::Text->new();
     }
     
