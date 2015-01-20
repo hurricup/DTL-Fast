@@ -94,9 +94,11 @@ sub parse_tag_chunk
     }
     else
     {
+        use Data::Dumper;
         warn sprintf ('Unknown tag: %s in %s'
             , $tag_name
-            , ($self->{'_template'} // $self)->{'inherited'}->[0] // 'inline'
+            , Dumper($self)
+#            , ($self->{'_template'} // $self)->{'inherited'}->[0] // 'inline'
         );
         $result = DTL::Fast::Text->new();
     }
