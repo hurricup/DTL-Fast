@@ -94,7 +94,10 @@ sub parse_tag_chunk
     }
     else
     {
-        warn "Unknown tag: $tag_name in $self->{'_template'}->{'inherited'}->[0]";
+        warn sprintf ('Unknown tag: %s in %s'
+            , $tag_name
+            , $self->{'_template'}->{'inherited'}->[0] // 'inline'
+        );
         $result = DTL::Fast::Text->new();
     }
     
