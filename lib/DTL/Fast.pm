@@ -5,7 +5,7 @@ use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.05.2';
+our $VERSION = '1.05.3';
 
 require XSLoader;
 XSLoader::load('DTL::Fast', $VERSION);
@@ -215,7 +215,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.05.2
+Version 1.05.3
 
 =head1 SYNOPSIS
 
@@ -530,6 +530,8 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * 18/01/2015 - v1.05 
 
 =over
+
+=item * 1.05.3 Context trying to traverse objects like hash if there is no method
 
 =item * 1.05.2 Fixed bug in C spaceless implementation for linux
 

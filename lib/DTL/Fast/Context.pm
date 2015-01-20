@@ -74,6 +74,10 @@ sub traverse
         {
             $variable = $variable->$step($self);
         }
+        elsif( $current_type )
+        {
+            $variable = $variable->{$step};
+        }
         else
         {
             croak  sprintf("Don't know how to traverse %s (%s) with %s"
