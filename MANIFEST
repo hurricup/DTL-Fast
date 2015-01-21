@@ -139,6 +139,7 @@ t/core/critic.t
 t/core/expression.t
 t/core/loader.t
 t/core/template.t
+t/core/utils.t
 t/expression/defined.t
 t/expression/eq.t
 t/expression/in.t

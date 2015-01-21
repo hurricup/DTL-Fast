@@ -531,6 +531,8 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =over
 
+=item * Added C<DTL::Fast::Utils::is_lvalue> method to check if method is lvalue. Lvalue methods in context being invoked without context argument.
+
 =item * Fixed bugs with spaces in variables and filters
 
 =back

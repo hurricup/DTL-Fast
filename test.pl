@@ -7,6 +7,7 @@ runtests(
     't/core/expression.t',
     't/core/loader.t',
     't/core/template.t',
+    't/core/utils.t',
     't/expression/logic.t',
     't/expression/in.t',
     't/expression/eq.t',

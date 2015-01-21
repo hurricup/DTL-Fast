@@ -2,7 +2,7 @@ package DTL::Fast::Context;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use Carp;
 
-use DTL::Fast::Utils qw(has_method);
+use DTL::Fast::Utils qw(has_method is_lvalue);
 
 sub new
 {
@@ -40,7 +40,9 @@ sub get
 
     while( ref $variable eq 'CODE' )
     {
-        $variable = $variable->($self) 
+        $variable = is_lvalue($variable) ?
+            $variable->()
+            : $variable->($self);
     }
         
     $variable = $self->traverse($variable, $variable_path)
@@ -72,7 +74,9 @@ sub traverse
         }
         elsif( has_method($variable, $step) )
         {
-            $variable = $variable->$step($self);
+            $variable = is_lvalue($variable->can($step)) ? 
+                $variable->$step()
+                : $variable->$step($self);
         }
         elsif( $current_type )
         {
@@ -90,7 +94,9 @@ sub traverse
 
     while( ref $variable eq 'CODE' )
     {
-        $variable = $variable->($self);
+        $variable = is_lvalue($variable) ?
+            $variable->()
+            : $variable->($self);
     }
 
     return $variable;

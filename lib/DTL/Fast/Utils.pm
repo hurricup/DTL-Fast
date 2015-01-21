@@ -32,6 +32,26 @@ sub has_method
     );
 }
 
+# prototype, C implementation required
+push @EXPORT_OK, 'is_lvalue';
+sub is_lvalue
+{
+    my($method) = @_;
+    require attributes;
+    my $result = 0;
+    
+    my @attrs = attributes::get($method);
+    foreach my $attr (@attrs)
+    {
+        if( $attr eq 'lvalue' )
+        {
+            $result = 1;
+            last;
+        }
+    }
+    return $result;
+}
+
 # @todo This must be implemented with XS part (already written)
 push @EXPORT_OK, 'html_protect';
 our %HTML_PROTECT = (
