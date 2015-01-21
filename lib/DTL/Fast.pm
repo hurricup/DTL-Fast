@@ -405,7 +405,9 @@ May be some of this features implemented in Django itself. Let me know about it.
 
 =over
 
-=item * C<strftime> - new filter. Formatting time using L<C<Date::Format>> module, which is using C functions C<strftime> and C<ctime>.
+=item * C<numberformat> - new filter. Formats number like c<12 345 678.9999999> 
+
+=item * C<strftime> - new filter. Formats time using L<C<Date::Format>> module, which is using C functions C<strftime> and C<ctime>.
 
 =item * C<firstofdefined> - new tag, that works like C<firstof> tag, but checks if value is defined (not true)
 
@@ -530,6 +532,8 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 =item * 18/01/2015 - v1.05 
 
 =over
+
+=item * Added filter C<numberformat>, formats number like c<12 345 678.9999999> 
 
 =item * Added C<DTL::Fast::Utils::is_lvalue> method to check if method is lvalue. Lvalue methods in context being invoked without context argument.
 

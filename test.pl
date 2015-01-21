@@ -39,6 +39,7 @@ runtests(
     't/filter/ljust.t',
     't/filter/lower.t',
     't/filter/make_list.t',
+    't/filter/numberformat.t',
     't/filter/phone2numeric.t',
     't/filter/pluralize.t',
     't/filter/pluralize_ru.t',

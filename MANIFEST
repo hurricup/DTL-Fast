@@ -61,6 +61,7 @@ lib/DTL/Fast/Filter/Linenumbers.pm
 lib/DTL/Fast/Filter/Ljust.pm
 lib/DTL/Fast/Filter/Lower.pm
 lib/DTL/Fast/Filter/MakeList.pm
+lib/DTL/Fast/Filter/Numberformat.pm
 lib/DTL/Fast/Filter/PhoneToNumeric.pm
 lib/DTL/Fast/Filter/Pluralize.pm
 lib/DTL/Fast/Filter/Random.pm
@@ -171,6 +172,7 @@ t/filter/linenumbers.t
 t/filter/ljust.t
 t/filter/lower.t
 t/filter/make_list.t
+t/filter/numberformat.t
 t/filter/phone2numeric.t
 t/filter/pluralize.t
 t/filter/pluralize_ru.t

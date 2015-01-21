@@ -1,6 +1,11 @@
 package DTL::Fast::Filters;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
+# not in Django
+
+# experimental
+use DTL::Fast::Filter::Numberformat;
+
 # built in filters
 use DTL::Fast::Filter::Add;
 use DTL::Fast::Filter::Addslashes;
