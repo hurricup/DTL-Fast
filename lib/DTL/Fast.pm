@@ -531,6 +531,10 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
 
 =over
 
+=item * Fixed bugs with spaces in variables and filters
+
+=back
+
 =item * 1.05.4 
 
 =over

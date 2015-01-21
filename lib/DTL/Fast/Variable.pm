@@ -11,7 +11,7 @@ sub new
     my( $proto, $variable, %kwargs ) = @_;
     
     $variable =~ s/(^\s+|\s+$)//gsi;
-    my @filters = split /\|+/, $variable;
+    my @filters = split /\s*\|+\s*/, $variable;
     my $variable_name = shift @filters;
     
     my @variable;

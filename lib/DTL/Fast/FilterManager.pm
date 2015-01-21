@@ -53,7 +53,7 @@ sub parse_filters
     my $filter_string = shift;
     
     $filter_string =~ s/(^\s+|\s+$)//gsi;
-    return $self->add_filters([split /\|+/, $filter_string]);
+    return $self->add_filters([split /\s*\|+\s*/x, $filter_string]);
 }
 
 sub add_filters
@@ -73,7 +73,7 @@ sub add_filter
     my $self = shift;
     my $filter_name = shift;
   
-    my @arguments = split ':', $self->backup_strings($filter_name);
+    my @arguments = split /\s*\:\s*/x, $self->backup_strings($filter_name);
     $filter_name = shift @arguments;
 
     if( exists $DTL::Fast::FILTER_HANDLERS{$filter_name} )

@@ -95,9 +95,9 @@ sub _get_raw_chunks
     my( $template ) = @_;
 
     my $reg = qr/(
-        \{\# .*? \#\}
-        |\{\% .+? \%\}
-        |\{\{ .+? \}\}
+        \{\#\s*.*?\s*\#\}
+        |\{\%\s*.+?\s*\%\}
+        |\{\{\s*.+?\s*\}\}
     )/x;
     my $result = [split /$reg/s, $template];
     
