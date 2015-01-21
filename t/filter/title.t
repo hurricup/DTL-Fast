@@ -4,7 +4,9 @@ use Test::More;use utf8;
 
 use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
-use Data::Dumper;
+use POSIX ('locale_h');
+
+setlocale(LC_COLLATE, 'ru_RU.UTF-8');
 
 my( $template, $test_string, $context);
 
