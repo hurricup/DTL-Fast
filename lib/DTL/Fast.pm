@@ -5,7 +5,7 @@ use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = 'v1.05.5';
+our $VERSION = 'v1.05.6';
 
 require XSLoader;
 XSLoader::load('DTL::Fast', $VERSION);
@@ -215,7 +215,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version v1.05.5
+Version v1.05.6
 
 =head1 SYNOPSIS
 
@@ -525,130 +525,6 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
     7 Parse      :  1 wallclock secs ( 0.44 usr +  0.23 sys =  0.67 CPU) @ 1492.54/s (n=1000)
     8 Render     : 11 wallclock secs ( 9.30 usr +  1.14 sys = 10.44 CPU) @ 95.82/s (n=1000)    
 
-=head1 CHANGES
-
-=over
-
-=item * 18/01/2015 - v1.05.5
-
-=over
-
-=item * Added filter C<numberformat>, formats number like C<12 345 678.9999999> 
-
-=item * Added C<DTL::Fast::Utils::is_lvalue> method to check if method is lvalue. Lvalue methods in context being invoked without context argument.
-
-=item * Fixed bugs with spaces in variables and filters
-
-=back
-
-=item * 1.05.4 
-
-=over
-
-=item * Unknown block warning now displays template filename
-
-=item * Spaces in control blocks are not mandatory
-
-=back
-
-=item * 1.05.3 Context trying to traverse objects like hash if there is no method
-
-=item * 1.05.2 Fixed bug in C spaceless implementation for linux
-
-=item * Moved inheritance part into Template constructor 
-
-=item * Fixed bug with inheritance + blocks extension
-
-=item * Fixed bug with logic on arrays/hashes/scalars reference, object method as_bool support added. Tested.
-
-=item * Fixed bug with setting value to C<undef> using C<DTL::Fast::Context::set>
-
-=item * Fixed bug with inheritance path.
-
-=item * Implemented cache validation. Speed now is comparable to Dotiac::DTL.
-    
-=item * Made C<dirs> parameter optional for Template constructor, but it's still mandatory for C<get_template>/C<select_template>
-
-=item * Implemented cache classes: C<DTL::Fast::Cache>, C<DTL::Fast::Cache::Runtime>, C<DTL::Fast::Cache::Serialized>, C<DTL::Fast::Cache::Compressed>, C<DTL::Fast::Cache::File> and C<DTL::Fast::Cache::Memcached>. 
-
-=item * New dependencies added: L<C<Compress::Zlib>>, L<C<Digest::MD5>>
-
-=item * Added Perl::Critic testing, complies level 4.
-
-=item * Implemented C realization of spaceless tag.
-
-=back
-
-=item * 14/01/2015 - v1.04
-
-=over
-
-=item * Taken C<date> function from L<C<Dotiac::DTL>> to C<DTL::Fast::Utils::time2str_php>
-
-=item * C<now> tag and C<date> filter now works with C<time2str_php> function (like Django itself)
-
-=item * Implemented C<strftime> filter, which works with L<C<Date::Format>> C<str2time>.
-
-=item * Added Russian version of C<pluralize> filter:
-
-    use DTL::Fast;
-    use DTL::Fast::Filter::Ru::Pluralize; # this will override default pluralize with Russian version.
-
-=item * Refactored strings backup and parametrized filters.
-
-=item * C<block> and C<extends> tags now works as tags.
-
-=item * New dependency added: L<C<Storable>>
-    
-=back
-
-=item * 13/01/2015 - v1.03
-
-=over
-
-=item * Tested with CentOS & Perl 5.10
-
-=item * Lowered Perl version requirement to 5.10
-
-=item * Changed implicit split to explicit in C<wordcount> filter (v5.10 considers it depricated).
-
-=item * Added exception on missing parent template in C<extends> tag.
-
-=item * Added exception on missing included template in C<include> tag.
-
-=item * Added exception on recursive inheritance (C<extends> tag).
-
-=item * Added exception on recursive inclusion (C<include> tag).
-
-=back
-
-=item * 10/01/2015 - v1.02
-
-=over
-
-=item * changed some intermediate getters to direct access. Improved rendering performance by 10%. 
-
-=item * added tests for performance measuring and profiling (see C<timethese> directory).
-
-=back
-
-=item * 09/01/2015 - v1.01
-
-=over
-
-=item * fixed bug with C<add> filter repeated usage.
-
-=back
-
-=item * 09/01/2015 - v1.00
-
-=over
-
-=item * First release
-
-=back
-
-=back
 
 =head1 BUGS AND IMPROVEMENTS
 

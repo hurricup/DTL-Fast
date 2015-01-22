@@ -1,5 +1,9 @@
 Revision history for Perl extension DTL::Fast.
 
+1.05.6 - 2015-01-22
+	- Removed changes from pod documentation
+	- Fixed lvalue test for perl 5.10
+
 1.05.5 - 2015-01-21
     - Changes file cleanup
     - Added filter numberformat, formats number like 12 345 678.9999999
