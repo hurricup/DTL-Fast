@@ -11,7 +11,7 @@ package Foo;
 
 sub new{return bless {}, shift;}
 sub regular_method{ return 1 };
-sub lvalue_method: lvalue{ return 1 };
+sub lvalue_method: lvalue{ my $a = 1; return $a; };
 
 package main;
 
