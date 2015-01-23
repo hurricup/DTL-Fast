@@ -5,7 +5,7 @@ use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = 'v1.05.6';
+our $VERSION = '1.600'; # ==> ALSO update the version in the pod text below!
 
 require XSLoader;
 XSLoader::load('DTL::Fast', $VERSION);
@@ -215,7 +215,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version v1.05.6
+Version 1.600
 
 =head1 SYNOPSIS
 
