@@ -1,8 +1,20 @@
 DTL-Fast - Django templating in Perl
 ====================================
 
-Actual documentation may be found on CPAN:
-http://search.cpan.org/~hurricup/DTL-Fast/lib/DTL/Fast.pm
+    Documentation on CPAN:
+        http://search.cpan.org/~hurricup/DTL-Fast/lib/DTL/Fast.pm
+
+    Documentation on MetaCPAN
+        https://metacpan.org/pod/DTL::Fast
+
+    Testing results
+        http://www.cpantesters.org/distro/D/DTL-Fast.html
+        
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/DTL-Fast
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/DTL-Fast
         
 INSTALLATION
 ============
