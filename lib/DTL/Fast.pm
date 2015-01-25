@@ -540,6 +540,12 @@ This module is published under the terms of the MIT license, which basically mea
 
 =item * Main project repository and bugtracker: L<https://github.com/hurricup/DTL-Fast>
 
+=item * Testing results: L<http://www.cpantesters.org/distro/D/DTL-Fast.html>
+        
+=item * AnnoCPAN, Annotated CPAN documentation: L<http://annocpan.org/dist/DTL-Fast>
+
+=item * CPAN Ratings: L<http://cpanratings.perl.org/d/DTL-Fast>
+
 =item * Original Django templating documentation: L<https://docs.djangoproject.com/en/1.7/topics/templates/>
 
 =item * Other implementaion: L<http://search.cpan.org/~maluku/Dotiac-0.8/lib/Dotiac/DTL.pm>
