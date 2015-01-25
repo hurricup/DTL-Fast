@@ -1,0 +1,11 @@
+*	text=auto
+README	text
+Changes	text
+*.pl	text
+*.PL	text
+*.pm	text
+*.t		text
+*.xs	text
+*.h		text
+*.c		text
+Manifest
