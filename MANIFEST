@@ -255,6 +255,8 @@ t/tmpl/included_dynamic.txt
 t/tmpl/included_lvl_0.txt
 t/tmpl/included_lvl_1.txt
 t/tmpl/included_lvl_2.txt
+t/tmpl/included_with.txt
+t/tmpl/include_with.txt
 t/tmpl/inherit_recursive0.txt
 t/tmpl/inherit_recursive1.txt
 t/tmpl/inherit_recursive2.txt

@@ -1,6 +1,6 @@
 Revision history for Perl extension DTL::Fast.
 
-1.601 - Sun 25 Jan 2015 20:18 MSK
+1.602 - Sun 25 Jan 2015 20:18 MSK
 	- Implemented and tested include .. with tag
 
 1.05.6 - 2015-01-22
