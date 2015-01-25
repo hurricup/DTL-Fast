@@ -301,3 +301,5 @@ timetheese/tpl/results.html
 timetheese/tpl/root.txt
 timetheese/tpl/stackoverflow_homepage.html
 TODO
+META.json			Module JSON meta-data (added by MakeMaker)
+META.yml			Module YAML meta-data (added by MakeMaker)
