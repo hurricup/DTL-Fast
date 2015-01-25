@@ -29,8 +29,9 @@ FOR SURE:
 - binary logical operators should eval second argument only if first one is certain value
 - include .. with tag extension
 - sprintf tag
-- Dynamic filter loading
-- Dynamic tag loading
+- Dynamic filter loading on parsing/validating
+- Dynamic tag loading on parsing/validating
+- Dynamic operation loading on parsing/validating
 - Django iterates using 'items' using context option 'python_iteration'
 - Toss template parts as references, not text
 - `urlize` filter should be controllable with target and rel arguments.

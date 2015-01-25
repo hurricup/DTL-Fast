@@ -405,6 +405,8 @@ May be some of this features implemented in Django itself. Let me know about it.
 
 =over
 
+=item * filters may accept several arguments, and context variables can be used in them, like {{ var|filter1:var2:var3:...:varn }}
+
 =item * C<numberformat> - new filter. Formats number like C<12 345 678.9999999> 
 
 =item * C<strftime> - new filter. Formats time using L<C<Date::Format>> module, which is using C functions C<strftime> and C<ctime>.
