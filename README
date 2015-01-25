@@ -7,8 +7,11 @@ DTL-Fast - Django templating in Perl
     Documentation on MetaCPAN
         https://metacpan.org/pod/DTL::Fast
 
-    Testing results
+    CPAN Testers reports
         http://www.cpantesters.org/distro/D/DTL-Fast.html
+
+    Testers matrix
+        http://matrix.cpantesters.org/?dist=DTL-Fast
         
     AnnoCPAN, Annotated CPAN documentation
         http://annocpan.org/dist/DTL-Fast

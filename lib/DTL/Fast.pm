@@ -525,22 +525,15 @@ Tests shows, that C<DTL::Fast> works 26% slower, than L<C<Dotiac::DTL>> in CGI e
     7 Parse      :  1 wallclock secs ( 0.44 usr +  0.23 sys =  0.67 CPU) @ 1492.54/s (n=1000)
     8 Render     : 11 wallclock secs ( 9.30 usr +  1.14 sys = 10.44 CPU) @ 95.82/s (n=1000)    
 
-
-=head1 BUGS AND IMPROVEMENTS
-
-If you found any bug and/or want to make some improvement, feel free to participate in the project on GitHub: L<https://github.com/hurricup/DTL-Fast>
-
-=head1 LICENSE
-
-This module is published under the terms of the MIT license, which basically means "Do with it whatever you want". For more information, see the LICENSE file that should be enclosed with this distributions. A copy of the license is (at the time of writing) also available at L<http://www.opensource.org/licenses/mit-license.php>.
-
 =head1 SEE ALSO
 
 =over
 
 =item * Main project repository and bugtracker: L<https://github.com/hurricup/DTL-Fast>
 
-=item * Testing results: L<http://www.cpantesters.org/distro/D/DTL-Fast.html>
+=item * CPAN Testers reports: L<http://www.cpantesters.org/distro/D/DTL-Fast.html>
+
+=item * Testers matrix: L<http://matrix.cpantesters.org/?dist=DTL-Fast>
         
 =item * AnnoCPAN, Annotated CPAN documentation: L<http://annocpan.org/dist/DTL-Fast>
 
@@ -551,6 +544,10 @@ This module is published under the terms of the MIT license, which basically mea
 =item * Other implementaion: L<http://search.cpan.org/~maluku/Dotiac-0.8/lib/Dotiac/DTL.pm>
 
 =back
+
+=head1 LICENSE
+
+This module is published under the terms of the MIT license, which basically means "Do with it whatever you want". For more information, see the LICENSE file that should be enclosed with this distributions. A copy of the license is (at the time of writing) also available at L<http://www.opensource.org/licenses/mit-license.php>.
 
 =head1 AUTHOR
 
