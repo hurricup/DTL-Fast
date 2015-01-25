@@ -14,6 +14,7 @@ $context = new DTL::Fast::Context({
     , 'with' => {
         'substitution' => 'context text'
     }
+    , 'var1' => 'testvar'
 });
 
 $test_string = 'this is a simple include context text';
@@ -28,5 +29,8 @@ _EOT_
 chomp $test_string;
 is( get_template('included_dynamic.txt', 'dirs' => $dirs)->render($context), $test_string, 'Include from context value');
 
+
+$test_string = 'this is a this is a test2 and testvar include context text';
+is( get_template('include_with.txt', 'dirs' => $dirs)->render($context), $test_string, 'Include ... with');
 
 done_testing();

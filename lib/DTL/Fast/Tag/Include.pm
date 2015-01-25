@@ -7,6 +7,26 @@ $DTL::Fast::TAG_HANDLERS{'include'} = __PACKAGE__;
 use DTL::Fast::Expression;
 
 #@Override
+sub new
+{
+    my( $proto, $parameter, %kwargs ) = @_;
+    $parameter //= '';
+
+    my @parameter = split /\s+with\s+/, $parameter;
+    
+    my $self = $proto->SUPER::new( $parameter[0], %kwargs );
+    
+    if( scalar @parameter > 1 ) # with used
+    {
+        $kwargs{'raw_chunks'} = [];
+        require DTL::Fast::Tag::With;
+        $self = DTL::Fast::Tag::With->new($parameter[1], %kwargs)->add_chunk($self);
+    }
+    return $self;   
+}
+
+
+#@Override
 sub parse_parameters
 {
     my $self = shift;

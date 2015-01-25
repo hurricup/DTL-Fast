@@ -27,7 +27,6 @@ FOR SURE:
 - Performance testing for old and new context variables work
 - urlize target and following should be controlled via parameters
 - binary logical operators should eval second argument only if first one is certain value
-- include .. with tag extension
 - sprintf tag
 - Dynamic filter loading on parsing/validating
 - Dynamic tag loading on parsing/validating
