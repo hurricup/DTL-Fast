@@ -737,4 +737,10 @@ subtest 'Two parameters tests' => sub{
     }
 };
 
+$template = '{% if superandvar and superorvar %}true{%endif%}';
+is( DTL::Fast::Template->new($template)->render({
+        'superandvar' => 1,
+        'superorvar' => 1
+    }), 'true', 'Variable names with and/or' );
+
 done_testing();

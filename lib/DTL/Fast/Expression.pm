@@ -93,7 +93,7 @@ sub _parse_expression
             {
                 next if $token eq ''; 
                 
-                if( $token =~ /$operators/x ) # operation
+                if( $token =~ /^$operators$/x ) # operation
                 {
                     push @result, $token;
                 }

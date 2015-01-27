@@ -19,6 +19,11 @@ my $SET = [
         'template' => '{% load Foo::Bar %}and {% foobar %}',
         'title' => 'Custom tag loaded and rendered'
     },
+    {
+        'test' => 'and FooBar was here!',
+        'template' => '{% load "Foo::Bar" %}and {% foobar %}',
+        'title' => 'Custom tag loaded and rendered'
+    },
 ];
 
 foreach my $data (@$SET)

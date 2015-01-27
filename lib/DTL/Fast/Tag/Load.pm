@@ -9,15 +9,11 @@ sub new
     my $proto = shift;
     my $parameter = shift;
     
-    $parameter =~ s/(^\s+|\s+$)//gs;
+    $parameter =~ s/(^\s+|['"]+|\s+$)//gs; 
     my @modules = split /\s+/, $parameter;
+    require Module::Load;
     
-    foreach my $module (@modules)
-    {
-        (my $file = "$module.pm") =~ s{::}{/}g;
-        eval { require $file; };
-        warn $@ if $@;
-    }
+    map{ Module::Load::load $_ } @modules;
     
     return;
 }

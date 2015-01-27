@@ -1,11 +1,22 @@
 *	text=auto
 README	text
 Changes	text
-*.pl	text
-*.PL	text
-*.pm	text
+*.pl	text filter=tabs4
+*.PL	text filter=tabs4
+*.pm	text filter=tabs4
+*.pl	text filter=tabs4
 *.t		text
 *.xs	text
 *.h		text
 *.c		text
-Manifest
+Manifest	text
+*.html	text filter=tabs4
+*.htm	text filter=tabs4
+*.thtml	text filter=tabs4
+*.cmd	text
+*.bat	text
+*.cgi	text filter=tabs4
+*.log	text
+*.sh	text filter=tabs4
+*.rb	text
+*.py	text

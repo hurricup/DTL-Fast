@@ -22,7 +22,8 @@ WriteMakefile(
         'Compress::Zlib' => 0, 
         'Digest::MD5' => 0, 
         'XSLoader' => 0,
-		'parent' => 0,
+        'parent' => 0,
+        'Module::Load' => 0,
     }, 
     META_MERGE        => {
         'meta-spec' => { 
