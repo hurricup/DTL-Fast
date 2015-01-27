@@ -1,6 +1,6 @@
 Revision history for Perl extension DTL::Fast.
 
-1.604 - Sun 27 Jan 2015 20:18 MSK
+1.604 - Tue 27 Jan 2015 20:18 MSK
 	- Fixed bug when expression fails if variable name contains operator
 	- Load tag is now accepts package names with or without quotes
 
