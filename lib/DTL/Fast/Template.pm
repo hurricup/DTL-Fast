@@ -90,16 +90,17 @@ sub merge_template
 #@Override
 sub get_container_block{ return shift; }
 
+my $reg = qr/(
+     \{\#.+?\#\}
+    |\{\%.+?\%\}
+    |\{\{.+?\}\}
+)/xs;
+
 sub _get_raw_chunks
 {
     my( $template ) = @_;
 
-    my $reg = qr/(
-        \{\#\s*.*?\s*\#\}
-        |\{\%\s*.+?\s*\%\}
-        |\{\{\s*.+?\s*\}\}
-    )/x;
-    my $result = [split /$reg/s, $template];
+    my $result = [split $reg, $template];
     
     return $result;    
 }

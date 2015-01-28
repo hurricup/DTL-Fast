@@ -1,5 +1,8 @@
 Revision history for Perl extension DTL::Fast.
 
+1.605 - Wed 28 Jan 2015 18:27 MSK
+	- Fixed spaces between equals in 'with' tag. Now tags may be multiline	
+
 1.604 - Tue 27 Jan 2015 20:18 MSK
 	- Fixed bug when expression fails if variable name contains operator
 	- Load tag is now accepts package names with or without quotes

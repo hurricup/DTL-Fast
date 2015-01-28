@@ -1,7 +1,7 @@
 package DTL::Fast::Tag::With;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag';  
-use Carp qw(confess);
+use Carp;
 
 $DTL::Fast::TAG_HANDLERS{'with'} = __PACKAGE__;
 
@@ -20,17 +20,17 @@ sub parse_parameters
     }
     else    # modern
     {
-        my @parts = split /\s+/, $self->backup_strings($self->{'parameter'});
-        foreach my $part (@parts)
+        my @parts = split /[=\s]+/, $self->backup_strings($self->{'parameter'});
+        
+        croak sprintf("Unable to parse parameter for %s: %s", __PACKAGE__, $self->{'parameter'})
+            if (scalar @parts) % 2;
+        
+        while( scalar @parts )
         {
-            if( $part =~ /^([^.]+)\=(.+)$/ )
-            {
-                $self->{'mappings'}->{$1} = $self->get_backup_or_variable($2);
-            }
-            else
-            {
-                die "You must pass a list with key=val options to the with tag: $self->{'parameter'}";
-            }            
+            my $key = shift @parts;
+            my $val = shift @parts;
+            
+            $self->{'mappings'}->{$key} = $self->get_backup_or_variable($val);
         }
     }
     

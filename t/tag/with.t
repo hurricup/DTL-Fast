@@ -8,7 +8,7 @@ use Data::Dumper;
 
 my( $template, $test_string, $context);
 
-local $SIG{__WARN__} = sub {};
+#local $SIG{__WARN__} = sub {};
 
 my $dirs = ['./t/tmpl', './t/tmpl2'];
 my $ssi_dirs = ['./t/ssi'];
@@ -66,6 +66,24 @@ val3 blabla
 _EOT_
         'title' => 'Context safety',
     },
+    {
+        'template' => <<'_EOT_',
+{% with 
+    var3 = hash.key3 
+    var2  =    "blabla" 
+%}
+{{ var3 }} {{ var2 }}
+{% endwith %}
+{{ var3 }} {{ var2 }}
+_EOT_
+        'test' => <<'_EOT_',
+
+val3 blabla
+
+350 100
+_EOT_
+        'title' => 'Context safety with spaces between keys and vals',
+    },
 ];
 
 foreach my $data (@$SET)
@@ -73,5 +91,16 @@ foreach my $data (@$SET)
     is( DTL::Fast::Template->new($data->{'template'})->render($context), $data->{'test'}, $data->{'title'});
     
 }
+
+eval{ DTL::Fast::Template->new(<<'_EOT_');
+{% with 
+    var3 = hash.key3 
+    var2
+%}
+_EOT_
+};
+
+ok( $@ =~ /Unable to parse parameter/, 'With parameters protection');
+
 
 done_testing();

@@ -46,20 +46,20 @@ sub parse_next_chunk
     my $chunk = shift @{$self->{'raw_chunks'}};
     
 #    warn "Processing chunk $chunk";
-    if( $chunk =~ /^\{\{\s*(.+?)\s*\}\}$/ )
+    if( $chunk =~ /^\{\{\s*(.+?)\s*\}\}$/s )
     {
         $chunk = DTL::Fast::Variable->new($1);
     }
     elsif
     ( 
-        $chunk =~ /^\{\%\s*([^\s]+?)(?: (.*?))?\s*\%\}$/ 
+        $chunk =~ /^\{\%\s*([^\s]+?)(?:\s+(.*?))?\s*\%\}$/s
     )
     {
         $chunk = $self->parse_tag_chunk($1, $2);
     }
     elsif
     ( 
-        $chunk =~ /^\{\#.*\#\}$/ 
+        $chunk =~ /^\{\#.*\#\}$/s 
     )
     {
         $chunk = undef;
