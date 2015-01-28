@@ -10,12 +10,12 @@ sub new
     my $block_num = 0;
     while( not $blocksep or $expression =~ /$blocksep/ )
     {
-        $blocksep = sprintf '__BLOCK_%s', $block_num++;
+        $blocksep = sprintf '_BL_%s_', $block_num++;
     }
 
     my $self = bless {
         'block_counter' => 0
-        , 'block_ph' => $blocksep.'_%s__'
+        , 'block_ph' => $blocksep.'%s_'
         , 'blocks' => {}
     }, $proto;
     
@@ -47,5 +47,7 @@ sub get_replacement
     
     return $value;
 }
+
+
 
 1;

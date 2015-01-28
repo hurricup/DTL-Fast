@@ -84,6 +84,34 @@ val3 blabla
 _EOT_
         'title' => 'Context safety with spaces between keys and vals',
     },
+    {
+        'template' => <<'_EOT_',
+{% with a="aaa"|default:123 %}{{ a }}{% endwith %}{{ "ccc"|default:"ddd" }}
+_EOT_
+        'test' => <<'_EOT_',
+aaaccc
+_EOT_
+        'title' => 'With with default',
+    },
+    {
+        'template' => <<'_EOT_',
+{% with a=""|default:123 %}{{ a }}{% endwith %}{{ "ccc"|default:"ddd" }}
+_EOT_
+        'test' => <<'_EOT_',
+123ccc
+_EOT_
+        'title' => 'With with default, used',
+    },
+    {
+        'template' => <<'_EOT_',
+{% with a=""|default:"somestring" %}{{ a }}{% endwith %}{{ "ccc"|default:"ddd" }}
+_EOT_
+        'test' => <<'_EOT_',
+somestringccc
+_EOT_
+        'title' => 'With with default, used, string substitution',
+    },
+    
 ];
 
 foreach my $data (@$SET)

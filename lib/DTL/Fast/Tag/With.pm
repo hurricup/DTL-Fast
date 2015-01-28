@@ -20,7 +20,7 @@ sub parse_parameters
     }
     else    # modern
     {
-        my @parts = split /[=\s]+/, $self->backup_strings($self->{'parameter'});
+        my @parts = split /[=\s]+/s, $self->backup_strings($self->{'parameter'});
         
         croak sprintf("Unable to parse parameter for %s: %s", __PACKAGE__, $self->{'parameter'})
             if (scalar @parts) % 2;
@@ -29,7 +29,7 @@ sub parse_parameters
         {
             my $key = shift @parts;
             my $val = shift @parts;
-            
+
             $self->{'mappings'}->{$key} = $self->get_backup_or_variable($val);
         }
     }

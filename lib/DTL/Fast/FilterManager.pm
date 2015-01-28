@@ -3,27 +3,33 @@ use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Replacer';
 
 use DTL::Fast::Template;
+use Scalar::Util qw(weaken);
 
 sub new
 {
-    my $proto = shift;
-    my $filters = shift;
+    my( $proto, %kwargs ) = @_;
     
     my $self = bless
     {
         'filters' => [],
         'filters_number' => 0,
+        'replacement' => $kwargs{'replacement'},    # if strings were back-uped before
     }, $proto;
     
-    if( $filters )
+    if( $self->{'replacement'} )
     {
-        if( ref $filters eq 'ARRAY' )
+        weaken($self->{'replacement'});
+    }
+    
+    if( $kwargs{'filters'} )
+    {
+        if( ref $kwargs{'filters'} eq 'ARRAY' )
         {
-            $self->add_filters($filters);
+            $self->add_filters($kwargs{'filters'});
         }
         else
         {
-            $self->parse_filters($filters);
+            $self->parse_filters($kwargs{'filters'});
         }
     }
     

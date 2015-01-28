@@ -12,7 +12,16 @@ sub new
     
     $variable =~ s/(^\s+|\s+$)//gsi;
     my @filters = split /\s*\|+\s*/, $variable;
+    
     my $variable_name = shift @filters;
+
+    if( 
+        $kwargs{'replacement'} 
+        and my $replacement = $kwargs{'replacement'}->get_replacement($variable_name)
+    )
+    {
+        $variable_name = $replacement->{'original'};    # got stored string
+    }
     
     my @variable;
     my $static = 0;
@@ -60,7 +69,7 @@ sub new
         , 'sign' => $sign
         , 'undef' => $undef
         , 'static' => $static
-        , 'filter_manager' => DTL::Fast::FilterManager->new()
+        , 'filter_manager' => DTL::Fast::FilterManager->new('replacement' => $kwargs{'replacement'})
     }, $proto;
 
     if( scalar @filters )

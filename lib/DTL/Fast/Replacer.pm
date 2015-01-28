@@ -16,6 +16,7 @@ sub new
     return $self;
 }
 
+
 sub backup_strings
 {
     my( $self, $expression ) = @_;
@@ -32,7 +33,7 @@ sub backup_strings
 sub backup_value
 {
     my( $self, $value ) = @_;
-    
+
     return $self->{'replacement'}->add_replacement(
         DTL::Fast::Variable->new($value)
     );
@@ -63,7 +64,7 @@ sub get_backup_or_variable
     my( $self, $token ) = @_;
 
     my $result = $self->get_backup($token) 
-        // DTL::Fast::Variable->new( $token );
+        // DTL::Fast::Variable->new( $token, 'replacement' => $self->{'replacement'} );
         
     return $result;
 }
