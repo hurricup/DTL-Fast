@@ -7,3 +7,4 @@ META.*
 *~
 *.old
 *.tar.gz
+.gitattributes
