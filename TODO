@@ -1,11 +1,6 @@
 Inspired by Django templating and Jinja2
 
 FOR SURE:
-- Document numberformat filter
-- Documentation about Cache system
-- Documentation for Tags developers
-- Documentation for Filters developers
-- Pre-set date and time formats from Django
 - More tests (especially test blocks re-using, that caching works properly)
 - More tests for `jsescape` filter. Works other way than python's version.
 - More tests for `random` filter.
@@ -16,7 +11,6 @@ FOR SURE:
 - Debug tag tests
 - Clean up confess/croak/die
 - Tests for extends and include
-- Error exceptions
 - Recursion protection on deep comparision
 - Error messaging with line numbers and so on
 - Improve url tag regexp reversing
@@ -25,20 +19,10 @@ FOR SURE:
 - DTL::Fast::Utils::html_protect should work using XS module (to take from CDI3)
 - Implement internationalization and localization
 - Profiling and optimising using NYTProf
-- Performance testing for old and new context variables work
 - urlize target and following should be controlled via parameters
 - binary logical operators should eval second argument only if first one is certain value
-- sprintf tag
-- Dynamic filter loading on parsing/validating
-- Dynamic tag loading on parsing/validating
-- Dynamic operation loading on parsing/validating
-- Django iterates using 'items' using context option 'python_iteration'
-- Toss template parts as references, not text
 - `urlize` filter should be controllable with target and rel arguments.
 - How linenumbers filter should behave on empty lines?
-
-SECURITY:
-- load tag can load any module, even eval command, it's not secure. What can we do? Remember about perl poems.
 
 NEED IDEA:
 - Compare two undefs. What should we do?
