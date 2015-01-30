@@ -1,1 +1,1 @@
-here {% ssi "static.txt" %} is
+here {% ssi "./t/ssi/static.txt" %} is

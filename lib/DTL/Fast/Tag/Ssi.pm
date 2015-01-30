@@ -14,7 +14,7 @@ sub parse_parameters
     if( $self->{'parameter'} =~ /^\s*(.+?)(?:\s*(parsed))?\s*$/ )
     {
         @{$self}{'template', 'parsed'} = (
-            DTL::Fast::Expression->new($1, '_template' => $self->{'_template'})
+            DTL::Fast::Variable->new($1, '_template' => $self->{'_template'})
             , $2 
         );
     }
@@ -35,31 +35,43 @@ sub render
     my $result;
     
     my $ssi_dirs = $context->get('_dtl_ssi_dirs');
+    
     if( 
         defined $ssi_dirs
         and ref $ssi_dirs eq 'ARRAY'
         and scalar @$ssi_dirs
     )
     {
-        if( $self->{'parsed'} )
+        my $template_path = $self->{'template'}->render($context);
+        
+        my $allowed = 0;
+        
+        foreach my $allowed_dir (@$ssi_dirs)
         {
-            $result = DTL::Fast::get_template(
-                $self->{'template'}->render($context)
-                , 'dirs' => $ssi_dirs
-            )->render($context);
+            if( $template_path =~ /^\Q$allowed_dir\E/s )
+            {
+                $allowed = 1; 
+                last;
+            }
+        }
+
+        if( $allowed )
+        {
+            $result = DTL::Fast::__read_file($template_path);
+            
+            if( $self->{'parsed'} )
+            {
+                $result = DTL::Fast::Template->new($result)->render($context);
+            }
         }
         else
         {
-            my $ssi_filename;
-            ($result, $ssi_filename) = DTL::Fast::_read_file(
-                $self->{'template'}->render($context)
-                , $ssi_dirs
-            );
+            warn sprintf("File %s is not in one of ssi_dirs:\n\t%s", $template_path, join( "\n\t", @$ssi_dirs ));
         }
     }
     else
     {
-        confess 'In order to use ssi tag, you must provide ssi_dirs argument to constructor';
+        warn 'In order to use ssi tag, you must provide ssi_dirs argument to the constructor';
     }
     
     return $result;

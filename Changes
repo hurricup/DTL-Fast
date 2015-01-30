@@ -1,5 +1,8 @@
 Revision history for Perl extension DTL::Fast.
 
+1.606 - Fri 30 Jan 2015 15:00 MSK
+	- SSI tag behavior now is like in Django, fixes #26
+
 1.605 - Wed 28 Jan 2015 18:27 MSK
 	- Fixed spaces between equals in 'with' tag. Now tags may be multiline, fixes #7
 	- Fixed filters behavior in with tag, if constant strings being used in assignment, fixes #8

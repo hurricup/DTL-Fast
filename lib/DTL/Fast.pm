@@ -5,7 +5,7 @@ use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.605'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.606'; # ==> ALSO update the version in the pod text below!
 
 require XSLoader;
 XSLoader::load('DTL::Fast', $VERSION);
@@ -159,25 +159,35 @@ sub _read_file
             and -r $template_path
         )
         {
-            if( open my $IF, '<', $template_path )
-            {
-                local $/ = undef;
-                $template = <$IF>;
-                close $IF;
-                last;
-            }
-            else
-            {
-                croak  sprintf(
-                    'Error opening file %s, %s'
-                    , $template_path
-                    , $!
-                );
-            }
+            $template = __read_file( $template_path );
+            last;
         }        
     }
     
     return ($template, $template_path);
+}
+
+
+sub __read_file
+{
+    my( $file_name ) = @_;
+    my $result;
+    
+    if( open my $IF, '<', $file_name )
+    {
+        local $/ = undef;
+        $result = <$IF>;
+        close $IF;
+    }
+    else
+    {
+        croak  sprintf(
+            'Error opening file %s, %s'
+            , $file_name
+            , $!
+        );
+    }
+    return $result;
 }
 
 # result should be cached with full list of params
@@ -215,7 +225,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.605
+Version 1.606
 
 =head1 SYNOPSIS
 
@@ -275,7 +285,7 @@ Using DTL::Fast::Template constructor:
     my $tpl = DTL::Fast::Template->new(
         $template_text,                             # template itself
         'dirs' => [ $dir1, $dir2, ... ],            # optional, directories list to look for parent templates and includes
-        'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list to look for files included with ssi tag
+        'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list allowed to used in ssi tag (ALLOWED_INCLUDE_ROOTS in Django)
         'url_source' => \&uri_getter                # optional, reference to a function, that can return url template by model name (necessary for url tag)
     );
 
@@ -286,7 +296,7 @@ Using DTL::Fast::Template constructor:
     my $tpl = get_template(
         $template_path,                             # path to the template, relative to directories from second argument
         'dirs' => [ $dir1, $dir2, ... ],            # mandatory, directories list to look for parent templates and includes
-        'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list to look for files included with ssi tag
+        'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list allowed to used in ssi tag (ALLOWED_INCLUDE_ROOTS in Django)
         'url_source' => \&uri_getter                # optional, reference to a function, that can return url template by model name (necessary for url tag)
     );
     
@@ -299,7 +309,7 @@ when you are using C<get_template> helper function, framework will try to find t
     my $tpl = select_template(
         [ $template_path1, $template_path2, ...],   # paths to templates, relative to directories from second argument
         'dirs' => [ $dir1, $dir2, ... ],            # mandatory, directories list to look for parent templates and includes
-        'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list to look for files included with ssi tag
+        'ssi_dirs' => [ $ssi_dir1, $ssi_dir1, ...]  # optional, directories list allowed to used in ssi tag (ALLOWED_INCLUDE_ROOTS in Django)
         'url_source' => \&uri_getter                # optional, reference to a function, that can return url template by model name (necessary for url tag)
     );
     
@@ -375,7 +385,7 @@ This module supports all built-in filters documented on L<official Django site|h
 
 =over
 
-=item * C<ssi> tag in Django uses absolute paths and C<ALLOWED_INCLUDE_ROOTS> configuration option. This library works separately and may be used with different frameworks. So, C<ssi> tag uses relative paths and you MUST specify additional template constructor parameter: C<ssi_dirs> which should be an array reference with list of dirs to search in.
+=item * Django's setting C<ALLOWED_INCLUDE_ROOTS> should be passed to tempalte constructor/getter as C<ssi_dirs> argument.
 
 =item * C<csrf_token> tag is not implemented, too well connected with Django.
 
