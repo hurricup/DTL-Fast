@@ -24,7 +24,7 @@ sub dispatch
     }
     elsif( not defined $arg1 and not defined $arg2 )
     {
-        $result = 1; # @todo think about comparing two undefs
+        $result = 1; 
     }
     elsif( looks_like_number($arg1) and looks_like_number($arg2))
     {
