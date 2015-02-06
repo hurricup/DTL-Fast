@@ -125,7 +125,7 @@ close OF;
 
 print "Testing FCGI mode rendering...\n";
 
-timethese( 1000, {
+timethese( 3000, {
     'DTL::Fast  ' => \&dtl_fast_render,
     'Dotiac::DTL' => \&dtl_dotiac_render,
 });

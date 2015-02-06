@@ -28,6 +28,7 @@ sub render
 
     $global_safe ||= $context->get('_dtl_safe') // 0;
   
+  
     return join '', map{ 
         $_->render($context, $global_safe) // ''
     } @{$self->{'chunks'}};
