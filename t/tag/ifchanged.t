@@ -23,7 +23,25 @@ my $templates = [
 {% for val in array1 %}{% ifchanged val %}Changed to {% endifchanged %}{{ val }} {% endfor %}
 _EOT_
         'control' => <<'_EOT_',
-0 0 Changed to 1 1 1 Changed to 2 2 2 2 Changed to 3 
+Changed to 0 0 Changed to 1 1 1 Changed to 2 2 2 2 Changed to 3 
+_EOT_
+    },
+    {
+        'title' => 'Simple change, numbers, content watching',
+        'template' => <<'_EOT_',
+{% for val in array1 %}{% ifchanged %}Changed to {% endifchanged %}{{ val }} {% endfor %}
+_EOT_
+        'control' => <<'_EOT_',
+Changed to 0 0 1 1 1 2 2 2 2 3 
+_EOT_
+    },
+    {
+        'title' => 'Simple change, numbers, content watching, changes',
+        'template' => <<'_EOT_',
+{% for val in array1 %}{% ifchanged %}Changed to {{ val }} {% else %}{{ val }} {% endifchanged %}{% endfor %}
+_EOT_
+        'control' => <<'_EOT_',
+Changed to 0 0 Changed to 1 1 1 Changed to 2 2 2 2 Changed to 3 
 _EOT_
     },
     {
@@ -32,7 +50,7 @@ _EOT_
 {% for val in array1 %}{% ifchanged val %}Changed to {% else %}unchanged {% endifchanged %}{{ val }} {% endfor %}
 _EOT_
         'control' => <<'_EOT_',
-0 unchanged 0 Changed to 1 unchanged 1 unchanged 1 Changed to 2 unchanged 2 unchanged 2 unchanged 2 Changed to 3 
+Changed to 0 unchanged 0 Changed to 1 unchanged 1 unchanged 1 Changed to 2 unchanged 2 unchanged 2 unchanged 2 Changed to 3 
 _EOT_
     },
     {
@@ -41,7 +59,7 @@ _EOT_
 {% for val in array2 %}{% ifchanged val %}Changed to {% endifchanged %}{{ val }} {% endfor %}
 _EOT_
         'control' => <<'_EOT_',
-str1 str1 Changed to str2 str2 Changed to str3 Changed to str2 str2 
+Changed to str1 str1 Changed to str2 str2 Changed to str3 Changed to str2 str2 
 _EOT_
     },
     {
@@ -50,7 +68,16 @@ _EOT_
 {% for val in array2 %}{% ifchanged val %}Changed to {% else %}unchanged {% endifchanged %}{{ val }} {% endfor %}
 _EOT_
         'control' => <<'_EOT_',
-str1 unchanged str1 Changed to str2 unchanged str2 Changed to str3 Changed to str2 unchanged str2 
+Changed to str1 unchanged str1 Changed to str2 unchanged str2 Changed to str3 Changed to str2 unchanged str2 
+_EOT_
+    },
+    {
+        'title' => 'Simple change with else, strings, content watching',
+        'template' => <<'_EOT_',
+{% for val in array2 %}{% ifchanged %}Changed to {{ val }} {% else %}unchanged {{ val }} {% endifchanged %}{% endfor %}
+_EOT_
+        'control' => <<'_EOT_',
+Changed to str1 unchanged str1 Changed to str2 unchanged str2 Changed to str3 Changed to str2 unchanged str2 
 _EOT_
     },
     {
@@ -61,6 +88,7 @@ _EOT_
 {% endfor %}
 _EOT_
         'control' => <<'_EOT_',
+Changed to 0
 0 - 1
 0 - 2
 0 - 3
@@ -86,7 +114,8 @@ foreach my $tpl (@$templates)
     my $control = $tpl->{'control'};
     my $title = $tpl->{'title'};
     
-    is( DTL::Fast::Template->new($template)->render($context), $control, $title);
+    my $tpl = DTL::Fast::Template->new($template);
+    is( $tpl->render($context), $control, $title);
 }
 
 done_testing();

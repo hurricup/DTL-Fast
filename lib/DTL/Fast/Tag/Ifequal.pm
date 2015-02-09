@@ -23,9 +23,7 @@ sub parse_parameters
 #@Override
 sub parse_tag_chunk
 {
-    my $self = shift;
-    my $tag_name = shift;
-    my $tag_param = shift;
+    my( $self, $tag_name, $tag_param ) = @_;
     
     my $result = undef;
 
