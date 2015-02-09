@@ -9,6 +9,7 @@ register_tag(qw(
     block       DTL::Fast::Tag::Block
     comment     DTL::Fast::Tag::Comment
     cycle       DTL::Fast::Tag::Cycle
+    debug       DTL::Fast::Tag::Debug
     extends     DTL::Fast::Tag::Extends
     filter      DTL::Fast::Tag::Filter
     firstof     DTL::Fast::Tag::Firstof
@@ -26,6 +27,7 @@ register_tag(qw(
     templatetag DTL::Fast::Tag::Templatetag
     url         DTL::Fast::Tag::Url
     verbatim    DTL::Fast::Tag::Verbatim
+    warn        DTL::Fast::Tag::Warn
     widthratio  DTL::Fast::Tag::Widthratio
     with        DTL::Fast::Tag::With
 ));

@@ -5,8 +5,10 @@ Revision history for Perl extension DTL::Fast.
     - ifchanged tag is now rendered on the first pass
     - ifchanged tag can now work without parameters (watching rendered content); not recommended, bad performance
     - new tag - warn
-    - debug tag is not loaded by default anymore. Insert {% load 'DTL::Fast::Tag::Warn' %} before using it.
     - fixed bug with slicing indexes outside the array boundaries
+    - implemented dynamic tags loading and preloading registering with register_tag, fixes #18
+    - replaced some redundant methods with direct perl API calls
+    - documented numberformat filter, fixes #10
 
 1.605 - Wed 28 Jan 2015 18:27 MSK
     - Fixed spaces between equals in 'with' tag. Now tags may be multiline, fixes #7
