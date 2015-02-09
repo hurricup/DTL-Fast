@@ -1,25 +1,31 @@
 package DTL::Fast;
 use strict; use warnings FATAL => 'all'; 
-use parent 'Exporter';
+use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
 our $VERSION = '1.606'; # ==> ALSO update the version in the pod text below!
 
+# loaded modules
+our %TAG_HANDLERS;
+our %FILTER_HANDLERS;
+our %OPS_HANDLERS;
+
+# known but not loaded modules
+our %KNOWN_TAGS;
+our %KNOWN_FILTERS;
+our %KNOWN_OPS;
+
+# modules hash to avoid duplicating on deserializing
+our %LOADED_MODULES;
+
 require XSLoader;
 XSLoader::load('DTL::Fast', $VERSION);
-
-use DTL::Fast::Template;
-use DTL::Fast::Cache::Runtime;
-use DTL::Fast::Cache::Serialized;
 
 our $RUNTIME_CACHE;
 our $SERIALIZED_CACHE;
 
 our @EXPORT_OK;
-
-# @todo Texts should be tossed by references
-# @todo These should be done via Cache class which can work with last modified date
 
 push @EXPORT_OK, 'get_template';
 sub get_template
@@ -215,6 +221,40 @@ sub select_template
     return $result;
 }
 
+# registering tag as known
+push @EXPORT_OK, 'register_tag';
+sub register_tag
+{
+    my( %tags ) = @_;
+    
+    while( my( $slug, $module) = each %tags )
+    {
+        $DTL::Fast::KNOWN_TAGS{lc($slug)} = $module;
+    }
+    
+    return;
+}
+
+# registering tag as known
+push @EXPORT_OK, 'preload_tags';
+sub preload_tags
+{
+    require Module::Load;
+    
+    while( my( $keyword, $module) = each %KNOWN_TAGS )
+    {
+        Module::Load::load($module);
+    }
+    
+    return 1;
+}
+
+
+require DTL::Fast::Template;
+require DTL::Fast::Cache::Runtime;
+require DTL::Fast::Cache::Serialized;
+
+
 1;
 
 __END__ 
@@ -266,9 +306,9 @@ Goals of this implementation are:
 
 Current release implements almost all tags and filters documented on Django site.
 
-There are no speed optimizations done yet.
+There are no significant speed optimizations done yet.
 
-Internationalization, localization and caching are not yet implemented.
+Internationalization and localization are not yet implemented.
 
 =head1 PERL SIDE
 
@@ -348,6 +388,24 @@ or
 
     $context->set('name' => 'Sergey');
     print $tpl->render($context);
+
+=head2 register_tag
+
+    use DTL::Fast qw(register_tag);
+    
+    register_tag(
+        'mytag' => 'MyTag::Module'
+    );
+    
+This method registers or oferrides registered tag keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</Custom tags> section.
+
+=head2 preload_tags
+
+    use DTL::Fast qw(preload_tags);
+    
+    preload_tags();
+    
+Preloads all registered tags. Mostly for debugging purposes or persistent environment stability.
 
 =head2 Cache classes
 
@@ -525,11 +583,11 @@ To run this test, you need to alter L<C<Dotiac::DTL>> module and change declarat
 Rendering of pre-compiled template (software cache):
 
     Benchmark: timing 3000 iterations of DTL::Fast  , Dotiac::DTL...
+    
+    DTL::Fast  : 17 wallclock secs (13.46 usr +  3.87 sys = 17.33 CPU) @ 173.09/s (n=3000)
+    Dotiac::DTL: 18 wallclock secs (17.38 usr +  0.00 sys = 17.38 CPU) @ 172.63/s (n=3000)
 
-    DTL::Fast  : 18 wallclock secs (13.84 usr +  4.32 sys = 18.16 CPU) @ 165.22/s (n=3000)
-    Dotiac::DTL: 18 wallclock secs (17.85 usr +  0.00 sys = 17.85 CPU) @ 168.10/s (n=3000)
-
-Tests shows, that C<DTL::Fast> works a bit slower, than L<C<Dotiac::DTL>> in persistent environment.
+Tests shows, that C<DTL::Fast> works a bit faster, than L<C<Dotiac::DTL>> in persistent environment.
 
 =head2 CGI
 

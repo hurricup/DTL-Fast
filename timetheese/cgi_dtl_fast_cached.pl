@@ -1,4 +1,4 @@
-#!/usr/bin/perl -I../blib/lib -I../blib/arch
+#!/usr/bin/perl -I../lib -I../blib/arch
 
 use DTL::Fast qw(get_template);
 use DTL::Fast::Cache::File;

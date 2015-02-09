@@ -2,9 +2,6 @@ package DTL::Fast::Template;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Parser';
 
-our %TAG_HANDLERS;
-our %FILTER_HANDLERS;
-
 use DTL::Fast::Context;
 use DTL::Fast::Tags;
 use DTL::Fast::Filters;    

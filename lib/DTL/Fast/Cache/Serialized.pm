@@ -53,7 +53,17 @@ sub deserialize
 {
     my( $self, $data ) = @_;
     return if not defined $data;
-    return Storable::thaw($data);
+    my $template = Storable::thaw($data);
+    foreach my $module (keys(%{$template->{'modules'}}))
+    {
+        if( not $DTL::Fast::LOADED_MODULES{$module} )
+        {
+            require Module::Load;
+            Module::Load::load($module);
+            $DTL::Fast::LOADED_MODULES{$module} = time;            
+        }
+    }
+    return $template;
 }
 
 1;

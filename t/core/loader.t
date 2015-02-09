@@ -2,10 +2,12 @@
 use strict; use warnings FATAL => 'all'; 
 use Test::More;
 
-use DTL::Fast qw(get_template select_template);
+use DTL::Fast qw(get_template select_template preload_tags);
 
 my $dirs = ['./t/tmpl'];
 my $dirs2 = [@$dirs, './t/tmpl2'];
+
+ok(preload_tags(), 'Tags preloading');
 
 my( $template, $test_string);
 

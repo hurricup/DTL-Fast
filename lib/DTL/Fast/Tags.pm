@@ -1,32 +1,38 @@
 package DTL::Fast::Tags;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
+use DTL::Fast qw(register_tag);
+
 # built in tags
-use DTL::Fast::Tag::Autoescape;
-use DTL::Fast::Tag::Block;
-use DTL::Fast::Tag::Comment;
-use DTL::Fast::Tag::Cycle;
-use DTL::Fast::Tag::Extends;
-use DTL::Fast::Tag::Filter;
-use DTL::Fast::Tag::Firstof;
-use DTL::Fast::Tag::For;
-use DTL::Fast::Tag::Include;
-use DTL::Fast::Tag::If;
-use DTL::Fast::Tag::Ifchanged;
-use DTL::Fast::Tag::Ifequal;
-use DTL::Fast::Tag::Ifnotequal;
-use DTL::Fast::Tag::Load;
-use DTL::Fast::Tag::Now;
-use DTL::Fast::Tag::Regroup;
-use DTL::Fast::Tag::Spaceless;
-use DTL::Fast::Tag::Ssi;
-use DTL::Fast::Tag::Templatetag;
-use DTL::Fast::Tag::Url;
-use DTL::Fast::Tag::Verbatim;
-use DTL::Fast::Tag::Widthratio;
-use DTL::Fast::Tag::With;
+register_tag(qw(
+    autoescape  DTL::Fast::Tag::Autoescape
+    block       DTL::Fast::Tag::Block
+    comment     DTL::Fast::Tag::Comment
+    cycle       DTL::Fast::Tag::Cycle
+    extends     DTL::Fast::Tag::Extends
+    filter      DTL::Fast::Tag::Filter
+    firstof     DTL::Fast::Tag::Firstof
+    for         DTL::Fast::Tag::For
+    include     DTL::Fast::Tag::Include
+    if          DTL::Fast::Tag::If
+    ifchanged   DTL::Fast::Tag::Ifchanged
+    ifequal     DTL::Fast::Tag::Ifequal
+    ifnotequal  DTL::Fast::Tag::Ifnotequal
+    load        DTL::Fast::Tag::Load
+    now         DTL::Fast::Tag::Now
+    regroup     DTL::Fast::Tag::Regroup
+    spaceless   DTL::Fast::Tag::Spaceless
+    ssi         DTL::Fast::Tag::Ssi
+    templatetag DTL::Fast::Tag::Templatetag
+    url         DTL::Fast::Tag::Url
+    verbatim    DTL::Fast::Tag::Verbatim
+    widthratio  DTL::Fast::Tag::Widthratio
+    with        DTL::Fast::Tag::With
+));
 
 # not from Django
-use DTL::Fast::Tag::Firstofdefined;
+register_tag(qw(
+    firstofdefined  DTL::Fast::Tag::Firstofdefined
+));
 
 1;

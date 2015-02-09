@@ -54,7 +54,7 @@ sub parse_next_chunk
         $chunk =~ /^\{\%\s*([^\s]+?)(?:\s+(.*?))?\s*\%\}$/s
     )
     {
-        $chunk = $self->parse_tag_chunk($1, $2);
+        $chunk = $self->parse_tag_chunk(lc $1, $2);
     }
     elsif
     ( 
@@ -80,6 +80,17 @@ sub parse_tag_chunk
     my( $self, $tag_name, $tag_param ) = @_;
     
     my $result = undef;
+
+    # dynamic module loading
+    if( 
+        not exists $DTL::Fast::TAG_HANDLERS{$tag_name} 
+        and exists $DTL::Fast::KNOWN_TAGS{$tag_name} 
+    )
+    {
+        require Module::Load;
+        Module::Load::load($DTL::Fast::KNOWN_TAGS{$tag_name});
+        $DTL::Fast::LOADED_MODULES{$DTL::Fast::KNOWN_TAGS{$tag_name}} = time;            
+    }
 
     if( exists $DTL::Fast::TAG_HANDLERS{$tag_name} )
     {     
