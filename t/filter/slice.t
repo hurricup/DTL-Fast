@@ -26,6 +26,11 @@ my $SET = [
         'title' => 'Array slicing both, python format',
     },
     {
+        'template' => '{{ array1|slice:"1:100"|join:"," }}',
+        'test' => 'b,mpilgrim,z,example',
+        'title' => 'Array slicing both, python format, index is outside the boundaries',
+    },
+    {
         'template' => '{{ array1|slice:"1:-1"|join:"," }}',
         'test' => 'b,mpilgrim,z',
         'title' => 'Array slicing, negative last, python format',

@@ -4,6 +4,7 @@ use Test::More;
 
 use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
+use DTL::Fast::Tag::Debug;
 use Data::Dumper;
 
 my( $template, $test_string, $context);

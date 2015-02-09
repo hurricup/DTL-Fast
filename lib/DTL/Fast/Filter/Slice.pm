@@ -70,18 +70,24 @@ sub slice_array
     {
         die "Array slicing option MUST be specified in Python's or Perl's format: [from_index]:[to_index+1] or [from_index]..[to_index]";
     }
+
+    $start = $#$array if $start > $#$array;
+    $end = $#$array if $end > $#$array;
+    
+    if ( $start > $end ) {
+        my $var = $start;
+        $start = $end;
+        $end = $var;
+    }
     
     return [@{$array}[$start .. $end]];
 }
 
 sub python_index_map
 {
-    my $self = shift;
-    my $pyvalue = shift;
+    my( $self, $pyvalue, $lastindex ) =  @_;
     
     return $pyvalue if not defined $pyvalue;
-    
-    my $lastindex = shift;
 
     return $pyvalue < 0 ?
         $lastindex + $pyvalue + 1
