@@ -1,7 +1,6 @@
 package DTL::Fast::Parser;
 use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Renderer';
-use Carp;
 
 use DTL::Fast::Expression;
 use DTL::Fast::Text;
@@ -10,12 +9,12 @@ sub new
 {
     my( $proto, %kwargs ) = @_;
 
-    croak 'No directory arrays passed into constructor'
+    die 'No directory arrays passed into constructor'
         if not $kwargs{'dirs'}
             or ref $kwargs{'dirs'} ne 'ARRAY'
         ;
     
-    croak 'No raw chunks array passed into constructor'
+    die 'No raw chunks array passed into constructor'
         if not $kwargs{'raw_chunks'}
             or ref $kwargs{'raw_chunks'} ne 'ARRAY'
         ;
@@ -109,7 +108,7 @@ sub parse_tag_chunk
 sub get_container_block{ 
     my( $self ) = @_;
     return $self->{'_container_block'} 
-        // croak sprintf(
+        // die sprintf(
             "There is no container block in: %s", $self // 'undef'
         ); 
 }
@@ -118,13 +117,13 @@ sub add_blocks
 {
     my( $self, $blocks ) = @_;
     
-    croak "Blocks must be a HASH reference" if ref $blocks ne 'HASH';
+    die "Blocks must be a HASH reference" if ref $blocks ne 'HASH';
     
     foreach my $block_name (keys(%$blocks))
     {
         if( exists $self->{'blocks'}->{$block_name} )
         {
-            croak "Block $block_name is already registered. Duplicate names are not allowed";
+            die "Block $block_name is already registered. Duplicate names are not allowed";
         }
         
         $self->{'blocks'}->{$block_name} = $blocks->{$block_name};
@@ -142,11 +141,11 @@ sub remove_blocks
 {
     my ($self, $block_names ) = @_;
 
-    croak "Blocks must be an ARRAY reference" if ref $block_names ne 'ARRAY';
+    die "Blocks must be an ARRAY reference" if ref $block_names ne 'ARRAY';
      
     foreach my $block_name (@$block_names)
     {
-        croak "Sub-block $block_name does not registered in current block."
+        die "Sub-block $block_name does not registered in current block."
             if not exists $self->{'blocks'}->{$block_name};
             
         delete $self->{'blocks'}->{$block_name};

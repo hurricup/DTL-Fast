@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Url;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag::Simple';
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'url'} = __PACKAGE__;
 

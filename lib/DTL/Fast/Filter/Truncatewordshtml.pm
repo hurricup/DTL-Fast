@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Truncatewordshtml;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter::Truncatewords';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'truncatewords_html'} = __PACKAGE__;
 

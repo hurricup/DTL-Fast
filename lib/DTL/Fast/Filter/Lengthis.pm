@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Lengthis;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter::Length';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'length_is'} = __PACKAGE__;
 
@@ -10,7 +9,7 @@ $DTL::Fast::FILTER_HANDLERS{'length_is'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    carp "No length value specified"
+    die "No length value specified"
         if not scalar @{$self->{'parameter'}};
     $self->{'length'} = $self->{'parameter'}->[0];
     return $self;

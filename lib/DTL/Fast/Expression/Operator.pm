@@ -1,6 +1,5 @@
 package DTL::Fast::Expression::Operator;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp;
 
 our $VERSION = '1.00';
 
@@ -34,7 +33,7 @@ sub new
     }
     else
     {
-        croak "Unknown operator '$operator'";
+        die "Unknown operator '$operator'";
     }
     
     return $result;

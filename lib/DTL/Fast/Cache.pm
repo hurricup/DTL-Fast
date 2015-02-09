@@ -1,6 +1,5 @@
 package DTL::Fast::Cache;
 use strict; use warnings FATAL => 'all'; 
-use Carp;
 # This is a prototype class for caching templates
 
 sub new
@@ -47,20 +46,20 @@ sub put
 sub read_data
 {
     my( $self, $key ) = @_;
-    croak "read_data method was not defined in ".(ref $self);
+    die "read_data method was not defined in ".(ref $self);
 }
 
 sub clear
 {
     my( $self ) = @_;
-    croak "clear method was not defined in ".(ref $self);
+    die "clear method was not defined in ".(ref $self);
 }
 
 sub write_data
 {
     my( $self, $key, $value ) = @_;
     
-    croak "write_data method was not defined in ".(ref $self);
+    die "write_data method was not defined in ".(ref $self);
 }
 
 sub validate_template

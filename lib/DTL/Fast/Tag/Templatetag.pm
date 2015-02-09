@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Templatetag;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag::Simple';
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'templatetag'} = __PACKAGE__;
 
@@ -23,7 +22,7 @@ sub parse_parameters
     
     if( not ($self->{'value'} = $TAG_MAP{$self->{'parameter'}}))
     {
-        confess "Unknown template tag $self->{'parameter'}";
+        die "Unknown template tag $self->{'parameter'}";
     }
     
     return $self;

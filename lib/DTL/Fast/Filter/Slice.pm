@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Slice;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'slice'} = __PACKAGE__;
 
@@ -9,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'slice'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    croak "No slicing settings specified"
+    die "No slicing settings specified"
         if not scalar @{$self->{'parameter'}};
     $self->{'settings'} = $self->{'parameter'}->[0];
     return $self;

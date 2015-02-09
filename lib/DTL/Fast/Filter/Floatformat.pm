@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Floatformat;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'floatformat'} = __PACKAGE__;
 

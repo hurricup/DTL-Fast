@@ -1,14 +1,13 @@
 package DTL::Fast::Cache::File;
 use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Cache::Compressed';
-use Carp;
 
 #@Override
 sub new
 {
     my( $proto, $dir, %kwargs ) = @_;
 
-    croak "You should pass a cache directory to the constructor of ".__PACKAGE__
+    die "You should pass a cache directory to the constructor of ".__PACKAGE__
         if not $dir;
         
     $dir =~ s{[\/]+$}{}gs;
@@ -22,7 +21,7 @@ sub new
     }
     else
     {
-        croak "$dir is not a directory or it's not writable for me";
+        die "$dir is not a directory or it's not writable for me";
     }
     
     return $proto->SUPER::new(%kwargs);
@@ -47,7 +46,7 @@ sub read_compressed_data
         }
         else
         {
-            croak "Error opening cache file $filename for reading: $!";
+            die "Error opening cache file $filename for reading: $!";
         }
     }
     
@@ -68,7 +67,7 @@ sub write_compressed_data
     }
     else
     {
-        croak "Error opening cache file $filename for writing: $!";
+        die "Error opening cache file $filename for writing: $!";
     }
     return $self
 }

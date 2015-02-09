@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Debug;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag::Simple';  
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'debug'} = __PACKAGE__;
 

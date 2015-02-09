@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Date;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'date'} = __PACKAGE__;
 

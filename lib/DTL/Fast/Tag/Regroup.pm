@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Regroup;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag::Simple';  
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'regroup'} = __PACKAGE__;
 
@@ -20,11 +19,11 @@ sub parse_parameters
             , $3
         );
         
-        confess "Traget variable can't be traversable: $3" if $3 =~ /\./;
+        die "Traget variable can't be traversable: $3" if $3 =~ /\./;
     }
     else
     {
-        confess "Do not understand condition: $self->{'parameter'}";
+        die "Do not understand condition: $self->{'parameter'}";
     }
     
     return $self;

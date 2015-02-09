@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Removetags;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'removetags'} = __PACKAGE__;
 
@@ -9,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'removetags'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    croak "No tags to remove specified"
+    die "No tags to remove specified"
         if not scalar @{$self->{'parameter'}};
     $self->{'tags'} = $self->{'parameter'}->[0];
     return $self;

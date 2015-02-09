@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Divisibleby;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'divisibleby'} = __PACKAGE__;
 
@@ -11,7 +10,7 @@ use Scalar::Util qw(looks_like_number);
 sub parse_parameters
 {
     my $self = shift;
-    carp "No divider specified"
+    die "No divider specified"
         if not scalar @{$self->{'parameter'}};
     $self->{'divider'} = $self->{'parameter'}->[0];
     return $self;

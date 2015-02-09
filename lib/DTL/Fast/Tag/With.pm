@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::With;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag';  
-use Carp;
 
 $DTL::Fast::TAG_HANDLERS{'with'} = __PACKAGE__;
 
@@ -22,7 +21,7 @@ sub parse_parameters
     {
         my @parts = split /[=\s]+/s, $self->backup_strings($self->{'parameter'});
         
-        croak sprintf("Unable to parse parameter for %s: %s", __PACKAGE__, $self->{'parameter'})
+        die sprintf("Unable to parse parameter for %s: %s", __PACKAGE__, $self->{'parameter'})
             if (scalar @parts) % 2;
         
         while( scalar @parts )

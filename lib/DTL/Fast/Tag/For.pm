@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::For;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Tag';
-use Carp;
 
 $DTL::Fast::TAG_HANDLERS{'for'} = __PACKAGE__;
 
@@ -21,13 +20,13 @@ sub parse_parameters
         $source_name = $2;
         $reversed = $3;
         @target_names = map{
-            croak "Iterator variable can't be traversable: $_" if $_ =~ /\./;
+            die "Iterator variable can't be traversable: $_" if $_ =~ /\./;
             $_;
         } split( /\s*,\s*/, $1 );
     }
     else
     {
-        croak "Do not understand condition: $self->{'parameter'}";
+        die "Do not understand condition: $self->{'parameter'}";
     }
 
     $self->{'renderers'} = [];
@@ -44,7 +43,7 @@ sub parse_parameters
 
     if( not scalar @{$self->{'targets'}} )
     {
-        croak "There is no target variables defined for iteration";
+        die "There is no target variables defined for iteration";
     }
 
     return $self;
@@ -70,7 +69,7 @@ sub parse_tag_chunk
     {
         if( scalar @{$self->{'renderers'}} == 2 )
         {
-            croak "There can be only one empty block";
+            die "There can be only one empty block";
         }
         else
         {
@@ -123,7 +122,7 @@ sub render
     }
     else
     {
-        croak sprintf('Do not know how to iterate %s (%s, %s)'
+        die sprintf('Do not know how to iterate %s (%s, %s)'
             , $self->{'source'}->{'original'} // 'undef'
             , $source_data // 'undef'
             , $source_type // 'SCALAR'
@@ -183,7 +182,7 @@ sub render_array
                     }
                     else
                     {
-                        croak sprintf(
+                        die sprintf(
                             'Sub-array (%s) contains less items than variables number (%s)'
                             , join(', ', @$value)
                             , join(', ', @{$self->{'targets'}})
@@ -192,7 +191,7 @@ sub render_array
                 }
                 else
                 {
-                    croak "Multi-var iteration argument $value ($value_type) is not an ARRAY and has no as_array method";
+                    die "Multi-var iteration argument $value ($value_type) is not an ARRAY and has no as_array method";
                 }
             }
             $result .= $self->{'renderers'}->[0]->render($context) // '';
@@ -242,7 +241,7 @@ sub render_hash
         }
         else
         {
-            croak "Hash can be only iterated with 2 target variables";
+            die "Hash can be only iterated with 2 target variables";
         }
     }
     elsif( scalar @{$self->{'renderers'}} == 2 ) # there is an empty block

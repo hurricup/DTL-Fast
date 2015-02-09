@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Unorderedlist;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'unordered_list'} = __PACKAGE__;
 

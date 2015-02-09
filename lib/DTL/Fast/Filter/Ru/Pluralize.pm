@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Ru::Pluralize;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter::Pluralize';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'pluralize'} = __PACKAGE__;
 

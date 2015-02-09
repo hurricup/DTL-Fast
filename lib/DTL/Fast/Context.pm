@@ -1,7 +1,6 @@
 package DTL::Fast::Context;
 use strict; use utf8; use warnings FATAL => 'all';
 no if $] >= 5.017011, warnings => 'experimental::smartmatch';
-use Carp;
 use attributes;
 
 sub new
@@ -9,7 +8,7 @@ sub new
     my( $proto, $context ) = @_;
     $context //= {};
 
-    croak  "Context should be a HASH reference"
+    die  "Context should be a HASH reference"
         if ref $context ne 'HASH';
 
     return bless {
@@ -84,7 +83,7 @@ sub traverse
         }
         else
         {
-            croak  sprintf("Don't know how to traverse %s (%s) with %s"
+            die  sprintf("Don't know how to traverse %s (%s) with %s"
                 , $variable
                 , $current_type
                 , $step
@@ -116,7 +115,7 @@ sub set
             my $variable_name = pop @key;
             my $variable = $self->get([@key]);
 
-            croak  sprintf('Unable to set variable %s because parent %s is not defined.'
+            die  sprintf('Unable to set variable %s because parent %s is not defined.'
                 , $key
                 , join('.', @key)
             ) if not defined $variable;
@@ -135,7 +134,7 @@ sub set
             }
             else
             {
-                croak  sprintf("Don't know how to set variable %s for parent node of type %s"
+                die  sprintf("Don't know how to set variable %s for parent node of type %s"
                     , $variable_name
                     , $variable_type
                 );
@@ -160,7 +159,7 @@ sub push_scope
 sub pop_scope
 {
     my( $self ) = @_;
-    croak  "It's a last context layer available."
+    die  "It's a last context layer available."
         if scalar @{$self->{'ns'}} ==  1;
     pop @{$self->{'ns'}};
     return $self;

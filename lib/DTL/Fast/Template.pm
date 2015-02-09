@@ -1,7 +1,6 @@
 package DTL::Fast::Template;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Parser';
-use Carp;
 
 our %TAG_HANDLERS;
 our %FILTER_HANDLERS;
@@ -28,7 +27,7 @@ sub new
 
     if( exists $kwargs{'inherits'}->{$kwargs{'file_path'}} )
     {
-        croak  sprintf(
+        die  sprintf(
             "Recursive inheritance detected:\n%s\n" 
             , join "\n inherited from ", @{$kwargs{'inherited'}}, $kwargs{'file_path'}
         );
@@ -55,7 +54,7 @@ sub new
         }
         else
         {
-            croak  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
+            die  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
                 , $self->{'extends' }
                 , join( ', ', @{$kwargs{'dirs'}})
             );
@@ -121,7 +120,7 @@ sub render
         and ref $context ne 'DTL::Fast::Context'
     )
     {
-        croak  "Context must be a DTL::Fast::Context object or a HASH reference";
+        die  "Context must be a DTL::Fast::Context object or a HASH reference";
     }
     
     $context->push_scope();

@@ -1,6 +1,5 @@
 package DTL::Fast::Replacer;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp qw(confess);
 
 use DTL::Fast::Replacer::Replacement;
 use DTL::Fast::Variable;

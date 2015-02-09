@@ -4,7 +4,6 @@ use parent 'Exporter';
 
 require Date::Format;
 require URI::Escape::XS;
-use Carp qw(confess cluck);
 
 our $VERSION = '1.00';
 

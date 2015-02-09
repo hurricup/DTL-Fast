@@ -1,6 +1,5 @@
 package DTL::Fast::Expression::Operator::Unary;
 use strict; use utf8; use warnings FATAL => 'all'; 
-use Carp;
 
 use DTL::Fast::Expression::Operator::Unary::Not;
 
@@ -31,6 +30,6 @@ sub render
 sub dispatch
 {
     my( $self, $arg1 ) = @_;
-    croak 'ABSTRACT: This method should be overriden in subclasses';
+    die 'ABSTRACT: This method should be overriden in subclasses';
 }
 1;

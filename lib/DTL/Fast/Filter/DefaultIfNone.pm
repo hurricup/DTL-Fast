@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::DefaultIfNone;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter::Default';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'default_if_none'} = __PACKAGE__;
 

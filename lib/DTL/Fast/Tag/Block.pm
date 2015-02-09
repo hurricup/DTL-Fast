@@ -1,7 +1,7 @@
 package DTL::Fast::Tag::Block;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag';  
-use Carp;
+
 use Data::Dumper;
 
 our $VERSION = '1.00';
@@ -16,7 +16,7 @@ sub parse_parameters
 {
     my( $self ) = @_;
 
-    croak sprintf("Structure error. Top-level object for %s must be a DTL::Fast::Template, not %s (%s)"
+    die sprintf("Structure error. Top-level object for %s must be a DTL::Fast::Template, not %s (%s)"
         , __PACKAGE__
         , $self->{'_template'} // 'undef'
         , ref $self->{'_template'} || 'SCALAR' 
@@ -27,7 +27,7 @@ sub parse_parameters
     
     if( not $self->{'_container_block'} )
     {
-        croak "There is no container block defined for: ".Dumper($self);
+        die "There is no container block defined for: ".Dumper($self);
     }
     
     $self->{'_container'} = $self->{'_container_block'};    # store it for future usage

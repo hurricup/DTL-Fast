@@ -1,7 +1,6 @@
 package DTL::Fast::Expression::Operator::Binary::In;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
-use Carp qw(confess);
 
 $DTL::Fast::Expression::Operator::KNOWN{'in'} = __PACKAGE__;
 
@@ -95,7 +94,7 @@ sub dispatch
     # still nothing
     if( not defined $result )
     {
-        confess sprintf("Don't know how to check that %s (%s) is in %s (%s)"
+        die sprintf("Don't know how to check that %s (%s) is in %s (%s)"
             , $arg1
             , $arg1_type
             , $arg2

@@ -1,7 +1,6 @@
 package DTL::Fast::Expression::Operator::Binary::Div;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
-use Carp qw(confess);
 
 $DTL::Fast::Expression::Operator::KNOWN{'/'} = __PACKAGE__;
 
@@ -23,7 +22,7 @@ sub dispatch
     }
     else
     {
-        confess "Don't know how to divide $arg1 ($arg1_type) by $arg2 ($arg2_type)";
+        die "Don't know how to divide $arg1 ($arg1_type) by $arg2 ($arg2_type)";
     }
 
     return $result;

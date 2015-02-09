@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Add;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'add'} = __PACKAGE__;
 
@@ -12,7 +11,7 @@ sub parse_parameters
 {
     my $self = shift;
     
-    croak "No single arguments passed to the add ".__PACKAGE__
+    die "No single arguments passed to the add ".__PACKAGE__
         if(
             ref $self->{'parameter'} ne 'ARRAY'
             or not scalar @{$self->{'parameter'}}
@@ -44,7 +43,7 @@ sub filter
     }
     elsif( $value_type ) # @todo here we can implement ->add interface
     {
-        croak "Don't know how to add anything to $value_type";
+        die "Don't know how to add anything to $value_type";
     }
     
     foreach my $parameter (@{$self->{'parameters'}})
@@ -66,7 +65,7 @@ sub filter
             }
             else
             {
-                croak "It's not possible to add a single value to a hash";
+                die "It's not possible to add a single value to a hash";
             }
         }
         elsif( $result_type eq 'ARRAY' )

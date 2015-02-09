@@ -1,7 +1,6 @@
 package DTL::Fast::Expression::Operator::Binary::Minus;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
-use Carp qw(confess);
 
 $DTL::Fast::Expression::Operator::KNOWN{'-'} = __PACKAGE__;
 
@@ -18,11 +17,11 @@ sub dispatch
     }
     elsif( $arg1_type eq 'ARRAY' ) # @todo array substitution
     {
-        confess 'Arrays substitution not yet implemented';
+        die 'Arrays substitution not yet implemented';
     }
     elsif( $arg1_type eq 'HASH' )   # @todo hash substitution
     {
-        confess 'Hashes substitution not yet implemented';
+        die 'Hashes substitution not yet implemented';
     }
     elsif( UNIVERSAL::can($arg1, 'minus'))
     {
@@ -30,7 +29,7 @@ sub dispatch
     }
     else
     {
-        confess sprintf("Don't know how to substitute %s (%s) from %s (%s)"
+        die sprintf("Don't know how to substitute %s (%s) from %s (%s)"
             , $arg2 // 'undef'
             , $arg2_type // 'undef'
             , $arg1 // 'undef'

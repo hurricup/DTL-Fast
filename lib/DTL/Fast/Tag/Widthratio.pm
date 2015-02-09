@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Widthratio;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag::Simple';
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'widthratio'} = __PACKAGE__;
 

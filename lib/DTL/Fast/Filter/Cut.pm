@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Cut;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'cut'} = __PACKAGE__;
 
@@ -12,7 +11,7 @@ use DTL::Fast::Variable;
 sub parse_parameters
 {
     my $self = shift;
-    croak "No substitute specified for removing"
+    die "No substitute specified for removing"
         if not scalar @{$self->{'parameter'}};
     $self->{'remove'} = $self->{'parameter'}->[0];
     return $self;

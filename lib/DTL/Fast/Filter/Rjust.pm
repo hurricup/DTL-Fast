@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Rjust;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter::Center';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'rjust'} = __PACKAGE__;
 

@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Dictsortreversed;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter::Dictsort';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'dictsortreversed'} = __PACKAGE__;
 

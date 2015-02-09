@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Filter;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag';  
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'filter'} = __PACKAGE__;
 

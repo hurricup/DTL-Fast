@@ -1,7 +1,6 @@
 package DTL::Fast::Cache::Serialized;
 use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Cache::Runtime';
-use Carp;
 use Storable;
 
 #@Override

@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Ssi;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag::Simple';
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'ssi'} = __PACKAGE__;
 
@@ -20,7 +19,7 @@ sub parse_parameters
     }
     else
     {
-        confess "Can't parse parameter: $self->{'parameter'}";
+        die "Can't parse parameter: $self->{'parameter'}";
     }
     
     return $self;

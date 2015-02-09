@@ -1,7 +1,6 @@
 package DTL::Fast::Cache::Runtime;
 use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Cache';
-use Carp;
 
 # Runtime cache for compiled templates
 

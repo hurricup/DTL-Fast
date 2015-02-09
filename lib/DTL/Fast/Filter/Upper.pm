@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Upper;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'upper'} = __PACKAGE__;
 

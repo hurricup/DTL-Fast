@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Time;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'time'} = __PACKAGE__;
 

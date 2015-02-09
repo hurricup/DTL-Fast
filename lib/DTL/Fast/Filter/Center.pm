@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Center;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'center'} = __PACKAGE__;
 
@@ -9,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'center'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    croak "No width specified for adjusting"
+    die "No width specified for adjusting"
         if not scalar @{$self->{'parameter'}};
     $self->{'width'} = $self->{'parameter'}->[0];
     return $self;

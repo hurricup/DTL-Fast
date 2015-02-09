@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Yesno;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'yesno'} = __PACKAGE__;
 

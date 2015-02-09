@@ -1,7 +1,6 @@
 package DTL::Fast::Tag;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Parser';
-use Carp qw(confess);
 
 sub new
 {
@@ -28,7 +27,7 @@ sub parse_chunks
 sub get_close_tag
 {
     my( $self ) = @_;
-    confess sprintf(
+    die sprintf(
         "ABSTRACT method get_close_tag, must be overriden in %s"
         , ref $self
     );

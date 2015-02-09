@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Dictsort;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'dictsort'} = __PACKAGE__;
 
@@ -11,7 +10,7 @@ use Scalar::Util qw(looks_like_number);
 sub parse_parameters
 {
     my $self = shift;
-    carp "No sorting key specified"
+    die "No sorting key specified"
         if not scalar @{$self->{'parameter'}};
     $self->{'key'} = [split /\./, $self->{'parameter'}->[0]->render()]; # do we need to backup strings here ?
     return $self;

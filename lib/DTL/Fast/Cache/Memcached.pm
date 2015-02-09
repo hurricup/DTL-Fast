@@ -1,7 +1,6 @@
 package DTL::Fast::Cache::Memcached;
 use strict; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Cache::Runtime';
-use Carp;
 
 our %SUPPORTS = qw(
     Cache::Memcached        1
@@ -15,7 +14,7 @@ sub new
     
     if( not exists $SUPPORTS{ref $memcached} )
     {
-        croak sprintf(
+        die sprintf(
             "You may construct %s object using one of the following modules:\n\t%s\n"
             , $proto
             , join( "\n\t", keys %SUPPORTS )

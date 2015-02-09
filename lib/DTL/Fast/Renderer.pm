@@ -1,7 +1,6 @@
 package DTL::Fast::Renderer;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Replacer';
-use Carp qw(confess);
 
 use DTL::Fast::Context;
 

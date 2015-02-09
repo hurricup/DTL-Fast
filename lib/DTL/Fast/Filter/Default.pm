@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Default;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'default'} = __PACKAGE__;
 
@@ -9,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'default'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    carp "No default value specified"
+    die "No default value specified"
         if not scalar @{$self->{'parameter'}};
     $self->{'default'} = $self->{'parameter'}->[0];
     return $self;

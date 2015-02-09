@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Join;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'join'} = __PACKAGE__;
 
@@ -12,7 +11,7 @@ sub parse_parameters
 {
     my( $self ) = @_;
 
-    carp "No separator passed to the filter ".__PACKAGE__
+    die "No separator passed to the filter ".__PACKAGE__
         if(
             ref $self->{'parameter'} ne 'ARRAY'
             or not scalar @{$self->{'parameter'}}
@@ -43,7 +42,7 @@ sub filter
     }
     else
     {
-        confess sprintf( "Unable to apply filter %s to the %s value"
+        die sprintf( "Unable to apply filter %s to the %s value"
             , __PACKAGE__
             , $value_type || 'SCALAR'            
         );

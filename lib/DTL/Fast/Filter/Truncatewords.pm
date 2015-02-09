@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Truncatewords;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter';
-use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'truncatewords'} = __PACKAGE__;
 
@@ -9,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'truncatewords'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    croak "No max words number specified"
+    die "No max words number specified"
         if not scalar @{$self->{'parameter'}};
     $self->{'maxlen'} = $self->{'parameter'}->[0];
     return $self;

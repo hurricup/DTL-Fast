@@ -1,7 +1,6 @@
 package DTL::Fast::Expression::Operator::Binary::Mod;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
-use Carp qw(confess);
 
 $DTL::Fast::Expression::Operator::KNOWN{'mod'} = __PACKAGE__;
 $DTL::Fast::Expression::Operator::KNOWN{'%'} = __PACKAGE__;
@@ -24,7 +23,7 @@ sub dispatch
     }
     else
     {
-        confess "Don't know how to take $arg1 ($arg1_type) modulus $arg2 ($arg2_type)";
+        die "Don't know how to take $arg1 ($arg1_type) modulus $arg2 ($arg2_type)";
     }
 
     return $result;

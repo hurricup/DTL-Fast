@@ -1,7 +1,6 @@
 package DTL::Fast::Filter::Timeuntil;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Filter::Timesince';
-use Carp qw(confess);
 
 $DTL::Fast::FILTER_HANDLERS{'timeuntil'} = __PACKAGE__;
 

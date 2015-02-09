@@ -1,7 +1,6 @@
 package DTL::Fast::Expression::Operator::Binary;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Expression::Operator::Unary';
-use Carp;
 
 use DTL::Fast::Expression::Operator::Binary::Or;
 use DTL::Fast::Expression::Operator::Binary::Plus;
@@ -44,7 +43,7 @@ sub render
 sub dispatch
 {
     my( $self, $arg1, $arg2 ) = @_;
-    croak  'ABSTRACT: This method should be overriden in subclasses';
+    die  'ABSTRACT: This method should be overriden in subclasses';
 }
 
 1;

@@ -1,7 +1,6 @@
 package DTL::Fast;
 use strict; use warnings FATAL => 'all'; 
 use parent 'Exporter';
-use Carp;
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
@@ -27,10 +26,10 @@ sub get_template
 {
     my( $template_name, %kwargs ) = @_;
     
-    croak  "Template name was not specified" 
+    die  "Template name was not specified" 
         if not $template_name;
 
-    croak "Template directories array was not specified"
+    die "Template directories array was not specified"
         if
             not defined $kwargs{'dirs'}
             or ref $kwargs{'dirs'} ne 'ARRAY'
@@ -56,7 +55,7 @@ sub get_template
         }
         else
         {
-            croak  sprintf( <<'_EOT_', $template_name, join("\n", @{$kwargs{'dirs'}}));
+            die  sprintf( <<'_EOT_', $template_name, join("\n", @{$kwargs{'dirs'}}));
 Unable to find template %s in directories: 
 %s
 _EOT_
@@ -89,7 +88,7 @@ sub read_template
     my $template = undef;
     my $template_path = undef;
 
-    croak "Template directories array was not specified"
+    die "Template directories array was not specified"
         if not defined $kwargs{'dirs'}
             or not ref $kwargs{'dirs'}
             or not scalar @{$kwargs{'dirs'}}
@@ -181,7 +180,7 @@ sub __read_file
     }
     else
     {
-        croak  sprintf(
+        die  sprintf(
             'Error opening file %s, %s'
             , $file_name
             , $!
@@ -196,7 +195,7 @@ sub select_template
 {
     my( $template_names, %kwargs ) = @_;
     
-    croak  "First parameter must be a template names array reference" 
+    die  "First parameter must be a template names array reference" 
         if(
             not ref $template_names
             or ref $template_names ne 'ARRAY'
