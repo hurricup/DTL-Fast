@@ -4,6 +4,8 @@ Revision history for Perl extension DTL::Fast.
     - SSI tag behavior now is like in Django, fixes #26
     - ifchanged tag is now rendered on the first pass
     - ifchanged tag can now work without parameters (watching rendered content); not recommended, bad performance
+	- new tag - warn
+	- debug tag is not loaded by default anymore. Insert {% load 'DTL::Fast::Tag::Warn' %} before using it.
 
 1.605 - Wed 28 Jan 2015 18:27 MSK
     - Fixed spaces between equals in 'with' tag. Now tags may be multiline, fixes #7

@@ -6,7 +6,6 @@ use DTL::Fast::Tag::Autoescape;
 use DTL::Fast::Tag::Block;
 use DTL::Fast::Tag::Comment;
 use DTL::Fast::Tag::Cycle;
-use DTL::Fast::Tag::Debug;
 use DTL::Fast::Tag::Extends;
 use DTL::Fast::Tag::Filter;
 use DTL::Fast::Tag::Firstof;

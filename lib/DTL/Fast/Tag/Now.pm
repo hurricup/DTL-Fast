@@ -1,7 +1,6 @@
 package DTL::Fast::Tag::Now;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Tag::Simple';  
-use Carp qw(confess);
 
 $DTL::Fast::TAG_HANDLERS{'now'} = __PACKAGE__;
 
@@ -12,7 +11,7 @@ sub parse_parameters
 {
     my $self = shift;
     
-    confess "No time format specified" unless $self->{'parameter'};
+    die "No time format specified" unless $self->{'parameter'};
     $self->{'format'} = $self->parse_sources($self->{'parameter'})->[0];
     
     return $self;

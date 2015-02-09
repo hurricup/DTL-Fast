@@ -124,6 +124,7 @@ lib/DTL/Fast/Tag/Ssi.pm
 lib/DTL/Fast/Tag/Templatetag.pm
 lib/DTL/Fast/Tag/Url.pm
 lib/DTL/Fast/Tag/Verbatim.pm
+lib/DTL/Fast/Tag/Warn.pm
 lib/DTL/Fast/Tag/Widthratio.pm
 lib/DTL/Fast/Tag/With.pm
 lib/DTL/Fast/Tags.pm
