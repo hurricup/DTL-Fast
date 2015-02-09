@@ -376,9 +376,27 @@ New tag, that works like C<firstof> tag, but checks if value is defined (not tru
 
 C<url> tag works a different way. Because there is no framework around, we can't obtain model's path the same way. But you may pass C<url_source> parameter into template constructor or C<get_template>/C<select_template> function. This parameter MUST be a reference to a function, that will return to templating engine url template by some 'model path' (first parameter of C<url> tag). Second parameter passed to the C<url_source> handler will be a reference to array of argument values (in case of positional arguments) or reference to a hash of arguments (in case of named ones). Url source handler may just return a regexp template by model path and templating engine will try to restore it with specified arguments. Or, you may restore it yourself, alter replacement arguments or do whatever you want. 
 
+=head3 warn
+
+    {% warn var1 var2 ... varn %}
+
+C<warn> tag is useful for development and debugging. Dumps variable using L<C<Data::Dumper>> to C<STDERR>.
+
+Without and argument dumps full context object.
+
 =head2 Filters
 
 This module supports all built-in filters documented on L<official Django site|https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference>. Don't forget to read L<incompatibilities|/INCOMPATIBILITIES WITH DJANGO TEMPLATES> and L<extensions|/EXTENSIONS OF DJANGO TEMPLATES> sections.
+
+=head3 numberformat
+
+    {% var1|numberformat %}
+    
+Formats 12345678.9012 as
+    
+    12 345 678.9012
+
+Split integer part of the number by 3 digits, separated by spaces.
 
 =head1 INCOMPATIBILITIES WITH DJANGO TEMPLATES
 
