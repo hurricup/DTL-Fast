@@ -1,11 +1,10 @@
 package DTL::Fast::Expression::Operator::Binary::Eq;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
 
 $DTL::Fast::Expression::Operator::KNOWN{'=='} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
-use DTL::Fast::Utils qw(has_method);
 
 
 # @todo Recurursion protection on deep comparision or one-level comparision
@@ -15,8 +14,8 @@ sub dispatch
     my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
     my $result = 0;
 
-    if( 
-        not defined $arg1 and defined $arg2 
+    if(
+        not defined $arg1 and defined $arg2
         or not defined $arg2 and defined $arg1
     )
     {
@@ -24,7 +23,7 @@ sub dispatch
     }
     elsif( not defined $arg1 and not defined $arg2 )
     {
-        $result = 1; 
+        $result = 1;
     }
     elsif( looks_like_number($arg1) and looks_like_number($arg2))
     {
@@ -49,7 +48,7 @@ sub dispatch
     {
         my @keys1 = sort keys %$arg1;
         my @keys2 = sort keys %$arg2;
-        
+
         if( dispatch( $self, \@keys1, \@keys2 ) )
         {
             my $result = 1;
@@ -61,13 +60,13 @@ sub dispatch
                     last;
                 }
             }
-        }        
+        }
     }
-    elsif( has_method($arg1, 'equal'))
+    elsif( UNIVERSAL::can($arg1, 'equal'))
     {
         $result = $arg1->equal($arg2);
     }
-    elsif( has_method($arg2, 'equal'))
+    elsif( UNIVERSAL::can($arg2, 'equal'))
     {
         $result = $arg2->equal($arg1);
     }
@@ -75,7 +74,7 @@ sub dispatch
     {
         $result = ($arg1 eq $arg2);
     }
-    
+
     return $result;
 }
 

@@ -1,11 +1,10 @@
 package DTL::Fast::Tag::For;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Tag';
 use Carp;
 
 $DTL::Fast::TAG_HANDLERS{'for'} = __PACKAGE__;
 
-use DTL::Fast::Utils qw(has_method);
 use DTL::Fast::Variable;
 
 #@Override
@@ -15,7 +14,7 @@ sub get_close_tag{ return 'endfor';}
 sub parse_parameters
 {
     my( $self ) = @_;
-    
+
     my(@target_names, $source_name, $reversed);
     if( $self->{'parameter'} =~ /^\s*(.+)\s+in\s+(.+?)\s*(reversed)?\s*$/si )
     {
@@ -30,24 +29,24 @@ sub parse_parameters
     {
         croak "Do not understand condition: $self->{'parameter'}";
     }
-    
+
     $self->{'renderers'} = [];
     $self->add_renderer();
 
     $self->{'targets'} = [@target_names];
 
     $self->{'source'} = DTL::Fast::Variable->new($source_name);
-    
+
     if( $reversed )
     {
         $self->{'source'}->add_filter('reverse');
     }
-    
+
     if( not scalar @{$self->{'targets'}} )
     {
         croak "There is no target variables defined for iteration";
     }
-    
+
     return $self;
 }
 
@@ -55,7 +54,7 @@ sub parse_parameters
 sub add_chunk
 {
     my( $self, $chunk ) = @_;
-    
+
     $self->{'renderers'}->[-1]->add_chunk($chunk);
     return $self;
 }
@@ -64,7 +63,7 @@ sub add_chunk
 sub parse_tag_chunk
 {
     my( $self, $tag_name, $tag_param ) = @_;
-    
+
     my $result = undef;
 
     if( $tag_name eq 'empty' )
@@ -82,7 +81,7 @@ sub parse_tag_chunk
     {
         $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
     }
-    
+
     return $result;
 }
 
@@ -90,29 +89,29 @@ sub parse_tag_chunk
 sub render
 {
     my( $self, $context ) = @_;
-    
+
     my $result = '';
-  
+
     my $source_data = $self->{'source'}->render($context);
     my $source_type = ref $source_data;
-    
+
     if( # iterating array
-        $source_type eq 'ARRAY' 
+        $source_type eq 'ARRAY'
         or (
-            has_method($source_data, 'as_array')
+            UNIVERSAL::can($source_data, 'as_array')
             and ($source_data = $source_data->as_array($context))
         )
     )
     {
         $result = $self->render_array(
             $context
-            , $source_data 
+            , $source_data
         );
     }
     elsif( # iterating hash
-        $source_type eq 'HASH' 
+        $source_type eq 'HASH'
         or (
-            has_method($source_data, 'as_hash')
+            UNIVERSAL::can($source_data, 'as_hash')
             and ($source_data = $source_data->as_hash($context))
         )
     )
@@ -130,7 +129,7 @@ sub render
             , $source_type // 'SCALAR'
         );
     }
-    
+
     return $result;
 }
 
@@ -143,14 +142,14 @@ sub render_array
     if( scalar @$source_data )
     {
         $context->push_scope();
-        
+
         my $source_size = scalar @$source_data;
         my $forloop = $self->get_forloop($context, $source_size);
-        
+
         $context->set('forloop' => $forloop);
-        
+
         my $variables_number = scalar @{$self->{'targets'}};
-        
+
         foreach my $value (@$source_data)
         {
             my $value_type = ref $value;
@@ -162,10 +161,10 @@ sub render_array
             }
             else
             {
-                if( 
-                    $value_type eq 'ARRAY' 
+                if(
+                    $value_type eq 'ARRAY'
                     or (
-                        has_method($value, 'as_array')
+                        UNIVERSAL::can($value, 'as_array')
                         and ($value = $value->as_array($context))
                     )
                 )
@@ -200,7 +199,7 @@ sub render_array
 
             $self->step_forloop($forloop);
         }
-        
+
         $context->pop_scope();
     }
     elsif( scalar @{$self->{'renderers'}} == 2 ) # there is an empty block
@@ -219,14 +218,14 @@ sub render_hash
 
     my @keys = keys %$source_data;
     my $source_size = scalar @keys;
-    if( $source_size ) 
+    if( $source_size )
     {
         if( scalar @{$self->{'targets'}} == 2 )
         {
             $context->push_scope();
             my $forloop = $self->get_forloop($context, $source_size);
             $context->set('forloop' => $forloop);
-          
+
             foreach my $key (@keys)
             {
                 my $val = $source_data->{$key};
@@ -235,10 +234,10 @@ sub render_hash
                     $self->{'targets'}->[1] => $val,
                 );
                 $result .= $self->{'renderers'}->[0]->render($context) // '';
-                
+
                 $self->step_forloop($forloop);
             }
-            
+
             $context->pop_scope();
         }
         else
@@ -250,7 +249,7 @@ sub render_hash
     {
         $result = $self->{'renderers'}->[1]->render($context);
     }
-    
+
     return $result;
 }
 
@@ -264,7 +263,7 @@ sub add_renderer
 sub get_forloop
 {
     my( $self, $context, $source_size ) = @_;
-    
+
     return {
         'parentloop' => $context->get('forloop')
         , 'counter' => 1
@@ -284,7 +283,7 @@ sub get_forloop
 sub step_forloop
 {
     my( $self, $forloop ) = @_;
-    
+
     $forloop->{'counter'}++;
     $forloop->{'counter0'}++;
     $forloop->{'revcounter'}--;

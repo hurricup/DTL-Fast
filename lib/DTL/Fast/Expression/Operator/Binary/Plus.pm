@@ -1,18 +1,17 @@
 package DTL::Fast::Expression::Operator::Binary::Plus;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
 use Carp qw(confess);
 
 $DTL::Fast::Expression::Operator::KNOWN{'+'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
-use DTL::Fast::Utils qw(has_method);
 
 sub dispatch
 {
     my( $self, $arg1, $arg2, $context) = @_;
     my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
-    
+
     if( looks_like_number($arg1) and looks_like_number($arg2))
     {
         return $arg1 + $arg2;
@@ -27,7 +26,7 @@ sub dispatch
         {
             return [@$arg1, %$arg2];
         }
-        elsif( has_method($arg2, 'as_array'))
+        elsif( UNIVERSAL::can($arg2, 'as_array'))
         {
             return [@$arg1, @{$arg2->as_array($context)}];
         }
@@ -46,7 +45,7 @@ sub dispatch
         {
             return {%$arg1, %$arg2};
         }
-        elsif( has_method($arg2, 'as_hash'))
+        elsif( UNIVERSAL::can($arg2, 'as_hash'))
         {
             return {%$arg1, %{$arg2->as_hash($context)}};
         }
@@ -55,7 +54,7 @@ sub dispatch
             confess "Don't know how to add $arg2 ($arg2_type) to a HASH";
         }
     }
-    elsif( has_method($arg1, 'plus'))
+    elsif( UNIVERSAL::can($arg1, 'plus'))
     {
         return $arg1->plus($arg2, $context);
     }

@@ -1,11 +1,10 @@
 package DTL::Fast::Filter::Dictsort;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Filter';
 use Carp;
 
 $DTL::Fast::FILTER_HANDLERS{'dictsort'} = __PACKAGE__;
 
-use DTL::Fast::Utils qw(has_method);
 use Scalar::Util qw(looks_like_number);
 
 #@Override
@@ -25,10 +24,10 @@ sub filter
     shift;  # filter_manager
     my $value = shift;
     my $context = shift;
-    
+
     die "dictsort works only with array of hashes"
         if ref $value ne 'ARRAY';
-    
+
     return [(
         sort{
             $self->sort_function(
@@ -45,12 +44,12 @@ sub sort_function
     my $val1 = shift;
     my $val2 = shift;
     my $result;
-    
+
     if( looks_like_number($val1) and looks_like_number($val2))
     {
         $result = ($val1 <=> $val2);
     }
-    elsif( has_method($val1, 'compare'))
+    elsif( UNIVERSAL::can($val1, 'compare'))
     {
         $result = $val1->compare($val2);
     }
@@ -58,7 +57,7 @@ sub sort_function
     {
         $result = ($val1 cmp $val2);
     }
-    
+
     return $result;
 }
 

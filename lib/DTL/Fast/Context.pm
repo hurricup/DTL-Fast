@@ -1,17 +1,17 @@
 package DTL::Fast::Context;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
+no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 use Carp;
-
-use DTL::Fast::Utils qw(has_method is_lvalue);
+use attributes;
 
 sub new
 {
     my( $proto, $context ) = @_;
     $context //= {};
-    
+
     croak  "Context should be a HASH reference"
         if ref $context ne 'HASH';
-        
+
     return bless {
         'ns' => [$context]
     }, $proto;
@@ -29,25 +29,25 @@ sub get
     {
         $variable_path = [@$variable_path]; # cloning for re-use
     }
-    
+
     my $variable_name = shift @$variable_path;
-    
+
     # faster version
     my $namespace = $self->{'ns'}->[-1];
-    my $variable = exists $namespace->{$variable_name} ? 
+    my $variable = exists $namespace->{$variable_name} ?
         $namespace->{$variable_name}
-        : undef; 
+        : undef;
 
     while( ref $variable eq 'CODE' )
     {
-        $variable = is_lvalue($variable) ?
+        $variable = 'lvalue' ~~ attributes::get($variable) ?
             $variable->()
             : $variable->($self);
     }
-        
+
     $variable = $self->traverse($variable, $variable_path)
-        if 
-            defined $variable 
+        if
+            defined $variable
             and scalar @$variable_path;
 
     return $variable;
@@ -65,16 +65,16 @@ sub traverse
         {
             $variable = $variable->{$step};
         }
-        elsif( 
+        elsif(
             $current_type eq 'ARRAY'
             and $step =~ /^\-?\d+$/x
         )
         {
             $variable = $variable->[$step];
         }
-        elsif( has_method($variable, $step) )
+        elsif( UNIVERSAL::can($variable, $step) )
         {
-            $variable = is_lvalue($variable->can($step)) ? 
+            $variable = 'lvalue' ~~ attributes::get($variable->can($step)) ?
                 $variable->$step()
                 : $variable->$step($self);
         }
@@ -87,14 +87,14 @@ sub traverse
             croak  sprintf("Don't know how to traverse %s (%s) with %s"
                 , $variable
                 , $current_type
-                , $step 
+                , $step
             );
-        }        
+        }
     }
 
     while( ref $variable eq 'CODE' )
     {
-        $variable = is_lvalue($variable) ?
+        $variable = 'lvalue' ~~ attributes::get($variable) ?
             $variable->()
             : $variable->($self);
     }
@@ -105,7 +105,7 @@ sub traverse
 sub set
 {
     my( $self, @sets ) = @_;
-    
+
     while( scalar @sets > 1 )
     {
         my $key = shift @sets;
@@ -115,7 +115,7 @@ sub set
             my @key = split /\.+/x, $key;
             my $variable_name = pop @key;
             my $variable = $self->get([@key]);
-            
+
             croak  sprintf('Unable to set variable %s because parent %s is not defined.'
                 , $key
                 , join('.', @key)
@@ -126,7 +126,7 @@ sub set
             {
                 $variable->{$variable_name} = $val;
             }
-            elsif( 
+            elsif(
                 $variable_type eq 'ARRAY'
                 and $variable_name =~ /^\-?\d+$/x
             )
@@ -139,7 +139,7 @@ sub set
                     , $variable_name
                     , $variable_type
                 );
-            }            
+            }
         }
         else
         {

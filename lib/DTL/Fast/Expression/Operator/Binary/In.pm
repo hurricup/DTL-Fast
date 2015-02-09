@@ -1,11 +1,10 @@
 package DTL::Fast::Expression::Operator::Binary::In;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
 use Carp qw(confess);
 
 $DTL::Fast::Expression::Operator::KNOWN{'in'} = __PACKAGE__;
 
-use DTL::Fast::Utils qw(has_method);
 use DTL::Fast::Expression::Operator::Binary::Eq;
 
 sub dispatch
@@ -13,9 +12,9 @@ sub dispatch
     my( $self, $arg1, $arg2) = @_;
     my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
     my $result = undef;
-    
+
     if( not $arg2_type and not $arg1_type ) # substring checking
-    {   
+    {
         $result = index($arg2, $arg1) > -1 ? 1: 0;
     }
     elsif( not $arg1_type and $arg2_type eq 'ARRAY')  # operand in array
@@ -50,7 +49,7 @@ sub dispatch
                     last;
                 }
             }
-            
+
             if( not $found )
             {
                 $result = 0;
@@ -63,7 +62,7 @@ sub dispatch
         $result = 1;
         foreach my $key1 (keys %$arg1)
         {
-            if( 
+            if(
                 not exists $arg2->{$key1}
                 # @todo: deep comparision, shouldn't it be optional?
                 or not DTL::Fast::Expression::Operator::Binary::Eq::dispatch($self, $arg1->{$key1}, $arg2->{$key1})
@@ -76,23 +75,23 @@ sub dispatch
     }
 
     # `in` method implementation
-    if( 
-        not defined $result 
-        and has_method($arg1, 'in')
+    if(
+        not defined $result
+        and UNIVERSAL::can($arg1, 'in')
     )
     {
         $result = $arg1->in($arg2);
     }
 
     # `contains` method implementation
-    if( 
-        not defined $result 
-        and has_method($arg2, 'contains')
+    if(
+        not defined $result
+        and UNIVERSAL::can($arg2, 'contains')
     )
     {
         $result = $arg2->contains($arg1);
     }
-    
+
     # still nothing
     if( not defined $result )
     {
@@ -103,7 +102,7 @@ sub dispatch
             , $arg2_type
         );
     }
-    
+
     return $result;
 }
 

@@ -1,5 +1,5 @@
 package DTL::Fast::Utils;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
 use parent 'Exporter';
 
 require Date::Format;
@@ -9,48 +9,6 @@ use Carp qw(confess cluck);
 our $VERSION = '1.00';
 
 our @EXPORT_OK;
-
-push @EXPORT_OK, 'is_object';
-sub is_object
-{
-    my $ref = shift;
-    return (
-        ref $ref
-        and UNIVERSAL::can($ref, 'can')
-    );
-}
-
-push @EXPORT_OK, 'has_method';
-sub has_method
-{
-    my $ref = shift;
-    my $method = shift;
-    
-    return (
-        is_object($ref)
-        and $ref->can($method)
-    );
-}
-
-# prototype, C implementation required
-push @EXPORT_OK, 'is_lvalue';
-sub is_lvalue
-{
-    my($method) = @_;
-    require attributes;
-    my $result = 0;
-    
-    my @attrs = attributes::get($method);
-    foreach my $attr (@attrs)
-    {
-        if( $attr eq 'lvalue' )
-        {
-            $result = 1;
-            last;
-        }
-    }
-    return $result;
-}
 
 # @todo This must be implemented with XS part (already written)
 push @EXPORT_OK, 'html_protect';
@@ -75,17 +33,17 @@ sub html_protect
 # @todo what with timezones?
 push @EXPORT_OK, 'time2str';
 sub time2str
-{ 
+{
     my $format = shift;
     my $time = shift;
-    
+
     #  TIME_FORMAT, DATE_FORMAT, DATETIME_FORMAT, SHORT_DATE_FORMAT or SHORT_DATETIME_FORMAT
-    
+
     return Date::Format::time2str($format, $time );
 }
 
 push @EXPORT_OK, 'time2str_php';
-# the code below has been taken from Dotiac::DTL and should be re-written on C 
+# the code below has been taken from Dotiac::DTL and should be re-written on C
 # would be nice to implement module with this functionality (take from PHP source)
 #locale stuff
 our @datemonths=qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
@@ -100,13 +58,13 @@ sub time2str_php
 {
     my $format = shift;
     my $time = shift;
-    
+
     my @t = localtime($time);
     my @s = split //, $format;
-    
+
     my $res;
-    
-    while(my $s = shift @s ) 
+
+    while(my $s = shift @s )
     {
         if ($s eq '\\') {
             $res.=shift(@s);
@@ -214,7 +172,7 @@ sub time2str_php
                     $res.=" ".$timeampm[1];
                 }
             }
-            
+
         }
         elsif ($s eq "r") {
             $res.=$weekdays[$t[6]];
@@ -325,19 +283,19 @@ sub as_bool
 {
     my $value = shift;
     my $value_type = ref $value;
-    
+
     if( $value_type )
     {
         if( $BOOL_PROCESSORS{$value_type} )
         {
             $value = $BOOL_PROCESSORS{$value_type}->($value);
         }
-        elsif( has_method( $value, 'as_bool' ) )
+        elsif( UNIVERSAL::can( $value, 'as_bool' ) )
         {
             $value = $value->as_bool();
         }
     }
-    
+
     return $value;
 }
 
