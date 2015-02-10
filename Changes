@@ -1,8 +1,8 @@
 Revision history for Perl extension DTL::Fast.
 
-1.608 - Tue 10 Feb 2015 12:49 MSK
+1.608 - Tue 10 Feb 2015 19:09 MSK
     - Removed unsafe map usage in complicated loops
-    - Fixed bug with spaceless close tags endcomment and endverbatim
+    - Fixed bug with spaceless closing tags `endcomment` and `endverbatim`
 
 1.606 - Mon 09 Feb 2015 16:23 MSK
     - SSI tag behavior now is like in Django, fixes #26
