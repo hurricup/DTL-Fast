@@ -84,9 +84,15 @@ sub add_filter
 
     if( exists $DTL::Fast::FILTER_HANDLERS{$filter_name} )
     {
-        push @{$self->{'filters'}}, $DTL::Fast::FILTER_HANDLERS{$filter_name}->new(
-            [(map {$self->get_backup_or_variable($_) // $_} @arguments)]
-        );
+        my $args = [];
+        
+        foreach my $argument (@arguments)
+        {
+            push @$args, $self->get_backup_or_variable($argument) // $argument;
+        }
+        
+        push @{$self->{'filters'}}, $DTL::Fast::FILTER_HANDLERS{$filter_name}->new($args);
+        
         $self->{'filters_number'}++;
     }
     else

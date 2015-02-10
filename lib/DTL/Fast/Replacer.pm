@@ -110,19 +110,22 @@ sub parse_sources
         , $source
     ) if $sources =~ /,/;
         
-    return [map{ 
-        my $result; 
-        if( /^(__BLOCK_.+?)\|(.+)$/ )   # filtered static variable
+    my $result = [];
+    
+    foreach my $source (split /[,\s]+/, $sources)
+    {
+        if( $source =~ /^(__BLOCK_.+?)\|(.+)$/ )   # filtered static variable
         {
-            $result = $self->get_backup_or_variable($1);
-            $result->{'filter_manager'}->parse_filters($2);
+            push @$result, $self->get_backup_or_variable($1);
+            $result->[-1]->{'filter_manager'}->parse_filters($2);
         }
         else
         {
-            $result = $self->get_backup_or_variable($_) 
+            push @$result, $self->get_backup_or_variable($source) 
         }
-        $result;
-    } (split /[,\s]+/, $sources)];
+    }
+
+    return $result;
 }
 
 

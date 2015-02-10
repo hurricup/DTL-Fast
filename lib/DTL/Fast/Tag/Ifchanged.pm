@@ -144,9 +144,12 @@ sub update_preserved
     my $self = shift;
     my $context = shift;
 
-    $self->{'preserved'} = [(
-        map{ $_->render($context) } @{$self->{'watches'}}
-    )];
+    $self->{'preserved'} = [];
+    
+    foreach my $watch ( @{$self->{'watches'}} )
+    {
+        push @{$self->{'preserved'}}, $watch->render($context);
+    }
 
     return $self;
 }

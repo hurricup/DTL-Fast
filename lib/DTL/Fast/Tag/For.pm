@@ -20,7 +20,7 @@ sub parse_parameters
         $source_name = $2;
         $reversed = $3;
         @target_names = map{
-            die "Iterator variable can't be traversable: $_" if $_ =~ /\./;
+            die "Iterator variable can't be traversable: $_" if /\./;
             $_;
         } split( /\s*,\s*/, $1 );
     }

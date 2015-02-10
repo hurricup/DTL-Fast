@@ -11,9 +11,16 @@ sub new
     
     $parameter =~ s/(^\s+|['"]+|\s+$)//gs; 
     my @modules = split /\s+/, $parameter;
-    require Module::Load;
     
-    map{ Module::Load::load $_ } @modules;
+    foreach my $module (@modules)
+    {
+        if( not $DTL::Fast::LOADED_MODULES{$module} )
+        {
+            require Module::Load;
+            Module::Load::load $module;
+            $DTL::Fast::LOADED_MODULES{$module} = time;
+        }
+    }
     
     return;
 }

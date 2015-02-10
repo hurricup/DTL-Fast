@@ -1,5 +1,8 @@
 Revision history for Perl extension DTL::Fast.
 
+1.608 - Tue 10 Feb 2015 12:49 MSK
+	- Removed map usage in complicated loops
+
 1.606 - Mon 09 Feb 2015 16:23 MSK
     - SSI tag behavior now is like in Django, fixes #26
     - ifchanged tag is now rendered on the first pass

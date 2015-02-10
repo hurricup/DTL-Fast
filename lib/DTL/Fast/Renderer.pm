@@ -27,10 +27,14 @@ sub render
 
     $global_safe ||= $context->get('_dtl_safe') // 0;
   
-  
-    return join '', map{ 
-        $_->render($context, $global_safe) // ''
-    } @{$self->{'chunks'}};
+    my $result = [];
+    
+    foreach my $chunk (@{$self->{'chunks'}})
+    {
+        push @$result, $chunk->render($context, $global_safe) // '';
+    }
+        
+    return join '', @$result;
 }
 
 1;

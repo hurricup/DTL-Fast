@@ -125,9 +125,12 @@ sub render_arguments
     {
         if( ref $self->{'arguments'} eq 'ARRAY' )
         {
-            $result = [(
-                map{ $_->render($context) } @{$self->{'arguments'}}
-            )];
+            $result = [];
+            
+            foreach my $argument (@{$self->{'arguments'}})
+            {
+                push @$result, $argument->render($context);
+            }
         }
         else    # MUST be a HASH
         {

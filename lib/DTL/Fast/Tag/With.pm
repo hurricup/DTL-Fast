@@ -42,11 +42,13 @@ sub render
     my $self = shift;
     my $context = shift;
     
-    $context->push_scope()->set(
-        map{
-            $_ => $self->{'mappings'}->{$_}->render($context)
-        } keys(%{$self->{'mappings'}})
-    );
+    my %vars = ();
+    foreach my $key (keys(%{$self->{'mappings'}}))
+    {
+        $vars{$key} = $self->{'mappings'}->{$key}->render($context);
+    }
+    
+    $context->push_scope()->set(%vars);
    
     my $result = $self->SUPER::render($context);
 
