@@ -22,6 +22,20 @@ _EOT_
 
 is( $template->render($context), $test_string, 'Simple comment');
 
+
+$template = DTL::Fast::Template->new( << '_EOT_' );
+Simple {% 
+comment Some explanation %} 
+NOT RENDER {% 
+endcomment%} comment test
+_EOT_
+
+$test_string = <<'_EOT_';
+Simple  comment test
+_EOT_
+
+is( $template->render($context), $test_string, 'Simple comment with newlines');
+
 $test_string = <<'_EOT_';
 This is commented  test checking  endit
 _EOT_

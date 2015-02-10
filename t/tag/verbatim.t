@@ -34,6 +34,16 @@ my $SET = [
         'test' => 'here 1234  {{ var1 }} {% endverbatim %} {{ slug }}  example',
         'title' => 'Named verbatim block rendering',
     },
+    {
+        'template' => 'here {{ var1 }} {%verbatim %} {{ var1 }} {% endverbatim%} {{ slug }} {% endverbatim %} example',
+        'test' => 'here 1234  {{ var1 }}  дрель  example',
+        'title' => 'Premature closed verbatim rendering, spaceless',
+    },
+    {
+        'template' => 'here {{ var1 }} {%verbatim myblock %} {{ var1 }} {% endverbatim %} {{ slug }} {% endverbatim   myblock%} example',
+        'test' => 'here 1234  {{ var1 }} {% endverbatim %} {{ slug }}  example',
+        'title' => 'Named verbatim block rendering, spaceless',
+    },
 ];
 
 foreach my $data (@$SET)

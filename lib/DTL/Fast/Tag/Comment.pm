@@ -15,7 +15,7 @@ sub parse_next_chunk
     my $self = shift;
     my $chunk = shift @{$self->{'raw_chunks'}};
     
-    if( $chunk eq '{% endcomment %}' )
+    if( $chunk =~ /^\{\%\s*endcomment\s*\%\}$/six )
     {
         $self->{'raw_chunks'} = []; # this stops parsing
     }
