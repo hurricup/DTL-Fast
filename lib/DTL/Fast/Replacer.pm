@@ -47,7 +47,6 @@ sub backup_expression
             $expression
             , 'replacement' => $self->{'replacement'}
             , 'level' => 0 
-            , '_template' => $self->{'_template'}
         )
     );
 }
@@ -78,7 +77,6 @@ sub get_backup_or_expression
             $token
             , 'replacement' => $self->{'replacement'}
             , 'level' => $current_level+1 
-            , '_template' => $self->{'_template'}
         );
    
     return $result;

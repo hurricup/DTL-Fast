@@ -11,7 +11,7 @@ sub new
 
     $kwargs{'condition'} = ref $condition ?
         $condition
-        : DTL::Fast::Expression->new($condition, '_template' => $kwargs{'_template'});
+        : DTL::Fast::Expression->new($condition);
     
     my $self = $proto->SUPER::new(%kwargs);
     

@@ -6,6 +6,12 @@ use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
 use Data::Dumper;
 
+use locale;
+use POSIX qw(locale_h);
+my $locale = "ru_RU.CP-1251";
+setlocale(LC_COLLATE, $locale);
+setlocale(LC_CTYPE, $locale);
+
 my( $template, $test_string, $context);
 
 $context = new DTL::Fast::Context({
@@ -31,6 +37,15 @@ _EOT_
 Dynamic TEST1
 _EOT_
         'title' => 'Dynamic uppercasing',
+    },
+    {
+        'template' => <<'_EOT_',
+Dynamic {{ "Привет"|upper }}
+_EOT_
+        'test' => <<'_EOT_',
+Dynamic ПРИВЕТ
+_EOT_
+        'title' => 'Locale specific uppercasing',
     },
 ];
 

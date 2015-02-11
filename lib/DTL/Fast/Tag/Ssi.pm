@@ -13,7 +13,7 @@ sub parse_parameters
     if( $self->{'parameter'} =~ /^\s*(.+?)(?:\s*(parsed))?\s*$/ )
     {
         @{$self}{'template', 'parsed'} = (
-            DTL::Fast::Variable->new($1, '_template' => $self->{'_template'})
+            DTL::Fast::Variable->new($1)
             , $2 
         );
     }

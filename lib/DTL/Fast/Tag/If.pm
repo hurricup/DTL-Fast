@@ -73,7 +73,7 @@ sub render
 sub add_condition
 {
     my( $self, $condition ) = @_;
-    push @{$self->{'conditions'}}, DTL::Fast::Tag::If::Condition->new($condition, '_template' => $self->{'_template'});
+    push @{$self->{'conditions'}}, DTL::Fast::Tag::If::Condition->new($condition);
     return $self;
 }
 

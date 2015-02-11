@@ -1,69 +1,74 @@
 package DTL::Fast::Filters;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
+use DTL::Fast qw(register_filter);
 # not in Django
 
 # experimental
-use DTL::Fast::Filter::Numberformat;
+register_filter(qw(
+    numberformat        DTL::Fast::Filter::Numberformat
+    reverse             DTL::Fast::Filter::Reverse
+    strftime            DTL::Fast::Filter::Strftime
+));
 
 # built in filters
-use DTL::Fast::Filter::Add;
-use DTL::Fast::Filter::Addslashes;
-use DTL::Fast::Filter::Capfirst;
-use DTL::Fast::Filter::Center;
-use DTL::Fast::Filter::Cut;
-use DTL::Fast::Filter::Date;
-use DTL::Fast::Filter::Default;
-use DTL::Fast::Filter::DefaultIfNone;
-use DTL::Fast::Filter::Dictsort;
-use DTL::Fast::Filter::Dictsortreversed;
-use DTL::Fast::Filter::Divisibleby;
-use DTL::Fast::Filter::Escape;
-use DTL::Fast::Filter::Escapejs;
-use DTL::Fast::Filter::Filesizeformat;
-use DTL::Fast::Filter::First;
-use DTL::Fast::Filter::Floatformat;
-use DTL::Fast::Filter::Getdigit;
-use DTL::Fast::Filter::Iriencode;
-use DTL::Fast::Filter::Join;
-use DTL::Fast::Filter::Last;
-use DTL::Fast::Filter::Length;
-use DTL::Fast::Filter::Lengthis;
-use DTL::Fast::Filter::Linebreaks;
-use DTL::Fast::Filter::Linebreaksbr;
-use DTL::Fast::Filter::Linenumbers;
-use DTL::Fast::Filter::Ljust;
-use DTL::Fast::Filter::Lower;
-use DTL::Fast::Filter::MakeList;
-use DTL::Fast::Filter::PhoneToNumeric;
-use DTL::Fast::Filter::Pluralize;
-use DTL::Fast::Filter::Random;
-use DTL::Fast::Filter::Removetags;
-use DTL::Fast::Filter::Reverse;
-use DTL::Fast::Filter::Rjust;
-use DTL::Fast::Filter::Safe;
-use DTL::Fast::Filter::SafeSeq;
-use DTL::Fast::Filter::Slice;
-use DTL::Fast::Filter::Slugify;
-use DTL::Fast::Filter::Strftime;
-use DTL::Fast::Filter::Stringformat;
-use DTL::Fast::Filter::Striptags;
-use DTL::Fast::Filter::Time;
-use DTL::Fast::Filter::Timesince;
-use DTL::Fast::Filter::Timeuntil;
-use DTL::Fast::Filter::Title;
-use DTL::Fast::Filter::Truncatechars;
-use DTL::Fast::Filter::Truncatecharshtml;
-use DTL::Fast::Filter::Truncatewords;
-use DTL::Fast::Filter::Truncatewordshtml;
-use DTL::Fast::Filter::Unorderedlist;
-use DTL::Fast::Filter::Upper;
-use DTL::Fast::Filter::Urlencode;
-use DTL::Fast::Filter::Urlize;
-use DTL::Fast::Filter::Urlizetrunc;
-use DTL::Fast::Filter::Wordcount;
-use DTL::Fast::Filter::Wordwrap;
-use DTL::Fast::Filter::Yesno;
-
+register_filter(qw(
+    add                 DTL::Fast::Filter::Add
+    addslashes          DTL::Fast::Filter::Addslashes
+    capfirst            DTL::Fast::Filter::Capfirst
+    center              DTL::Fast::Filter::Center
+    cut                 DTL::Fast::Filter::Cut
+    date                DTL::Fast::Filter::Date
+    default             DTL::Fast::Filter::Default
+    default_if_none     DTL::Fast::Filter::DefaultIfNone
+    dictsort            DTL::Fast::Filter::Dictsort
+    dictsortreversed    DTL::Fast::Filter::Dictsortreversed
+    divisibleby         DTL::Fast::Filter::Divisibleby
+    escape              DTL::Fast::Filter::Escape
+    escapejs            DTL::Fast::Filter::Escapejs
+    filesizeformat      DTL::Fast::Filter::Filesizeformat
+    first               DTL::Fast::Filter::First
+    floatformat         DTL::Fast::Filter::Floatformat
+    force_escape        DTL::Fast::Filter::Escape
+    get_digit           DTL::Fast::Filter::Getdigit
+    iriencode           DTL::Fast::Filter::Iriencode
+    join                DTL::Fast::Filter::Join
+    last                DTL::Fast::Filter::Last
+    length              DTL::Fast::Filter::Length
+    length_is           DTL::Fast::Filter::Lengthis
+    linebreaks          DTL::Fast::Filter::Linebreaks
+    linebreaksbr        DTL::Fast::Filter::Linebreaksbr
+    linenumbers         DTL::Fast::Filter::Linenumbers
+    ljust               DTL::Fast::Filter::Ljust
+    lower               DTL::Fast::Filter::Lower
+    make_list           DTL::Fast::Filter::MakeList
+    phone2numeric       DTL::Fast::Filter::PhoneToNumeric
+    pluralize           DTL::Fast::Filter::Pluralize
+    random              DTL::Fast::Filter::Random
+    removetags          DTL::Fast::Filter::Removetags
+    rjust               DTL::Fast::Filter::Rjust
+    safe                DTL::Fast::Filter::Safe
+    safeseq             DTL::Fast::Filter::SafeSeq
+    slice               DTL::Fast::Filter::Slice
+    slugify             DTL::Fast::Filter::Slugify
+    stringformat        DTL::Fast::Filter::Stringformat
+    striptags           DTL::Fast::Filter::Striptags
+    time                DTL::Fast::Filter::Time
+    timesince           DTL::Fast::Filter::Timesince
+    timeuntil           DTL::Fast::Filter::Timeuntil
+    title               DTL::Fast::Filter::Title
+    truncatechars       DTL::Fast::Filter::Truncatechars
+    truncatechars_html  DTL::Fast::Filter::Truncatecharshtml
+    truncatewords       DTL::Fast::Filter::Truncatewords
+    truncatewords_html  DTL::Fast::Filter::Truncatewordshtml
+    unordered_list      DTL::Fast::Filter::Unorderedlist
+    upper               DTL::Fast::Filter::Upper
+    urlencode           DTL::Fast::Filter::Urlencode
+    urlize              DTL::Fast::Filter::Urlize
+    urlizetrunc         DTL::Fast::Filter::Urlizetrunc
+    wordcount           DTL::Fast::Filter::Wordcount
+    wordwrap            DTL::Fast::Filter::Wordwrap
+    yesno               DTL::Fast::Filter::Yesno
+));
 
 1;

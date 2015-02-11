@@ -27,5 +27,9 @@ $test_string = 'Reversed: Alexandr,Sergey,Ivan';
 
 is( DTL::Fast::Template->new( $template )->render($context), $test_string, 'Reversed join');
 
+$template = 'Reversed: {{ "test string"|reverse }}';
+$test_string = 'Reversed: gnirts tset';
+
+is( DTL::Fast::Template->new( $template )->render($context), $test_string, 'Reversed scalar');
 
 done_testing();

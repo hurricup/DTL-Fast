@@ -137,14 +137,14 @@ sub _parse_expression
                             }
                             else
                             {
-                                $result = DTL::Fast::Expression::Operator->new( $token, $operand, '_template' => $self->{'_template'});
+                                $result = DTL::Fast::Expression::Operator->new( $token, $operand);
                             }
                         }
                         elsif($handler eq 'DTL::Fast::Expression::Operator::Binary')
                         {
                             if( defined $result )
                             {
-                                $result = DTL::Fast::Expression::Operator->new( $token, $result, $operand, '_template' => $self->{'_template'});
+                                $result = DTL::Fast::Expression::Operator->new( $token, $result, $operand);
                             }
                             else
                             {

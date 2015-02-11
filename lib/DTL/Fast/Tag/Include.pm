@@ -30,7 +30,7 @@ sub new
 sub parse_parameters
 {
     my $self = shift;
-    $self->{'template'} = DTL::Fast::Expression->new($self->{'parameter'}, '_template' => $self->{'_template'});
+    $self->{'template'} = DTL::Fast::Expression->new($self->{'parameter'});
     return $self;
 }
 

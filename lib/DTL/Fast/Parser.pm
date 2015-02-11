@@ -24,7 +24,7 @@ sub new
 
     my $self = $proto->SUPER::new(%kwargs)->parse_chunks();
     
-    delete @{$self}{'_template', '_container_block', 'raw_chunks'};
+    delete @{$self}{'_container_block', 'raw_chunks'};
     
     return $self;
 }
@@ -98,7 +98,6 @@ sub parse_tag_chunk
             $tag_param
             , 'raw_chunks' => $self->{'raw_chunks'}
             , 'dirs' => $self->{'dirs'}
-            , '_template' => $self->{'_template'} // $self
             , '_container_block' => $self->get_container_block()
         );
     }
@@ -107,8 +106,7 @@ sub parse_tag_chunk
 #        use Data::Dumper;
         warn sprintf ('Unknown tag: %s in %s'
             , $tag_name
-#            , Dumper($self)
-            , ($self->{'_template'} // $self)->{'inherited'}->[0] // 'inline'
+            , ($DTL::Fast::Template::CURRENT_TEMPLATE // $self)->{'inherited'}->[0] // 'inline'
         );
         $result = DTL::Fast::Text->new();
     }

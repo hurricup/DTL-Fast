@@ -11,7 +11,8 @@ sub new
     
     die "Parameter must be an ARRAY reference" 
         if ref $kwargs{'parameter'} ne 'ARRAY';
-    
+
+    $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} = $proto->VERSION // DTL::Fast->VERSION;
     my $self = bless {%kwargs}, $proto;
     
     return $self->parse_parameters();

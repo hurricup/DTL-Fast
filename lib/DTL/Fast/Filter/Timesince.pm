@@ -60,7 +60,7 @@ sub time_diff
                 push @diffs, sprintf( '%d %s%s'
                     , $val
                     , $lapse->[0]
-                    , $DTL::Fast::FILTER_HANDLERS{'pluralize'}->pluralize($val, ['s'])
+                    , ($DTL::Fast::FILTER_HANDLERS{'pluralize'} // require DTL::Fast::Filter::Pluralize && 'DTL::Fast::Filter::Pluralize')->pluralize($val, ['s'])
                 );
                 
                 if( scalar @diffs == $MAXSTEPS )

@@ -15,7 +15,7 @@ sub parse_parameters
     $self->{'mappings'} = {};
     if( $self->{'parameter'} =~ /^\s*(.+?)\s+as\s+(.+)\s*$/s )  # legacy
     {
-        $self->{'mappings'}->{$2} = DTL::Fast::Expression->new($1, '_template' => $self->{'_template'});
+        $self->{'mappings'}->{$2} = DTL::Fast::Expression->new($1);
     }
     else    # modern
     {

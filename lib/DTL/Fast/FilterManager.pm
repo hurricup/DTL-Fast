@@ -82,6 +82,16 @@ sub add_filter
     my @arguments = split /\s*\:\s*/x, $self->backup_strings($filter_name);
     $filter_name = shift @arguments;
 
+    if( 
+        not exists $DTL::Fast::FILTER_HANDLERS{$filter_name} 
+        and exists $DTL::Fast::KNOWN_FILTERS{$filter_name}
+    )
+    {
+        require Module::Load;
+        Module::Load::load($DTL::Fast::KNOWN_FILTERS{$filter_name});
+        $DTL::Fast::LOADED_MODULES{$DTL::Fast::KNOWN_FILTERS{$filter_name}} = time;            
+    }
+
     if( exists $DTL::Fast::FILTER_HANDLERS{$filter_name} )
     {
         my $args = [];

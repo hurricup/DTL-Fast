@@ -12,7 +12,9 @@ sub get_close_tag{ return 'endfilter';}
 sub parse_parameters
 {
     my $self = shift;
-    $self->{'filter_manager'} = DTL::Fast::FilterManager->new('filters' => $self->{'parameter'});
+    $self->{'filter_manager'} = DTL::Fast::FilterManager->new(
+        'filters' => $self->{'parameter'}
+    );
     return $self;
 }
 

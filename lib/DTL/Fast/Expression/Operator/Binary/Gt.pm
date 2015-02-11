@@ -5,6 +5,7 @@ use parent 'DTL::Fast::Expression::Operator::Binary';
 $DTL::Fast::Expression::Operator::KNOWN{'>'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
+use locale;
 
 sub dispatch
 {

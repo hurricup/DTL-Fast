@@ -2,6 +2,8 @@ package DTL::Fast::Tag;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Parser';
 
+use DTL::Fast::Template;
+
 sub new
 {
     my( $proto, $parameter, %kwargs ) = @_;
@@ -9,7 +11,7 @@ sub new
     
     $parameter =~ s/(^\s+|\s+$)//gs;
 
-    $kwargs{'_template'}->{'modules'}->{$proto} //= $proto->VERSION // $DTL::Fast::VERSION;
+    $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} //= $proto->VERSION // DTL::Fast->VERSION;
     
     $kwargs{'parameter'} = $parameter;
     return $proto->SUPER::new(%kwargs);

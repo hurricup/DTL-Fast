@@ -16,15 +16,6 @@ sub parse_parameters
 {
     my( $self ) = @_;
 
-    die sprintf("Structure error. Top-level object for %s must be a DTL::Fast::Template, not %s (%s)"
-        , __PACKAGE__
-        , $self->{'_template'} // 'undef'
-        , ref $self->{'_template'} || 'SCALAR' 
-    ) if not $self->{'_template'}
-        or not ref $self->{'_template'}
-        or not $self->{'_template'}->isa('DTL::Fast::Template')
-    ;
-    
     if( not $self->{'_container_block'} )
     {
         die "There is no container block defined for: ".Dumper($self);

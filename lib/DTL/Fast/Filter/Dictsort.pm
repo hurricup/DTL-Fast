@@ -5,6 +5,7 @@ use parent 'DTL::Fast::Filter';
 $DTL::Fast::FILTER_HANDLERS{'dictsort'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
+use locale;
 
 #@Override
 sub parse_parameters

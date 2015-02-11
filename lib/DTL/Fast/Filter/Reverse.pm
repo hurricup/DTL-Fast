@@ -7,10 +7,7 @@ $DTL::Fast::FILTER_HANDLERS{'reverse'} = __PACKAGE__;
 #@Overrde
 sub filter
 {
-    my $self = shift;
-    my $filter_manager = shift;
-    my $value = shift;
-    my $context = shift;
+    my( $self, $filter_manager, $value, $context ) = @_;
     my $result;
 
     my $value_type = ref $value;
@@ -26,6 +23,10 @@ sub filter
     elsif( UNIVERSAL::can($value_type, 'reverse') )
     {
         $result = $value->reverse($context);
+    }
+    elsif( not $value_type )
+    {
+        $result = join '', reverse ($value =~ /(.)/gs);
     }
     else
     {

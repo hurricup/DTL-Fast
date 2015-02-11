@@ -61,7 +61,7 @@ sub add_main_condition
 {
     my $self = shift;
     my $sources = shift;
-    return $self->add_condition(DTL::Fast::Expression::Operator::Binary::Eq->new(@{$sources}[0,1]), '_template' => $self->{'_template'});
+    return $self->add_condition(DTL::Fast::Expression::Operator::Binary::Eq->new(@{$sources}[0,1]));
 }
 
 #@Override
@@ -69,7 +69,7 @@ sub add_condition
 {
     my $self = shift;
     my $condition = shift;
-    push @{$self->{'conditions'}}, DTL::Fast::Tag::If::Condition->new($condition, '_template' => $self->{'_template'});
+    push @{$self->{'conditions'}}, DTL::Fast::Tag::If::Condition->new($condition);
     return $self;
 }
 

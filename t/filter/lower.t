@@ -1,16 +1,24 @@
 #!/usr/bin/perl
 use strict; use warnings FATAL => 'all'; 
+no warnings;
 use Test::More;
 
 use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
 use Data::Dumper;
 
+use locale;
+use POSIX qw(locale_h);
+my $locale = "ru_RU.CP-1251";
+setlocale(LC_COLLATE, $locale);
+setlocale(LC_CTYPE, $locale);
+
 my( $template, $test_string, $context);
 
 $context = new DTL::Fast::Context({
     'var1' => "tEsT1",
     'var2' => 'Test2',
+    'var3' => 'Привет',
 });
 
 my $SET = [
@@ -31,6 +39,15 @@ _EOT_
 Dynamic test1
 _EOT_
         'title' => 'Dynamic lowercasing',
+    },
+    {
+        'template' => <<'_EOT_',
+Dynamic {{ "Привет"|lower }}
+_EOT_
+        'test' => <<'_EOT_',
+Dynamic привет
+_EOT_
+        'title' => 'Locale-specific lowercasing',
     },
 ];
 

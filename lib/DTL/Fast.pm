@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.608'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.609'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -244,6 +244,37 @@ sub preload_tags
     while( my( $keyword, $module) = each %KNOWN_TAGS )
     {
         Module::Load::load($module);
+        $LOADED_MODULES{$module} = time;
+    }
+    
+    return 1;
+}
+
+
+# registering filter as known
+push @EXPORT_OK, 'register_filter';
+sub register_filter
+{
+    my( %filters ) = @_;
+    
+    while( my( $slug, $module) = each %filters )
+    {
+        $DTL::Fast::KNOWN_FILTERS{lc($slug)} = $module;
+    }
+    
+    return;
+}
+
+# registering tag as known
+push @EXPORT_OK, 'preload_filters';
+sub preload_filters
+{
+    require Module::Load;
+    
+    while( my( $keyword, $module) = each %KNOWN_FILTERS )
+    {
+        Module::Load::load($module);
+        $LOADED_MODULES{$module} = time;
     }
     
     return 1;
@@ -264,7 +295,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.608
+Version 1.609
 
 =head1 SYNOPSIS
 
@@ -397,7 +428,7 @@ or
         'mytag' => 'MyTag::Module'
     );
     
-This method registers or oferrides registered tag keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</Custom tags> section.
+This method registers or overrides registered tag keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</Custom tags> section.
 
 =head2 preload_tags
 
@@ -405,7 +436,25 @@ This method registers or oferrides registered tag keyword with handler module. M
     
     preload_tags();
     
-Preloads all registered tags. Mostly for debugging purposes or persistent environment stability.
+Preloads all registered tags modules. Mostly for debugging purposes or persistent environment stability.
+
+=head2 register_filter
+
+    use DTL::Fast qw(register_filter);
+    
+    register_filter(
+        'myfilter' => 'MyFilter::Module'
+    );
+    
+This method registers or overrides registered filter keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</Custom filters> section.
+
+=head2 preload_filters
+
+    use DTL::Fast qw(preload_filters);
+    
+    preload_filters();
+    
+Preloads all registered filters modules. Mostly for debugging purposes or persistent environment stability.
 
 =head2 Cache classes
 
@@ -455,6 +504,26 @@ Formats 12345678.9012 as
     12 345 678.9012
 
 Split integer part of the number by 3 digits, separated by spaces.
+
+=head3 reverse
+
+Reverses data depending on type:
+
+=over
+
+=item * Scalar will be reversed literally: "hi there" => "ereht ih"
+
+=item * Array will be reversed using perl's reverse function
+
+=item * Hash will be reversed using perl's reverse function
+
+=item * Object may provide reverse method to be used with this filter
+
+=back
+
+=head3 strftime
+
+Formatting timestamp using L<C<Date::Format>> module. This is C-style date formatting, not PHP one.
 
 =head1 INCOMPATIBILITIES WITH DJANGO TEMPLATES
 

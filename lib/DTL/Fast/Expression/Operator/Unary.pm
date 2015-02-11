@@ -5,14 +5,13 @@ use DTL::Fast::Expression::Operator::Unary::Not;
 
 # not in Django
 use DTL::Fast::Expression::Operator::Unary::Defined;
+use DTL::Fast::Template;
 
 sub new
 {
     my( $proto, $argument, %kwargs ) = @_;
     $kwargs{'a'} = $argument;
-    $kwargs{'_template'}->{'modules'}->{$proto} //= $proto->VERSION // $DTL::Fast::VERSION;
-
-    delete $kwargs{'_template'};
+    $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} //= $proto->VERSION // DTL::Fast->VERSION;
     
     return bless {%kwargs}, $proto;
 }

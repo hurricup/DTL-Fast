@@ -4,6 +4,7 @@ use parent 'DTL::Fast::Filter';
 
 $DTL::Fast::FILTER_HANDLERS{'title'} = __PACKAGE__;
 
+use locale;
 
 #@Override
 sub filter

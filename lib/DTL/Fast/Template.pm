@@ -6,6 +6,8 @@ use DTL::Fast::Context;
 use DTL::Fast::Tags;
 use DTL::Fast::Filters;    
 
+our $CURRENT_TEMPLATE;  # global variable for linking  modules
+
 #@Override
 sub new
 {
@@ -37,7 +39,7 @@ sub new
     push @{$kwargs{'inherited'}}, $kwargs{'file_path'};
     
     my $self = $proto->SUPER::new(%kwargs);
-
+    
     if( $self->{'extends'} )
     {
         my $parent_template = DTL::Fast::read_template(
@@ -80,6 +82,20 @@ sub merge_template
     # appending inheritance path
     @{$self}{'inherited','inherits'} = @{$donor}{'inherited','inherits'};
     
+    return $self;
+}
+
+#@Override
+sub parse_chunks
+{
+    my( $self ) = @_;
+    
+    my $current_template_backup = $CURRENT_TEMPLATE;
+    $CURRENT_TEMPLATE = $self;
+    
+    $self->SUPER::parse_chunks();
+    
+    $CURRENT_TEMPLATE = $current_template_backup;
     return $self;
 }
 
