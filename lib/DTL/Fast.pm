@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.609.0_1'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.609'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -345,7 +345,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.609.0_1
+Version 1.609
 
 =head1 SYNOPSIS
 

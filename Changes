@@ -1,6 +1,6 @@
 Revision history for Perl extension DTL::Fast.
 
-1.609 - Wed 11 Feb 2015 15:01 MSK
+1.609 - Wed 11 Feb 2015 21:38 MSK
     - Dynamic filters loading implemented, fixes #16
     - Dynamic operators loading implemented, fixes #19
     - Custom operators introduced
