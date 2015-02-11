@@ -1,10 +1,6 @@
 package DTL::Fast::Expression::Operator::Unary;
 use strict; use utf8; use warnings FATAL => 'all'; 
 
-use DTL::Fast::Expression::Operator::Unary::Not;
-
-# not in Django
-use DTL::Fast::Expression::Operator::Unary::Defined;
 use DTL::Fast::Template;
 
 sub new

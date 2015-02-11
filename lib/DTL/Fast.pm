@@ -12,9 +12,11 @@ our %FILTER_HANDLERS;
 our %OPS_HANDLERS;
 
 # known but not loaded modules
-our %KNOWN_TAGS;
-our %KNOWN_FILTERS;
-our %KNOWN_OPS;
+our %KNOWN_TAGS;        # plain map tag => module
+our %KNOWN_FILTERS;     # plain map filter => module
+our %KNOWN_OPS;         # complex map priority => operator => module
+our %KNOWN_OPS_PLAIN;   # plain map operator => module
+our @OPS_RE = ();
 
 # modules hash to avoid duplicating on deserializing
 our %LOADED_MODULES;
@@ -245,6 +247,7 @@ sub preload_tags
     {
         Module::Load::load($module);
         $LOADED_MODULES{$module} = time;
+        delete $TAG_HANDLERS{$keyword} if exists $TAG_HANDLERS{$keyword} and $TAG_HANDLERS{$keyword} ne $module;
     }
     
     return 1;
@@ -259,19 +262,66 @@ sub register_filter
     
     while( my( $slug, $module) = each %filters )
     {
-        $DTL::Fast::KNOWN_FILTERS{lc($slug)} = $module;
+        $DTL::Fast::KNOWN_FILTERS{$slug} = $module;
+        delete $FILTER_HANDLERS{$slug} if exists $FILTER_HANDLERS{$slug} and $FILTER_HANDLERS{$slug} ne $module;
     }
     
     return;
 }
 
-# registering tag as known
 push @EXPORT_OK, 'preload_filters';
 sub preload_filters
 {
     require Module::Load;
     
     while( my( $keyword, $module) = each %KNOWN_FILTERS )
+    {
+        Module::Load::load($module);
+        $LOADED_MODULES{$module} = time;
+    }
+    
+    return 1;
+}
+
+# invoke with parameters:
+#
+#   '=' => [ priority, module ]
+#
+push @EXPORT_OK, 'register_operator';
+sub register_operator
+{
+    my %ops = @_;
+    
+    my %recompile = ();
+    foreach my $operator (keys %ops)
+    {
+        my($priority, $module) = @{$ops{$operator}};
+        
+        die "Operator priority must be a number from 0 to 8"
+            if $priority !~ /^[012345678]$/;
+        
+        $KNOWN_OPS{$priority} //= {};
+        $KNOWN_OPS{$priority}->{$operator} = $module;
+        $recompile{$priority} = 1;
+        $KNOWN_OPS_PLAIN{$operator} = $module;
+        delete $OPS_HANDLERS{$operator} if exists $OPS_HANDLERS{$operator} and $OPS_HANDLERS{$operator} ne $module;
+    }
+    
+    foreach my $priority (keys(%recompile))
+    {
+        my @ops = sort{ length $b <=> length $a } keys(%{$KNOWN_OPS{$priority}});
+        my $ops = join '|', map{ "\Q$_\E" } @ops;
+        $OPS_RE[$priority] = $ops;
+    }
+}
+
+
+push @EXPORT_OK, 'preload_operators';
+sub preload_operators
+{
+    require Module::Load;
+    
+    while( my( $keyword, $module) = each %KNOWN_OPS_PLAIN )
     {
         Module::Load::load($module);
         $LOADED_MODULES{$module} = time;
@@ -319,7 +369,7 @@ And load and render it:
 
 This module is a Perl and stand-alone templating system, cloned from Django templating sytem, described in L<here|https://docs.djangoproject.com/en/1.7/topics/templates/>.
 
-=head2 GOALS
+=head2 Goals
 
 Goals of this implementation are:
 
@@ -333,7 +383,7 @@ Goals of this implementation are:
 
 =back
 
-=head2 CURRENT STATUS
+=head2 Current status
 
 Current release implements almost all tags and filters documented on Django site.
 
@@ -341,7 +391,7 @@ There are no significant speed optimizations done yet.
 
 Internationalization and localization are not yet implemented.
 
-=head1 PERL SIDE
+=head1 BASICS
 
 You may get template object using three ways. 
 
@@ -428,7 +478,7 @@ or
         'mytag' => 'MyTag::Module'
     );
     
-This method registers or overrides registered tag keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</Custom tags> section.
+This method registers or overrides registered tag keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</CUSTOM TAGS> section.
 
 =head2 preload_tags
 
@@ -446,7 +496,7 @@ Preloads all registered tags modules. Mostly for debugging purposes or persisten
         'myfilter' => 'MyFilter::Module'
     );
     
-This method registers or overrides registered filter keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</Custom filters> section.
+This method registers or overrides registered filter keyword with handler module. Module will be loaded when first encountered during template parsing. About handler modules you may read in L</CUSTOM FILTERS> section.
 
 =head2 preload_filters
 
@@ -456,15 +506,54 @@ This method registers or overrides registered filter keyword with handler module
     
 Preloads all registered filters modules. Mostly for debugging purposes or persistent environment stability.
 
-=head2 Cache classes
+=head2 register_operator
+
+    use DTL::Fast qw(register_operator);
+    
+    register_operator(
+        'xor' => [ 1, 'MyOps::XOR' ],
+        'myop' => [ 0, 'MyOps::MYOP' ],
+    );
+
+This method registers or overrides registered operator handlers. Handler module will be loaded when first encountered during template parsing. 
+
+Arguments hash is:
+
+    'operator_keyword' => [ precedence, handler_module ]
+
+Currently there are 9 precedences from 0 to 8, the lower is less prioritised. You may see built-in precedence in the C<DTL::Fast::Expression::Operator> module.
+
+More about custom operators you may read in L</CUSTOM OPERATORS> section.
+
+=head2 preload_filters
+
+    use DTL::Fast qw(preload_filters);
+    
+    preload_filters();
+    
+Preloads all registered filters modules. Mostly for debugging purposes or persistent environment stability.
+
+=head2 preload_operators
+
+    use DTL::Fast qw(preload_operators);
+    
+    preload_operators();
+    
+Preloads all registered operators modules. Mostly for debugging purposes or persistent environment stability.
+
+=head1 Cache classes
 
 To do...
 
-=head2 Custom tags
+=head1 CUSTOM TAGS
 
 To do...
 
-=head2 Custom filters
+=head1 CUSTOM FILTERS
+
+To do...
+
+=head1 CUSTOM OPERATORS
 
 To do...
 

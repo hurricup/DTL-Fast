@@ -2,7 +2,7 @@ package DTL::Fast::Expression::Operator::Binary::And;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary::Logical';
 
-$DTL::Fast::Expression::Operator::KNOWN{'and'} = __PACKAGE__;
+$DTL::Fast::OPS_HANDLERS{'and'} = __PACKAGE__;
 
 sub dispatch
 {

@@ -2,7 +2,7 @@ package DTL::Fast::Expression::Operator::Binary::In;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
 
-$DTL::Fast::Expression::Operator::KNOWN{'in'} = __PACKAGE__;
+$DTL::Fast::OPS_HANDLERS{'in'} = __PACKAGE__;
 
 use DTL::Fast::Expression::Operator::Binary::Eq;
 

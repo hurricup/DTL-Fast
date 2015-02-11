@@ -2,6 +2,7 @@ package DTL::Fast::Expression;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Replacer';
 
+use DTL::Fast;
 use DTL::Fast::Variable;
 use DTL::Fast::Expression::Operator;
 use DTL::Fast::Replacer::Replacement;
@@ -71,10 +72,9 @@ sub _parse_expression
     
     my $result = undef;
     
-    for( my $level = $self->{'level'}; $level < scalar @{$DTL::Fast::Expression::Operator::OPERATORS}; $level++ )
+    for( my $level = $self->{'level'}; $level < scalar @DTL::Fast::OPS_RE; $level++ )
     {
-        my $precedence = $DTL::Fast::Expression::Operator::OPERATORS->[$level];
-        my( $operators, $handler ) = @$precedence;
+        my $operators = $DTL::Fast::OPS_RE[$level];
 
         my @result = ();
         my @source = split /
@@ -126,7 +126,33 @@ sub _parse_expression
                     {
                         my $operand = shift @result;
                         
-                        if( $handler eq 'DTL::Fast::Expression::Operator::Unary' )
+                        if( not exists $DTL::Fast::OPS_HANDLERS{$token}
+                            and exists $DTL::Fast::KNOWN_OPS_PLAIN{$token}
+                        )
+                        {
+                            require Module::Load;
+                            Module::Load::load($DTL::Fast::KNOWN_OPS_PLAIN{$token});
+                            $DTL::Fast::LOADED_MODULES{$DTL::Fast::KNOWN_OPS_PLAIN{$token}} = time;            
+                            $DTL::Fast::OPS_HANDLERS{$token} = $DTL::Fast::KNOWN_OPS_PLAIN{$token};
+                        }
+                        
+                        my $handler = $DTL::Fast::OPS_HANDLERS{$token} || die "There is no processor for $token operator";
+                        
+                        if($handler->isa('DTL::Fast::Expression::Operator::Binary'))
+                        {
+                            if( defined $result )
+                            {
+                                $result = $handler->new( $result, $operand );
+                            }
+                            else
+                            {
+                                die sprintf('Binary operator %s has no left argument: %s'
+                                    , $token
+                                    , $self->{'expression'}
+                                );
+                            }
+                        }
+                        elsif( $handler->isa('DTL::Fast::Expression::Operator::Unary') )
                         {
                             if( defined $result )
                             {
@@ -137,21 +163,7 @@ sub _parse_expression
                             }
                             else
                             {
-                                $result = DTL::Fast::Expression::Operator->new( $token, $operand);
-                            }
-                        }
-                        elsif($handler eq 'DTL::Fast::Expression::Operator::Binary')
-                        {
-                            if( defined $result )
-                            {
-                                $result = DTL::Fast::Expression::Operator->new( $token, $result, $operand);
-                            }
-                            else
-                            {
-                                die sprintf('Binary operator %s has no left argument: %s'
-                                    , $token
-                                    , $self->{'expression'}
-                                );
+                                $result = $handler->new( $operand);
                             }
                         }
                         else

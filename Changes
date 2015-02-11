@@ -1,7 +1,9 @@
 Revision history for Perl extension DTL::Fast.
 
 1.609 - Wed 11 Feb 2015 15:01 MSK
-    - Implemented dynamic filters loading, fixes #16
+    - Dynamic filters loading implemented, fixes #16
+    - Dynamic operators loading implemented, fixes #19
+    - Custom operators introduced
     - Documented some additional filters 
     - Fixed bug with locale-specific string operations: cmp, lt, gt, upper, lower, capfirst, dictsort
 

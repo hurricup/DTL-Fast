@@ -2,7 +2,7 @@ package DTL::Fast::Expression::Operator::Unary::Not;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Unary::Logical';
 
-$DTL::Fast::Expression::Operator::KNOWN{'not'} = __PACKAGE__;
+$DTL::Fast::OPS_HANDLERS{'not'} = __PACKAGE__;
 
 sub dispatch
 {

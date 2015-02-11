@@ -2,7 +2,7 @@ package DTL::Fast::Expression::Operator::Unary::Defined;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Expression::Operator::Unary';
 
-$DTL::Fast::Expression::Operator::KNOWN{'defined'} = __PACKAGE__;
+$DTL::Fast::OPS_HANDLERS{'defined'} = __PACKAGE__;
 
 sub render
 {

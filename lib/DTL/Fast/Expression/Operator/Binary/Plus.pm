@@ -2,7 +2,7 @@ package DTL::Fast::Expression::Operator::Binary::Plus;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary';
 
-$DTL::Fast::Expression::Operator::KNOWN{'+'} = __PACKAGE__;
+$DTL::Fast::OPS_HANDLERS{'+'} = __PACKAGE__;
 
 use Scalar::Util qw(looks_like_number);
 

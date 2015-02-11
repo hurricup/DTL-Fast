@@ -40,10 +40,10 @@ _EOT_
     },
     {
         'template' => <<'_EOT_',
-Dynamic {{ "ÐŸÑ€Ð¸Ð²ÐµÑ‚"|upper }}
+Dynamic {{ "Ïðèâåò"|upper }}
 _EOT_
         'test' => <<'_EOT_',
-Dynamic ÐŸÐ Ð˜Ð’Ð•Ð¢
+Dynamic ÏÐÈÂÅÒ
 _EOT_
         'title' => 'Locale specific uppercasing',
     },

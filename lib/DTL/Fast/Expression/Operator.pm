@@ -3,63 +3,38 @@ use strict; use utf8; use warnings FATAL => 'all';
 
 our $VERSION = '1.00';
 
-our $OPERATORS = [
-    ['or', 'DTL::Fast::Expression::Operator::Binary']                       # 0
-    , ['and', 'DTL::Fast::Expression::Operator::Binary']                    # 1
-    , ['==|!=|<>|<=|>=|<|>', 'DTL::Fast::Expression::Operator::Binary']     # 2
-    , ['[+-]', 'DTL::Fast::Expression::Operator::Binary']                   # 3
-    , ['[*/%]|mod', 'DTL::Fast::Expression::Operator::Binary']              # 4
-    , ['not\ in|in', 'DTL::Fast::Expression::Operator::Binary']             # 5
-    , ['not', 'DTL::Fast::Expression::Operator::Unary']                     # 6
-    , ['defined', 'DTL::Fast::Expression::Operator::Unary']                 # 7
-    , ['[*]{2}', 'DTL::Fast::Expression::Operator::Binary']                 # 8
-]; # 
+use DTL::Fast qw(register_operator);
 
-our %KNOWN;
+register_operator(
+    'or'        => [0, 'DTL::Fast::Expression::Operator::Binary::Or'],
 
-our %OPS;
+    'and'       => [1, 'DTL::Fast::Expression::Operator::Binary::And'],
 
-use DTL::Fast::Expression::Operator::Unary;
-use DTL::Fast::Expression::Operator::Binary;
+    '=='        => [2, 'DTL::Fast::Expression::Operator::Binary::Eq'],
+    '!='        => [2, 'DTL::Fast::Expression::Operator::Binary::Ne'],
+    '<>'        => [2, 'DTL::Fast::Expression::Operator::Binary::Ne'],
+    '<'         => [2, 'DTL::Fast::Expression::Operator::Binary::Lt'],
+    '>'         => [2, 'DTL::Fast::Expression::Operator::Binary::Gt'],
+    '<='        => [2, 'DTL::Fast::Expression::Operator::Binary::Le'],
+    '>='        => [2, 'DTL::Fast::Expression::Operator::Binary::Ge'],
 
-sub new
-{
-    my( $proto, $operator, @args ) = @_;
-    $operator = lc($operator);
-    
-    my $result = undef;
+    '+'         => [3, 'DTL::Fast::Expression::Operator::Binary::Plus'],
+    '-'         => [3, 'DTL::Fast::Expression::Operator::Binary::Minus'],
 
-    if( $DTL::Fast::Expression::Operator::KNOWN{$operator} )
-    {
-        $result = $DTL::Fast::Expression::Operator::KNOWN{$operator}->new(@args);
-    }
-    else
-    {
-        die "Unknown operator '$operator'";
-    }
-    
-    return $result;
-}
+    '*'         => [4, 'DTL::Fast::Expression::Operator::Binary::Mul'],
+    '/'         => [4, 'DTL::Fast::Expression::Operator::Binary::Div'],
+    '%'         => [4, 'DTL::Fast::Expression::Operator::Binary::Mod'],
+    'mod'       => [4, 'DTL::Fast::Expression::Operator::Binary::Mod'],
 
-# invoke with parameters:
-#
-#   '=' => [ priority, module ]
-#
-sub register_operator
-{
-    my %ops = @_;
-    
-    my %recompile = ();
-    foreach my $operator (keys %ops)
-    {
-        my($priority, $module) = @{$ops{$operator}};
-        
-        die "Operator priority must be a number from 0 to 8"
-            if $priority ;
-        
-        $OPS{$priority} //= {};
-        $OPS{$priority}->{$operator} = $module;
-    }
-}
+    'not in'    => [5, 'DTL::Fast::Expression::Operator::Binary::NotIn'], 
+    'in'        => [5, 'DTL::Fast::Expression::Operator::Binary::In'], 
+
+    'not'       => [6, 'DTL::Fast::Expression::Operator::Unary::Not'],
+
+    'defined'   => [7, 'DTL::Fast::Expression::Operator::Unary::Defined'],
+
+    '**'      => [8, 'DTL::Fast::Expression::Operator::Binary::Pow'],
+    'pow'       => [8, 'DTL::Fast::Expression::Operator::Binary::Pow'],
+);
 
 1;

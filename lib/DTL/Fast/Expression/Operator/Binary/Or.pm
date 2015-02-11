@@ -2,7 +2,7 @@ package DTL::Fast::Expression::Operator::Binary::Or;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Expression::Operator::Binary::Logical';
 
-$DTL::Fast::Expression::Operator::KNOWN{'or'} = __PACKAGE__;
+$DTL::Fast::OPS_HANDLERS{'or'} = __PACKAGE__;
 
 sub dispatch
 {
