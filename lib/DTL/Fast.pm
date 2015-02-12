@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.609'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.610'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -345,7 +345,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.609
+Version 1.610
 
 =head1 SYNOPSIS
 
@@ -525,14 +525,6 @@ Currently there are 9 precedences from 0 to 8, the lower is less prioritised. Yo
 
 More about custom operators you may read in L</CUSTOM OPERATORS> section.
 
-=head2 preload_filters
-
-    use DTL::Fast qw(preload_filters);
-    
-    preload_filters();
-    
-Preloads all registered filters modules. Mostly for debugging purposes or persistent environment stability.
-
 =head2 preload_operators
 
     use DTL::Fast qw(preload_operators);
@@ -540,24 +532,7 @@ Preloads all registered filters modules. Mostly for debugging purposes or persis
     preload_operators();
     
 Preloads all registered operators modules. Mostly for debugging purposes or persistent environment stability.
-
-=head1 Cache classes
-
-To do...
-
-=head1 CUSTOM TAGS
-
-To do...
-
-=head1 CUSTOM FILTERS
-
-To do...
-
-=head1 CUSTOM OPERATORS
-
-To do...
-
-    
+  
 =head1 TEMPLATING LANGUAGE
 
 =head2 Tags
@@ -613,6 +588,24 @@ Reverses data depending on type:
 =head3 strftime
 
 Formatting timestamp using L<C<Date::Format>> module. This is C-style date formatting, not PHP one.
+
+=head1 CUSTOM CACHE CLASSES
+
+To do...
+
+=head1 CUSTOM TAGS
+
+To do...
+
+=head1 CUSTOM FILTERS
+
+To do...
+
+=head1 CUSTOM OPERATORS
+
+To do...
+
+
 
 =head1 INCOMPATIBILITIES WITH DJANGO TEMPLATES
 
