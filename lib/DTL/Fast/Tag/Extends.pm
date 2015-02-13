@@ -17,8 +17,8 @@ sub parse_parameters
             or not ($parent_template = DTL::Fast::Variable->new($self->{'parameter'})->render());
             
     die sprintf("Multiple extends specified in the template:\n\%s\n\%s\n"
-        , $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'}
-        , $parent_template
+        , $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'} // 'undef'
+        , $parent_template // 'undef'
     ) if $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'};
             
     $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'} = $parent_template;

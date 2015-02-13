@@ -60,7 +60,7 @@ sub wrap_url
     $uri = 'http://'.$uri if
         $uri !~ m{^(http|ftp|https)://}i;
     return sprintf '<a href="%s" rel="nofollow">%s</a>%s'
-        , $uri
+        , $uri // 'undef'
         , html_protect(unescape($self->normalize_text($text)))
         , $appendix
         ;

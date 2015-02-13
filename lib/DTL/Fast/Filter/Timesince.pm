@@ -58,8 +58,8 @@ sub time_diff
                 my $val = int( $diff / $lapse->[1]);
                 $diff = $diff % $lapse->[1];
                 push @diffs, sprintf( '%d %s%s'
-                    , $val
-                    , $lapse->[0]
+                    , $val // 'undef'
+                    , $lapse->[0] // 'undef'
                     , ($DTL::Fast::FILTER_HANDLERS{'pluralize'} // require DTL::Fast::Filter::Pluralize && 'DTL::Fast::Filter::Pluralize')->pluralize($val, ['s'])
                 );
                 

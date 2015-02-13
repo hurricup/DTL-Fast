@@ -54,7 +54,7 @@ sub new
         else
         {
             die  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
-                , $self->{'extends' }
+                , $self->{'extends' } // 'undef'
                 , join( ', ', @{$kwargs{'dirs'}})
             );
         }

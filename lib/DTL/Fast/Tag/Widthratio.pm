@@ -19,7 +19,7 @@ sub parse_parameters
         
         die sprintf(
             "Three arguments should be passed to widthratio: %s %s"
-            , $self->{'parameter'} 
+            , $self->{'parameter'}  // 'undef'
             , scalar @{$self->{'sources'}}
         ) if scalar @{$self->{'sources'}} != 3;
     }

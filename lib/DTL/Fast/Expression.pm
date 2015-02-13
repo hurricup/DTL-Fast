@@ -147,8 +147,8 @@ sub _parse_expression
                             else
                             {
                                 die sprintf('Binary operator %s has no left argument: %s'
-                                    , $token
-                                    , $self->{'expression'}
+                                    , $token // 'undef'
+                                    , $self->{'expression'} // 'undef'
                                 );
                             }
                         }
@@ -157,8 +157,8 @@ sub _parse_expression
                             if( defined $result )
                             {
                                 die sprintf('Unary operator %s got left argument: %s'
-                                    , $token
-                                    , $self->{'expression'}
+                                    , $token // 'undef'
+                                    , $self->{'expression'} // 'undef'
                                 );
                             }
                             else
@@ -179,7 +179,7 @@ sub _parse_expression
                             , ref $result[0] // 'undef'
                             , $result // 'undef'
                             , $result[0] // 'undef'
-                            , $self->{'expression'}
+                            , $self->{'expression'} // 'undef'
                         );
                     }
                 }

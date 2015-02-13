@@ -95,10 +95,10 @@ sub dispatch
     if( not defined $result )
     {
         die sprintf("Don't know how to check that %s (%s) is in %s (%s)"
-            , $arg1
-            , $arg1_type
-            , $arg2
-            , $arg2_type
+            , $arg1 // 'undef'
+            , $arg1_type // 'undef'
+            , $arg2 // 'undef'
+            , $arg2_type // 'undef'
         );
     }
 

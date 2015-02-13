@@ -21,7 +21,10 @@ sub parse_parameters
     {
         my @parts = split /[=\s]+/s, $self->backup_strings($self->{'parameter'});
         
-        die sprintf("Unable to parse parameter for %s: %s", __PACKAGE__, $self->{'parameter'})
+        die sprintf("Unable to parse parameter for %s: %s"
+            , __PACKAGE__
+            , $self->{'parameter'} // 'undef'
+        )
             if (scalar @parts) % 2;
         
         while( scalar @parts )

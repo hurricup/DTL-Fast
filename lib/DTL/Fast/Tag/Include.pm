@@ -49,7 +49,7 @@ sub render
   
     die sprintf(
         "Couldn't find included template %s in directories %s"
-        , $template_name
+        , $template_name // 'undef'
         , join(', ', @{$self->{'dirs'}})
     ) if not defined $result;
   

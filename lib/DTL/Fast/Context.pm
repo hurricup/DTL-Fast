@@ -83,10 +83,10 @@ sub traverse
         }
         else
         {
-            die  sprintf("Don't know how to traverse %s (%s) with %s"
-                , $variable
-                , $current_type
-                , $step
+            die sprintf("Don't know how to traverse %s (%s) with %s"
+                , $variable // 'undef'
+                , $current_type // 'undef'
+                , $step // 'undef'
             );
         }
     }
@@ -116,8 +116,8 @@ sub set
             my $variable = $self->get([@key]);
 
             die  sprintf('Unable to set variable %s because parent %s is not defined.'
-                , $key
-                , join('.', @key)
+                , $key // 'undef'
+                , join('.', @key) // 'undef'
             ) if not defined $variable;
 
             my $variable_type = ref $variable;
@@ -135,8 +135,8 @@ sub set
             else
             {
                 die  sprintf("Don't know how to set variable %s for parent node of type %s"
-                    , $variable_name
-                    , $variable_type
+                    , $variable_name // 'undef'
+                    , $variable_type // 'undef'
                 );
             }
         }

@@ -16,7 +16,7 @@ sub new
     {
         die sprintf(
             "You may construct %s object using one of the following modules:\n\t%s\n"
-            , $proto
+            , $proto // 'undef'
             , join( "\n\t", keys %SUPPORTS )
         );
     }

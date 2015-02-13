@@ -26,7 +26,7 @@ sub filter
     
     my $format = $self->{'format'}->render($context);
     
-    return sprintf '%'.$format, $value;
+    return sprintf '%'.$format, $value // '';
 }
 
 1;

@@ -88,7 +88,7 @@ sub render
     else
     {
         die sprintf( "Regroup can be applied to lists only: %s is a %s"
-            , $self->{'source'}->{'original'}
+            , $self->{'source'}->{'original'} // 'undef'
             , ref $source_array
         );
     }

@@ -48,7 +48,7 @@ sub make_list
             if( $rendered )
             {
                 $rendered =~ s/^/\t/mg;
-                push @values, sprintf( "\t<ul>\n%s\t</ul>\n", $rendered );
+                push @values, sprintf( "\t<ul>\n%s\t</ul>\n", $rendered  // 'undef');
             }
 
         }
@@ -59,8 +59,8 @@ sub make_list
                     not $self->{'safeseq'} 
                     and not $self->{'global_safe'}
                 ) ? 
-                    html_protect($element)
-                    : $element
+                    html_protect($element) // 'undef'
+                    : $element // 'undef'
             )."\n";
         }
     }

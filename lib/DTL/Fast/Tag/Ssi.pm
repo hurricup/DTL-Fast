@@ -65,7 +65,11 @@ sub render
         }
         else
         {
-            warn sprintf("File %s is not in one of ssi_dirs:\n\t%s", $template_path, join( "\n\t", @$ssi_dirs ));
+            warn sprintf(
+                "File %s is not in one of ssi_dirs:\n\t%s"
+                , $template_path // 'undef'
+                , join( "\n\t", @$ssi_dirs )
+            );
         }
     }
     else
