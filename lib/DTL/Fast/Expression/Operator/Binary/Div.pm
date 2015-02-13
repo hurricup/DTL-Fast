@@ -22,7 +22,13 @@ sub dispatch
     }
     else
     {
-        die "Don't know how to divide $arg1 ($arg1_type) by $arg2 ($arg2_type)";
+        die sprintf(
+            "Don't know how to divide %s (%s) by %s (%s)"
+            , $arg1 // 'undef'
+            , $arg1_type || 'SCALAR'
+            , $arg2 // 'undef'
+            , $arg2_type || 'SCALAR'
+        );
     }
 
     return $result;

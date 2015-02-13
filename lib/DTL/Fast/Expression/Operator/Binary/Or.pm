@@ -6,18 +6,15 @@ $DTL::Fast::OPS_HANDLERS{'or'} = __PACKAGE__;
 
 sub dispatch
 {
-    my( $self, $arg1, $arg2) = @_;
+    my( $self, $arg1, $context) = @_;
 
-    if(
-        ref $arg1
-        and UNIVERSAL::can($arg1, 'or')
-    )
+    if( UNIVERSAL::can($arg1, 'or') )
     {
-        return $arg1->or($arg2);
+        return $arg1->or($self->get_b($context));
     }
     else
     {
-        return $arg1 || $arg2;
+        return $arg1 || $self->get_b($context);
     }
 }
 

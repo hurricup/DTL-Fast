@@ -11,7 +11,7 @@ sub filter
 {
     shift;  # self
     shift;  # filter_manager
-    return uc(shift);
+    return uc(shift // '');
 }
 
 1;

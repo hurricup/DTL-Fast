@@ -12,7 +12,7 @@ sub filter
     shift;  # self
     shift;  # filter_manager
     
-    return lc(shift);
+    return lc(shift // '');
 }
 
 1;

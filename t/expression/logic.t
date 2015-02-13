@@ -743,4 +743,27 @@ is( DTL::Fast::Template->new($template)->render({
         'superorvar' => 1
     }), 'true', 'Variable names with and/or' );
 
+   
+$template = '{% if 0 and var.supervar / 0 %}true{%else%}false{%endif%}';
+$test_string = "false";
+is( DTL::Fast::Template->new($template)->render(), $test_string, 'and operator second argument rendering suppression' );
+   
+$template = '{% if 1 or var.supervar / 0 %}true{%else%}false{%endif%}';
+$test_string = "true";
+is( DTL::Fast::Template->new($template)->render(), $test_string, 'or operator second argument rendering supression' );
+   
+$template = '{% if 1 and var.supervar / 0 %}true{%else%}false{%endif%}';
+$test_string = "false";
+eval{
+    DTL::Fast::Template->new($template)->render();
+};
+ok($@, 'and operator second argument rendering: '.$@);
+
+$template = '{% if 0 or var.supervar / 0 %}true{%else%}false{%endif%}';
+$test_string = "false";
+eval{
+    DTL::Fast::Template->new($template)->render();
+};
+ok($@, 'and operator second argument rendering: '.$@);
+    
 done_testing();

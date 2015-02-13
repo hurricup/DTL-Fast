@@ -6,16 +6,15 @@ $DTL::Fast::OPS_HANDLERS{'and'} = __PACKAGE__;
 
 sub dispatch
 {
-    my( $self, $arg1, $arg2) = @_;
-    my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
+    my( $self, $arg1, $context ) = @_;
 
     if( UNIVERSAL::can($arg1, 'and') )
     {
-        return $arg1->and($arg2);
+        return $arg1->and($self->get_b($context));
     }
     else
     {
-        return $arg1 && $arg2;
+        return $arg1 && $self->get_b($context);
     }
 }
 
