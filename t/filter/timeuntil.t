@@ -11,11 +11,11 @@ my( $template, $test_string, $context);
 $context = new DTL::Fast::Context({
 });
 
-{
+BEGIN {
     no warnings;
-    *CORE::GLOBAL::time = sub
+    *CORE::GLOBAL::time = sub()
     {
-        return 1420739322;
+        1420739322
     };
 }
 

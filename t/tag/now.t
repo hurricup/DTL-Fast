@@ -7,11 +7,11 @@ use DTL::Fast::Context;
 use Data::Dumper;
 use DTL::Fast::Utils qw( time2str_php );
 
-{
+BEGIN {
     no warnings;
-    *CORE::GLOBAL::time = sub
+    *CORE::GLOBAL::time = sub()
     {
-        return 1420739322;
+        1420739322
     };
 }
 
