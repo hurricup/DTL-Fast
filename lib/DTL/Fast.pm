@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.610_001'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.611'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -345,7 +345,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.610_001
+Version 1.611
 
 =head1 SYNOPSIS
 
@@ -547,7 +547,7 @@ New tag, that works like C<firstof> tag, but checks if value is defined (not tru
 
     {% sprintf pattern var1 var2 ... varn %}
     
-Works exactly like a perl's sprintf function with pattern and substitutions.
+Works exactly like a perl's sprintf function with pattern and substitutions. This tag was recently implemented and should be considered as experimental.
 
 =head3 url
 
@@ -595,7 +595,7 @@ Reverses data depending on type:
 
     {{ var1|split:"\s+"|slice:":2"|join:"," }}
     
-Splitting variable with specified pattern, using Perl's split function. Current implementation uses //s regexp. Filter returns array.
+Splitting variable with specified pattern, using Perl's split function. Current implementation uses //s regexp. Filter returns array. This filter was recently implemented and should be considered as experimental.
 
 =head3 strftime
 

@@ -6,6 +6,7 @@ Revision history for Perl extension DTL::Fast.
     - logical operators now behaves properly. Second operand evaluated only if first is not enough, fixes #25
     - upper and lower filters treats undef as an empty string
     - implemented split filter (experimental)
+    - implemented sprintf tag (experimental)
 
 1.609 - Wed 11 Feb 2015 21:38 MSK
     - Dynamic filters loading implemented, fixes #16
