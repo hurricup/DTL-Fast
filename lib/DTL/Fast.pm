@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.611'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.612'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -331,7 +331,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.611
+Version 1.612
 
 =head1 SYNOPSIS
 
@@ -525,6 +525,10 @@ Preloads all registered operators modules. Mostly for debugging purposes or pers
 
 This module supports almost all built-in tags documented on L<official Django site|https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference>. Don't forget to read L<incompatibilities|/INCOMPATIBILITIES WITH DJANGO TEMPLATES> and L<extensions|/EXTENSIONS OF DJANGO TEMPLATES> sections.
 
+=head3 block_super
+
+New tag for using with inheritance in order to render a parent block. In Django you are using C<{{ block.super }}> which is also currently supported, but depricated and will be removed in future versions.
+
 =head3 firstofdefined
 
 New tag, that works like C<firstof> tag, but checks if value is defined (not true)
@@ -609,6 +613,8 @@ To do...
 
 =over
 
+=item * C<{{ block.super }}> construction is currently supported, but depricated in favor of C<{% block_super %}> tag.
+
 =item * Django's setting C<ALLOWED_INCLUDE_ROOTS> should be passed to tempalte constructor/getter as C<ssi_dirs> argument.
 
 =item * C<csrf_token> tag is not implemented, too well connected with Django.
@@ -640,12 +646,6 @@ May be some of this features implemented in Django itself. Let me know about it.
 =over
 
 =item * filters may accept several arguments, and context variables can be used in them, like {{ var|filter1:var2:var3:...:varn }}
-
-=item * C<numberformat> - new filter. Formats number like C<12 345 678.9999999> 
-
-=item * C<strftime> - new filter. Formats time using L<C<Date::Format>> module, which is using C functions C<strftime> and C<ctime>.
-
-=item * C<firstofdefined> - new tag, that works like C<firstof> tag, but checks if value is defined (not true)
 
 =item * C<defined> logical operator. In logical constructions you may use C<defined> operator, which works exactly like perl's C<defined>
 
