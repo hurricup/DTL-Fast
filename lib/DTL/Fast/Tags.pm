@@ -35,6 +35,7 @@ register_tag(qw(
 # not from Django
 register_tag(qw(
     firstofdefined  DTL::Fast::Tag::Firstofdefined
+    sprintf         DTL::Fast::Tag::Sprintf
 ));
 
 1;

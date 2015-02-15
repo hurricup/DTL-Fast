@@ -88,6 +88,7 @@ runtests(
     't/tag/now.t',
     't/tag/regroup.t',
     't/tag/spaceless.t',
+    't/tag/sprintf.t',
     't/tag/ssi.t',
     't/tag/templatetag.t',
     't/tag/url.t',

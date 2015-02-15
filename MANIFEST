@@ -121,6 +121,7 @@ lib/DTL/Fast/Tag/Now.pm
 lib/DTL/Fast/Tag/Regroup.pm
 lib/DTL/Fast/Tag/Simple.pm
 lib/DTL/Fast/Tag/Spaceless.pm
+lib/DTL/Fast/Tag/Sprintf.pm
 lib/DTL/Fast/Tag/Ssi.pm
 lib/DTL/Fast/Tag/Templatetag.pm
 lib/DTL/Fast/Tag/Url.pm
@@ -226,6 +227,7 @@ t/tag/load.t
 t/tag/now.t
 t/tag/regroup.t
 t/tag/spaceless.t
+t/tag/sprintf.t
 t/tag/ssi.t
 t/tag/templatetag.t
 t/tag/url.t
