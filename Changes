@@ -1,6 +1,6 @@
 Revision history for Perl extension DTL::Fast.
 
-1.612 - in development
+1.612 - Sun 15 Feb 2015 18:40 MSK
     - Fixed timeuntil test race condition, thanks to @eserte, fixes #59
     - Implemented dynamic inheritance. You may now extend with context, fixes #9
     - Redundant serialized cache removed from templating system. Only runtime and custom now.
