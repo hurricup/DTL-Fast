@@ -51,6 +51,7 @@ runtests(
     't/filter/safeseq.t',
     't/filter/slice.t',
     't/filter/slugify.t',
+    't/filter/split.t',
     't/filter/strftime.t',
     't/filter/stringformat.t',
     't/filter/striptags.t',

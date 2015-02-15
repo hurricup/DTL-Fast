@@ -561,7 +561,7 @@ This module supports all built-in filters documented on L<official Django site|h
 
 =head3 numberformat
 
-    {% var1|numberformat %}
+    {{ var1|numberformat }}
     
 Formats 12345678.9012 as
     
@@ -584,6 +584,12 @@ Reverses data depending on type:
 =item * Object may provide reverse method to be used with this filter
 
 =back
+
+=head3 split
+
+    {{ var1|split:"\s+"|slice:":2"|join:"," }}
+    
+Splitting variable with specified pattern, using Perl's split function. Current implementation uses //s regexp. Filter returns array.
 
 =head3 strftime
 

@@ -73,6 +73,7 @@ lib/DTL/Fast/Filter/Safe.pm
 lib/DTL/Fast/Filter/SafeSeq.pm
 lib/DTL/Fast/Filter/Slice.pm
 lib/DTL/Fast/Filter/Slugify.pm
+lib/DTL/Fast/Filter/Split.pm
 lib/DTL/Fast/Filter/Strftime.pm
 lib/DTL/Fast/Filter/Stringformat.pm
 lib/DTL/Fast/Filter/Striptags.pm
@@ -133,7 +134,7 @@ lib/DTL/Fast/Text.pm
 lib/DTL/Fast/Utils.pm
 lib/DTL/Fast/Variable.pm
 Makefile.PL
-MANIFEST			This list of files
+MANIFEST            This list of files
 README
 src/spaceless.h
 t/core/context.t
@@ -185,6 +186,7 @@ t/filter/safe.t
 t/filter/safeseq.t
 t/filter/slice.t
 t/filter/slugify.t
+t/filter/split.t
 t/filter/strftime.t
 t/filter/stringformat.t
 t/filter/striptags.t
@@ -302,5 +304,5 @@ timetheese/tpl/results.html
 timetheese/tpl/root.txt
 timetheese/tpl/stackoverflow_homepage.html
 TODO
-META.json			Module JSON meta-data (added by MakeMaker)
-META.yml			Module YAML meta-data (added by MakeMaker)
+META.json           Module JSON meta-data (added by MakeMaker)
+META.yml            Module YAML meta-data (added by MakeMaker)

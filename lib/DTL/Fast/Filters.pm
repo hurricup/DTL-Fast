@@ -9,6 +9,7 @@ register_filter(qw(
     numberformat        DTL::Fast::Filter::Numberformat
     reverse             DTL::Fast::Filter::Reverse
     strftime            DTL::Fast::Filter::Strftime
+    split               DTL::Fast::Filter::Split
 ));
 
 # built in filters
