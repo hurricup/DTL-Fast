@@ -140,7 +140,6 @@ timethese( 5000, {
 print "Testing CGI mode...\n";
 
 timethese( 300, {
-    'Fast render       ' => \&dtl_fast_cgi,
-    'Fast cached render' => \&dtl_fast_cgi_cached,
-    'Dotiac render     ' => \&dtl_dotiac_cgi,
+    'DTL::Fast  ' => \&dtl_fast_cgi,
+    'Dotiac::DTL' => \&dtl_dotiac_cgi,
 });

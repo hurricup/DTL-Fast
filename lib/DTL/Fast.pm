@@ -722,10 +722,10 @@ Template parsing permormance with software cache wiping on each iteration:
 
     Benchmark: timing 5000 iterations of DTL::Fast  , Dotiac::DTL...
     
-    DTL::Fast  :  3 wallclock secs ( 2.47 usr +  1.05 sys =  3.51 CPU) @ 1424.10/s (n=5000)
-    Dotiac::DTL: 44 wallclock secs (21.86 usr + 20.39 sys = 42.25 CPU) @ 118.36/s (n=5000)
+    DTL::Fast  :  5 wallclock secs ( 4.52 usr +  0.16 sys =  4.68 CPU) @ 1068.45/s (n=5000)
+    Dotiac::DTL: 41 wallclock secs (38.87 usr +  2.14 sys = 41.01 CPU) @ 121.93/s (n=5000)
 
-C<DTL::Fast> parsing templates 12 times faster, than L<C<Dotiac::DTL>>.
+C<DTL::Fast> parsing templates 8.7 times faster, than L<C<Dotiac::DTL>>.
 
 To run this test, you need to alter L<C<Dotiac::DTL>> module and change declaration of C<my %cache;> to C<our %cache;>. 
     
@@ -733,10 +733,10 @@ Rendering of pre-compiled template (software cache):
 
     Benchmark: timing 3000 iterations of DTL::Fast  , Dotiac::DTL...
     
-    DTL::Fast  : 17 wallclock secs (13.46 usr +  3.87 sys = 17.33 CPU) @ 173.09/s (n=3000)
-    Dotiac::DTL: 18 wallclock secs (17.38 usr +  0.00 sys = 17.38 CPU) @ 172.63/s (n=3000)
+    DTL::Fast  : 45 wallclock secs (44.48 usr +  0.36 sys = 44.84 CPU) @ 66.90/s (n=3000)
+    Dotiac::DTL: 53 wallclock secs (53.02 usr +  0.51 sys = 53.52 CPU) @ 56.05/s (n=3000)
 
-Tests shows, that C<DTL::Fast> works a bit faster, than L<C<Dotiac::DTL>> in persistent environment.
+Tests shows, that C<DTL::Fast> works a 20% faster, than L<C<Dotiac::DTL>> in persistent environment.
 
 =head2 CGI
 
@@ -744,10 +744,10 @@ This test rendered test template many times by external script, invoked via C<sy
 
     Benchmark: timing 300 iterations of Dotiac render     , Fast cached render, Fast render
     
-    Dotiac render     : 40 wallclock secs ( 0.11 usr +  0.40 sys =  0.51 CPU) @ 583.66/s (n=300)
-    Fast render       : 55 wallclock secs ( 0.06 usr +  0.42 sys =  0.48 CPU) @ 619.83/s (n=300)
+    DTL::Fast  : 41 wallclock secs ( 0.01 usr  0.12 sys + 37.09 cusr  4.03 csys = 41.25 CPU) @  7.27/s (n=300)
+    Dotiac::DTL: 49 wallclock secs ( 0.04 usr  0.09 sys + 44.30 cusr  4.45 csys = 48.88 CPU) @  6.14/s (n=300)
 
-Tests shows, that C<DTL::Fast> works 40% slower, than L<C<Dotiac::DTL>> in CGI environment.
+Tests shows, that C<DTL::Fast> works 18% faster, than L<C<Dotiac::DTL>> in CGI environment.
 
 =head2 DTL::Fast steps performance
 
