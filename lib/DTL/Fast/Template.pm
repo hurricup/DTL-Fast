@@ -154,12 +154,14 @@ sub render
         
         push @descendants, $current_descendant;
         $context->{'ns'}->[-1]->{'_dtl_descendants'} = \@descendants;
+        $context->{'ns'}->[-1]->{'_dtl_rendering_template'} = $current_descendant;
         $result = $current_descendant->SUPER::render($context);
 
     }
     else
     {
         delete $context->{'ns'}->[-1]->{'_dtl_descendants'};
+        $context->{'ns'}->[-1]->{'_dtl_rendering_template'} = $self;
         $result = $self->SUPER::render($context);
     }
     

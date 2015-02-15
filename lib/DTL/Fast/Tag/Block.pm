@@ -40,10 +40,15 @@ sub render
     
     my $result;
     
-    if ( $context->{'ns'}->[-1]->{'_dtl_descendants'} )
+    $context->push_scope();
+    my $ns = $context->{'ns'}->[-1];
+    
+    $ns->{'_dtl_rendering_block'} = $self;
+    
+    if ( $ns->{'_dtl_descendants'} )
     {
         # template with inheritance
-        foreach my $descendant (@{$context->{'ns'}->[-1]->{'_dtl_descendants'}})
+        foreach my $descendant (@{$ns->{'_dtl_descendants'}})
         {
             if ( $descendant == $self )
             {
@@ -52,6 +57,7 @@ sub render
             }
             elsif($descendant->{'blocks'}->{$self->{'block_name'}})
             {
+                $ns->{'_dtl_rendering_template'} = $descendant;
                 $result = $descendant->{'blocks'}->{$self->{'block_name'}}->SUPER::render($context);
                 last;
             }
@@ -62,6 +68,7 @@ sub render
         # simple template
         $result = $self->SUPER::render($context);   
     }    
+    $context->pop_scope();
     
     return $result;    
 }

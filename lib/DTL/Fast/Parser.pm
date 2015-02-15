@@ -46,7 +46,18 @@ sub parse_next_chunk
 #    warn "Processing chunk $chunk";
     if( $chunk =~ /^\{\{\s*(.+?)\s*\}\}$/s )
     {
-        $chunk = DTL::Fast::Variable->new($1);
+        if( $1 eq 'block.super' )
+        {
+            require DTL::Fast::Tag::BlockSuper;
+            $chunk = DTL::Fast::Tag::BlockSuper->new(
+                ''
+                , 'dirs' => $self->{'dirs'}
+            );
+        }
+        else
+        {
+            $chunk = DTL::Fast::Variable->new($1);
+        }
     }
     elsif
     ( 

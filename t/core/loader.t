@@ -75,8 +75,10 @@ Dynamic override
 _EOT_
 is( $template->render({'parent_template' => 'child0.txt'}), $test_string, 'Dynamic inheritance 2 levels');
 
-
 is( $DTL::Fast::RUNTIME_CACHE->{'hits'}, 9, 'Runtime cache');
+
+is(get_template('block_super_child_tag.txt', 'dirs' => $dirs )->render(), 'This is a incapsulated parent block text in child', 'Parent block by tag');
+is(get_template('block_super_child_django.txt', 'dirs' => $dirs )->render(), 'This is a incapsulated parent block text in child', 'Parent block django style');
 
 $template = get_template('simple2.txt', 'dirs' => $dirs2);
 is( $template->render, 'simple2-text', 'Multiple directories search');

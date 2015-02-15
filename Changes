@@ -4,6 +4,7 @@ Revision history for Perl extension DTL::Fast.
     - Fixed timeuntil test race condition, thanks to @eserte, fixes #59
     - Implemented dynamic inheritance. You may now extend with context, fixes #9
     - Redundant serialized cache removed from templating system. Only runtime and custom now.
+    - Added block_super tag and {{ block.super }} support, fixes #52
 
 1.611 - Sun 15 Feb 2015 11:44 MSK
     - stringformat now treats undef values as empty strings

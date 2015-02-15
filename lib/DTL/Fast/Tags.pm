@@ -36,6 +36,7 @@ register_tag(qw(
 register_tag(qw(
     firstofdefined  DTL::Fast::Tag::Firstofdefined
     sprintf         DTL::Fast::Tag::Sprintf
+    block_super     DTL::Fast::Tag::BlockSuper
 ));
 
 1;

@@ -102,6 +102,7 @@ lib/DTL/Fast/Replacer/Replacement.pm
 lib/DTL/Fast/Tag.pm
 lib/DTL/Fast/Tag/Autoescape.pm
 lib/DTL/Fast/Tag/Block.pm
+lib/DTL/Fast/Tag/BlockSuper.pm
 lib/DTL/Fast/Tag/Comment.pm
 lib/DTL/Fast/Tag/Cycle.pm
 lib/DTL/Fast/Tag/Debug.pm
@@ -238,6 +239,9 @@ t/tmpl/autoescape_included.txt
 t/tmpl/autoescape_sample.txt
 t/tmpl/autoescape_top.txt
 t/tmpl/badinclude.txt
+t/tmpl/block_super_child_django.txt
+t/tmpl/block_super_child_tag.txt
+t/tmpl/block_super_parent.txt
 t/tmpl/child0.txt
 t/tmpl/child1.txt
 t/tmpl/child2.txt
