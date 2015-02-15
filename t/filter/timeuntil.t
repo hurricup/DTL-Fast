@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use strict; use warnings FATAL => 'all'; 
+use strict; use warnings FATAL => 'all';
 use Test::More;
 
 use DTL::Fast qw(get_template);
@@ -10,6 +10,14 @@ my( $template, $test_string, $context);
 
 $context = new DTL::Fast::Context({
 });
+
+{
+    no warnings;
+    *CORE::time = sub
+    {
+        return 1420739322;
+    };
+}
 
 # @todo some random testing
 my $SET = [

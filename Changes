@@ -1,6 +1,10 @@
 Revision history for Perl extension DTL::Fast.
 
-1.611 - in development
+1.612 - in development
+    - Fixed timeuntil test race condition, thanks to @eserte, fixes #59
+    - Implemented dynamic inheritance. You may now extend with context, fixes #9
+
+1.611 - Sun 15 Feb 2015 11:44 MSK
     - stringformat now treats undef values as empty strings
     - fixed bug with crashing on error messging with "undef in sprintf" error, fixes #57
     - logical operators now behaves properly. Second operand evaluated only if first is not enough, fixes #25

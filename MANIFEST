@@ -241,6 +241,7 @@ t/tmpl/badinclude.txt
 t/tmpl/child0.txt
 t/tmpl/child1.txt
 t/tmpl/child2.txt
+t/tmpl/child3.txt
 t/tmpl/comment_include.txt
 t/tmpl/comment_top.txt
 t/tmpl/complex.txt

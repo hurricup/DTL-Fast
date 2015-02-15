@@ -59,8 +59,25 @@ is($template->render, $test_string, 'Two-level of inheritance, both blocks');
 
 $template = get_template('child0.txt', 'dirs' => $dirs);
 
-is( $DTL::Fast::SERIALIZED_CACHE->{'hits'}, 3, 'Serialized cache');
-is( $DTL::Fast::RUNTIME_CACHE->{'hits'}, 1, 'Runtime cache');
+$template = get_template('child3.txt', 'dirs' => $dirs);
+
+$test_string = <<'_EOT_';
+This is a parent main text
+
+Dynamic override
+_EOT_
+is( $template->render({'parent_template' => 'child1.txt'}), $test_string, 'Dynamic inheritance 1 level');
+
+$test_string = <<'_EOT_';
+Child main text
+
+Dynamic override
+_EOT_
+is( $template->render({'parent_template' => 'child0.txt'}), $test_string, 'Dynamic inheritance 2 levels');
+
+
+is( $DTL::Fast::SERIALIZED_CACHE->{'hits'}, 0, 'Serialized cache');
+is( $DTL::Fast::RUNTIME_CACHE->{'hits'}, 9, 'Runtime cache');
 
 $template = get_template('simple2.txt', 'dirs' => $dirs2);
 is( $template->render, 'simple2-text', 'Multiple directories search');
@@ -79,7 +96,7 @@ is( $template->render, 'simple3-text', 'Multi-directory template selecting, back
 $template = select_template(['simple.txt', 'simple3.txt'], 'dirs' => $dirs2);
 is( $template->render, 'simple', 'Multi-directory template selecting, forward');
 
-eval{ $template = get_template('orphan.txt', 'dirs' => $dirs2 )};
+eval{ $template = get_template('orphan.txt', 'dirs' => $dirs2 )->render()};
 ok( $@ =~ /_missing_parent\.txt/, 'Missing parent exception');
 
 eval{$template = get_template('badinclude.txt', 'dirs' => $dirs2 )->render};

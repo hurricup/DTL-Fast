@@ -11,17 +11,15 @@ sub parse_parameters
 {
     my $self = shift;
     
-    my $parent_template = '';
     die "Parent template was not specified"
-        if not $self->{'parameter'}
-            or not ($parent_template = DTL::Fast::Variable->new($self->{'parameter'})->render());
+        if not $self->{'parameter'};
             
     die sprintf("Multiple extends specified in the template:\n\%s\n\%s\n"
-        , $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'} // 'undef'
-        , $parent_template // 'undef'
+        , $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'}->{'original'} // 'undef'
+        , $self->{'parameter'} // 'undef'
     ) if $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'};
             
-    $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'} = $parent_template;
+    $DTL::Fast::Template::CURRENT_TEMPLATE->{'extends'} = DTL::Fast::Variable->new($self->{'parameter'});
     
     return;
 }

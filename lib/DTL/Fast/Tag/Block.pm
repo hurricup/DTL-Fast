@@ -16,48 +16,54 @@ sub parse_parameters
 {
     my( $self ) = @_;
 
-    if( not $self->{'_container_block'} )
-    {
-        die "There is no container block defined for: ".Dumper($self);
-    }
+    $self->{'block_name'} = $self->{'parameter'};
     
-    $self->{'_container'} = $self->{'_container_block'};    # store it for future usage
-    $self->{'_container'}->add_blocks({$self->{'parameter'} => $self});
+    die "No name specified in the block tag" if not $self->{'block_name'};
+
+    # registering block within template    
+    if ( exists $DTL::Fast::Template::CURRENT_TEMPLATE->{'blocks'}->{$self->{'block_name'}} )
+    {
+        die "Block name must be unique in the template. Duplicated block: $self->{'block_name'}";
+    }
+    else
+    {
+        $DTL::Fast::Template::CURRENT_TEMPLATE->{'blocks'}->{$self->{'block_name'}} = $self;
+    }
     
     return $self;
 }
 
 #@Override
-sub get_container_block{ return shift; }
-
-sub replace_with
+sub render
 {
-    my( $self, $donor ) = @_;
+    my( $self, $context ) = @_;
     
-    my @current_subblocks_names = keys %{$self->{'blocks'}};
-
-    # remove current subblocks
-    if( scalar @current_subblocks_names )
+    my $result;
+    
+    if ( $context->{'ns'}->[-1]->{'_dtl_descendants'} )
     {
-        $self->remove_blocks(\@current_subblocks_names);
-    }
-    
-    # register subblocks from donor
-    $self->add_blocks($donor->{'blocks'});
-
-    # moving chunks from donor to me
-    $self->{'chunks'} = $donor->{'chunks'}; 
-    
-    # re-attaching container from donor to current
-    my $subblocks = $self->{'blocks'};
-    foreach my $subblock (keys %$subblocks)
-    {
-        if( $subblocks->{$subblock}->{'_container'} == $donor )
+        # template with inheritance
+        foreach my $descendant (@{$context->{'ns'}->[-1]->{'_dtl_descendants'}})
         {
-            $subblocks->{$subblock}->{'_container'} = $self;
+            if ( $descendant == $self )
+            {
+                $result = $self->SUPER::render($context);
+                last;
+            }
+            elsif($descendant->{'blocks'}->{$self->{'block_name'}})
+            {
+                $result = $descendant->{'blocks'}->{$self->{'block_name'}}->SUPER::render($context);
+                last;
+            }
         }
     }
-    return $self;
+    else
+    {
+        # simple template
+        $result = $self->SUPER::render($context);   
+    }    
+    
+    return $result;    
 }
 
 1;

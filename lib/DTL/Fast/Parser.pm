@@ -20,11 +20,10 @@ sub new
         ;
     
     $kwargs{'safe'} //= 0;
-    $kwargs{'blocks'} = {};
 
     my $self = $proto->SUPER::new(%kwargs)->parse_chunks();
     
-    delete @{$self}{'_container_block', 'raw_chunks'};
+    delete @{$self}{'raw_chunks'};
     
     return $self;
 }
@@ -98,12 +97,10 @@ sub parse_tag_chunk
             $tag_param
             , 'raw_chunks' => $self->{'raw_chunks'}
             , 'dirs' => $self->{'dirs'}
-            , '_container_block' => $self->get_container_block()
         );
     }
     else
     {
-#        use Data::Dumper;
         warn sprintf ('Unknown tag: %s in %s'
             , $tag_name // 'undef'
             , ($DTL::Fast::Template::CURRENT_TEMPLATE // $self)->{'inherited'}->[0] // 'inline'
@@ -112,60 +109,6 @@ sub parse_tag_chunk
     }
     
     return $result;
-}
-
-sub get_container_block{ 
-    my( $self ) = @_;
-    return $self->{'_container_block'} 
-        // die sprintf(
-            "There is no container block in: %s", $self // 'undef'
-        ); 
-}
-
-sub add_blocks
-{
-    my( $self, $blocks ) = @_;
-    
-    die "Blocks must be a HASH reference" if ref $blocks ne 'HASH';
-    
-    foreach my $block_name (keys(%$blocks))
-    {
-        if( exists $self->{'blocks'}->{$block_name} )
-        {
-            die "Block $block_name is already registered. Duplicate names are not allowed";
-        }
-        
-        $self->{'blocks'}->{$block_name} = $blocks->{$block_name};
-    }
-    
-    if( $self->{'_container'} )
-    {
-        $self->{'_container'}->add_blocks($blocks);
-    }    
-    
-    return $self;
-}
-
-sub remove_blocks
-{
-    my ($self, $block_names ) = @_;
-
-    die "Blocks must be an ARRAY reference" if ref $block_names ne 'ARRAY';
-     
-    foreach my $block_name (@$block_names)
-    {
-        die "Sub-block $block_name does not registered in current block."
-            if not exists $self->{'blocks'}->{$block_name};
-            
-        delete $self->{'blocks'}->{$block_name};
-    }
-  
-    if( $self->{'_container'} )
-    {
-        $self->{'_container'}->remove_blocks($block_names);
-    }    
-    
-    return $self;
 }
 
 1;

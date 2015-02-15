@@ -2,6 +2,7 @@ package DTL::Fast::Template;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Parser';
 
+use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
 use DTL::Fast::Tags;
 use DTL::Fast::Filters;    
@@ -17,73 +18,18 @@ sub new
     $kwargs{'raw_chunks'} = _get_raw_chunks($template);
     $kwargs{'dirs'} //= [];             # optional dirs to look up for includes or parents
     $kwargs{'file_path'} //= 'inline';  
-    $kwargs{'inherits'} //= {};
-    $kwargs{'inherited'} //= [];
     $kwargs{'perl'} = $];
+    $kwargs{'blocks'} = {};
     $kwargs{'modules'} //= {
         'DTL::Fast' => $DTL::Fast::VERSION,
     };
 
-    if( exists $kwargs{'inherits'}->{$kwargs{'file_path'}} )
-    {
-        die  sprintf(
-            "Recursive inheritance detected:\n%s\n" 
-            , join "\n inherited from ", @{$kwargs{'inherited'}}, $kwargs{'file_path'}
-        );
-    }
-    
-    $kwargs{'inherits'}->{$kwargs{'file_path'}} = $kwargs{'file_path'} eq 'inline' ? 
-        0: # this should depend on calling script
-        (stat($kwargs{'file_path'}))[9];
-        
-    push @{$kwargs{'inherited'}}, $kwargs{'file_path'};
     
     my $self = $proto->SUPER::new(%kwargs);
     
-    if( $self->{'extends'} )
-    {
-        my $parent_template = DTL::Fast::read_template(
-            $self->{'extends'}
-            , %kwargs
-        );
-          
-        if( defined $parent_template )
-        {
-            $self = $parent_template->merge_template($self);
-        }
-        else
-        {
-            die  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
-                , $self->{'extends' } // 'undef'
-                , join( ', ', @{$kwargs{'dirs'}})
-            );
-        }
-    }
-    
     return $self;
 }
 
-sub merge_template
-{
-    my( $self, $donor ) = @_;
-
-    foreach my $block_name ( keys %{$donor->{'blocks'}})
-    {
-        if( my $block = $self->{'blocks'}->{$block_name} )
-        {
-            $block->replace_with($donor->{'blocks'}->{$block_name});
-        }
-    }
-
-    # appending module dependencies
-    my @modules = keys %{$donor->{'modules'}};
-    @{$self->{'modules'}}{@modules} = @{$donor->{'modules'}}{@modules};
-    
-    # appending inheritance path
-    @{$self}{'inherited','inherits'} = @{$donor}{'inherited','inherits'};
-    
-    return $self;
-}
 
 #@Override
 sub parse_chunks
@@ -98,9 +44,6 @@ sub parse_chunks
     $CURRENT_TEMPLATE = $current_template_backup;
     return $self;
 }
-
-#@Override
-sub get_container_block{ return shift; }
 
 my $reg = qr/(
      \{\#.+?\#\}
@@ -148,7 +91,7 @@ sub render
         $context->{'ns'}->[-1]->{'_dtl_include_path'} = [];
         $context->{'ns'}->[-1]->{'_dtl_include_files'} = {};
     }
-    else    # check for recursion
+    else    # check for recursion, shouldn't this be in the include tag?
     {
         if( exists $context->{'ns'}->[-1]->{'_dtl_include_files'}->{$template_path} )
         {
@@ -162,7 +105,63 @@ sub render
     $context->{'ns'}->[-1]->{'_dtl_include_files'}->{$template_path} = 1;
     push @{$context->{'ns'}->[-1]->{'_dtl_include_path'}}, $template_path;
   
-    my $result = $self->SUPER::render($context);
+    my $result;
+    if ( $self->{'extends'} ) # has parent template
+    {
+        my @descendants = ();
+        my $current_descendant = $self; 
+        my %inheritance = ();
+        
+        while( $current_descendant->{'extends'} )
+        {
+            push @descendants, $current_descendant;
+            $inheritance{$current_descendant->{'file_path'}} = 1;
+            
+            my $parent_template_name = $current_descendant->{'extends'}->render($context);
+                        
+            die sprintf(
+                "Unable to resolve parent template name for %s"
+                , $current_descendant->{'file_path'}
+            ) if not $parent_template_name;
+            
+            $current_descendant = get_template(
+                $parent_template_name 
+                , 'dirs' => $self->{'dirs'}
+            );
+            
+            if ( defined $current_descendant )
+            {
+                if ( $inheritance{$current_descendant->{'file_path'}} )
+                {
+                    die  sprintf(
+                        "Recursive inheritance detected:\n%s\n" 
+                        , join(
+                            "\n inherited from ",
+                            (map {$_->{'file_path'}} @descendants),
+                            $current_descendant->{'file_path'}
+                        )
+                    );
+                }
+            }
+            else
+            {
+                die  sprintf( "Couldn't found a parent template: %s in one of the following directories: %s"
+                    , $parent_template_name 
+                    , join( ', ', @{$self->{'dirs'}})
+                );
+            }
+        }
+        
+        push @descendants, $current_descendant;
+        $context->{'ns'}->[-1]->{'_dtl_descendants'} = \@descendants;
+        $result = $current_descendant->SUPER::render($context);
+
+    }
+    else
+    {
+        delete $context->{'ns'}->[-1]->{'_dtl_descendants'};
+        $result = $self->SUPER::render($context);
+    }
     
     pop @{$context->{'ns'}->[-1]->{'_dtl_include_path'}};
     delete $context->{'ns'}->[-1]->{'_dtl_include_files'}->{$template_path};

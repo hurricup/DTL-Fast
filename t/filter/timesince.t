@@ -11,6 +11,14 @@ my( $template, $test_string, $context);
 $context = new DTL::Fast::Context({
 });
 
+{
+    no warnings;
+    *CORE::time = sub
+    {
+        return 1420739322;
+    };
+}
+
 # @todo some random testing
 my $SET = [
     {

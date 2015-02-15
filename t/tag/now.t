@@ -7,6 +7,14 @@ use DTL::Fast::Context;
 use Data::Dumper;
 use DTL::Fast::Utils qw( time2str_php );
 
+{
+    no warnings;
+    *CORE::time = sub
+    {
+        return 1420739322;
+    };
+}
+
 my( $template, $test_string, $context);
 
 my $dirs = ['./t/tmpl', './t/tmpl2'];
