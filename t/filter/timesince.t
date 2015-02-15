@@ -13,7 +13,7 @@ $context = new DTL::Fast::Context({
 
 {
     no warnings;
-    *CORE::time = sub
+    *CORE::GLOBAL::time = sub
     {
         return 1420739322;
     };

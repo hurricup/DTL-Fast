@@ -9,7 +9,7 @@ use DTL::Fast::Utils qw( time2str_php );
 
 {
     no warnings;
-    *CORE::time = sub
+    *CORE::GLOBAL::time = sub
     {
         return 1420739322;
     };
