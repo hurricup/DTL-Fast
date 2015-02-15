@@ -75,7 +75,6 @@ sub dtl_fast_render
 sub dtl_fast_parse
 {
     $DTL::Fast::RUNTIME_CACHE->clear();
-    $DTL::Fast::SERIALIZED_CACHE->clear();
     
     my $tpl = get_template(
         'root.txt',

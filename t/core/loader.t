@@ -76,7 +76,6 @@ _EOT_
 is( $template->render({'parent_template' => 'child0.txt'}), $test_string, 'Dynamic inheritance 2 levels');
 
 
-is( $DTL::Fast::SERIALIZED_CACHE->{'hits'}, 0, 'Serialized cache');
 is( $DTL::Fast::RUNTIME_CACHE->{'hits'}, 9, 'Runtime cache');
 
 $template = get_template('simple2.txt', 'dirs' => $dirs2);

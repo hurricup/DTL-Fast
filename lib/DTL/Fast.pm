@@ -25,7 +25,6 @@ require XSLoader;
 XSLoader::load('DTL::Fast', $VERSION);
 
 our $RUNTIME_CACHE;
-our $SERIALIZED_CACHE;
 
 our @EXPORT_OK;
 
@@ -104,40 +103,29 @@ sub read_template
     
     my $cache_key = _get_cache_key( $template_name, %kwargs );
 
-    $SERIALIZED_CACHE //= DTL::Fast::Cache::Serialized->new();
-    
     if( 
         $kwargs{'no_cache'}
-        or not defined ( $template = $SERIALIZED_CACHE->get($cache_key))   # runtime serialized cache reading
+        or not exists $kwargs{'cache'} 
+        or not $kwargs{'cache'}
+        or not $kwargs{'cache'}->isa('DTL::Fast::Cache')
+        or not defined ($template = $kwargs{'cache'}->get($cache_key))
     )
     {
-        if( 
-            $kwargs{'no_cache'}
-            or not exists $kwargs{'cache'} 
-            or not $kwargs{'cache'}
-            or not $kwargs{'cache'}->isa('DTL::Fast::Cache')
-            or not defined ($template = $kwargs{'cache'}->get($cache_key))
-        )
+        ($template, $template_path) = _read_file($template_name, $kwargs{'dirs'});
+        
+        if( defined $template )
         {
-            ($template, $template_path) = _read_file($template_name, $kwargs{'dirs'});
-            
-            if( defined $template )
-            {
-                $kwargs{'file_path'} = $template_path;
-                $template = DTL::Fast::Template->new( $template, %kwargs);
-        
-                $kwargs{'cache'}->put( $cache_key, $template )
-                    if 
-                        defined $template
-                        and exists $kwargs{'cache'}
-                        and $kwargs{'cache'}
-                        and $kwargs{'cache'}->isa('DTL::Fast::Cache')
-                    ;
-            }
+            $kwargs{'file_path'} = $template_path;
+            $template = DTL::Fast::Template->new( $template, %kwargs);
+    
+            $kwargs{'cache'}->put( $cache_key, $template )
+                if 
+                    defined $template
+                    and exists $kwargs{'cache'}
+                    and $kwargs{'cache'}
+                    and $kwargs{'cache'}->isa('DTL::Fast::Cache')
+                ;
         }
-        
-        $SERIALIZED_CACHE->put($cache_key, $template)
-            if defined $template;
     }
     
     if( defined $template )
@@ -333,8 +321,6 @@ sub preload_operators
 
 require DTL::Fast::Template;
 require DTL::Fast::Cache::Runtime;
-require DTL::Fast::Cache::Serialized;
-
 
 1;
 
