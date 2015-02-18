@@ -1,5 +1,4 @@
 #!/usr/bin/perl -I../blib/lib -I../blib/arch
-use Benchmark qw(:all);
 use DTL::Fast qw(get_template);
 
 my $context = {
@@ -60,9 +59,9 @@ my $tpl = get_template(
     'url_source' => \&uri_source
 );
 
-
-timethese( 1000, {
-    'Render' => sub{ my $template = $tpl->render($context);},
-});
+for( my $i = 0; $i < 1000; $i++ )
+{
+    my $template = $tpl->render($context);
+}
 
 
