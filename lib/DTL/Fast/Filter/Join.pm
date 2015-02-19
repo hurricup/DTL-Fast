@@ -4,8 +4,6 @@ use parent 'DTL::Fast::Filter';
 
 $DTL::Fast::FILTER_HANDLERS{'join'} = __PACKAGE__;
 
-use DTL::Fast::Utils qw(html_protect);
-
 #@Override
 sub parse_parameters
 {
@@ -50,7 +48,7 @@ sub filter
     
     if( $filter_manager->{'safeseq'} )
     {
-        $separator = html_protect($separator) 
+        DTL::Fast::html_protect($separator) 
             if not $context->get('_dtl_safe');
             
         $filter_manager->{'safe'} = 1;

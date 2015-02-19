@@ -4,7 +4,7 @@ use parent 'DTL::Fast::Filter';
 
 $DTL::Fast::FILTER_HANDLERS{'urlize'} = __PACKAGE__;
 
-use DTL::Fast::Utils qw(html_protect unescape);
+use DTL::Fast::Utils qw(unescape);
 
 our $DOMAINS_RE = qr/com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum|travel|ru|рф|[a-z]{2,3}/;
 
@@ -59,9 +59,12 @@ sub wrap_url
     my $uri = $text;
     $uri = 'http://'.$uri if
         $uri !~ m{^(http|ftp|https)://}i;
+        
+    $text = unescape($self->normalize_text($text));
+    DTL::Fast::html_protect($text);
     return sprintf '<a href="%s" rel="nofollow">%s</a>%s'
         , $uri // 'undef'
-        , html_protect(unescape($self->normalize_text($text)))
+        , $text
         , $appendix
         ;
 }
@@ -74,9 +77,12 @@ sub wrap_email
     my $appendix = shift // '';
     
     my $uri = $text;
+    $text = unescape($self->normalize_text($text));
+    DTL::Fast::html_protect($text);
+    
     return sprintf '<a href="mailto:%s" rel="nofollow">%s</a>%s'
         , $uri
-        , html_protect(unescape($self->normalize_text($text)))
+        , $text
         , $appendix
         ;
 }

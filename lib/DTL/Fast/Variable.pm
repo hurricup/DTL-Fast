@@ -3,7 +3,7 @@ use strict; use utf8; use warnings FATAL => 'all';
 
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::FilterManager;
-use DTL::Fast::Utils qw(as_bool html_protect);
+use DTL::Fast::Utils qw(as_bool);
 
 sub new
 {
@@ -97,9 +97,15 @@ sub render
     $value = $self->{'filter_manager'}->filter($value, $context)
         if $self->{'filter_manager'}->{'filters_number'};
     
-    return ( $global_safe or $self->{'filter_manager'}->{'safe'} ) ?
-        $value
-        : html_protect($value);
+    DTL::Fast::html_protect($value) if
+        (
+            not $global_safe 
+            and not $self->{'filter_manager'}->{'safe'}
+        )
+    ;
+    
+        
+    return $value;
 }
 
 our $BOOL_PROCESSORS = {

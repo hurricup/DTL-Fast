@@ -4,8 +4,6 @@ use parent 'DTL::Fast::Filter';
 
 $DTL::Fast::FILTER_HANDLERS{'unordered_list'} = __PACKAGE__;
 
-use DTL::Fast::Utils qw(html_protect);
-
 #@Override
 sub filter
 {
@@ -54,13 +52,14 @@ sub make_list
         }
         else
         {
-            push @values, sprintf( "\t<li>%s</li>"
-                , (
-                    not $self->{'safeseq'} 
-                    and not $self->{'global_safe'}
-                ) ? 
-                    html_protect($element) // 'undef'
-                    : $element // 'undef'
+            my $element_clone = $element; 
+            if( not $self->{'safeseq'} and not $self->{'global_safe'} )
+            {
+                DTL::Fast::html_protect($element_clone);
+            }
+            push @values, sprintf(
+                "\t<li>%s</li>"
+                , $element_clone // 'undef'
             )."\n";
         }
     }

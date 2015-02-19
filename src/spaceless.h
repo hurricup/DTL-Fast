@@ -1,6 +1,3 @@
-#define true 1
-#define false 0
-
 unsigned char whitespace[256] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, // 00-15
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 16-31
@@ -21,10 +18,10 @@ unsigned char whitespace[256] = {
 };
 
 // not utf safe i belive
-SV* _spaceless(pTHX_ SV* sv_string_ptr)
+void _spaceless(pTHX_ perl_scalar* scalar_string)
 {
-    void*   src_buffer = (void*)SvPV_nolen(sv_string_ptr);
-    size_t  src_buffer_length = SvCUR(sv_string_ptr);
+    void*   src_buffer = (void*)get_scalar_string(scalar_string);
+    size_t  src_buffer_length = get_scalar_string_length(scalar_string);
     size_t  src_offset = 0;
     
     void*   dst_buffer = src_buffer;
@@ -79,6 +76,6 @@ SV* _spaceless(pTHX_ SV* sv_string_ptr)
         }
     }
 
-    SvCUR_set(sv_string_ptr, dst_offset);
+    set_scalar_string_length(scalar_string, dst_offset);
 }
 

@@ -139,6 +139,8 @@ Makefile.PL
 MANIFEST            This list of files
 README
 src/spaceless.h
+src/html_protect.h
+src/perl_mnemonic.h
 t/core/context.t
 t/core/critic.t
 t/core/expression.t
@@ -285,6 +287,7 @@ t/tmpl2/simple.txt
 t/tmpl2/simple2.txt
 t/tmpl2/simple3.txt
 t/xs/spaceless.t
+t/xs/html_protect.t
 test.pl
 timetheese/cache/.dir
 timetheese/cache/dump_cache.pl

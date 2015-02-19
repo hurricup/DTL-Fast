@@ -3,11 +3,18 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "src/perl_mnemonic.h"
 #include "src/spaceless.h"
+#include "src/html_protect.h"
 
 MODULE = DTL::Fast  PACKAGE = DTL::Fast
 
-SV*
-spaceless( SV* sv_string_ptr )
+void
+spaceless( SV* scalar_string )
     CODE:
-        _spaceless( aTHX_ sv_string_ptr );
+        _spaceless( aTHX_ scalar_string );
+
+void
+html_protect( SV* scalar_string )
+    CODE:
+        _html_protect(aTHX_ scalar_string );

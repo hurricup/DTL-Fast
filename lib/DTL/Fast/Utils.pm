@@ -9,26 +9,6 @@ our $VERSION = '1.00';
 
 our @EXPORT_OK;
 
-# @todo This must be implemented with XS part (already written)
-push @EXPORT_OK, 'html_protect';
-our %HTML_PROTECT = (
-    '<' => '&lt;',
-    '>' => '&gt;',
-    '\'' => '&#39;',
-    '"' => '&quot;',
-    '&' => '&amp;',
-);
-
-our $HTML_PROTECT_RE = join '|', keys %HTML_PROTECT;
-
-sub html_protect
-{
-    my $text = shift;
-    return $text if not defined $text;
-    $text =~ s/($HTML_PROTECT_RE)/$HTML_PROTECT{$1}/g;
-    return $text;
-}
-
 # @todo what with timezones?
 push @EXPORT_OK, 'time2str';
 sub time2str
