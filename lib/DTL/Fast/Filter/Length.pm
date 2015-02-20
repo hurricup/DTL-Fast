@@ -18,7 +18,7 @@ sub filter
     }
     else
     {
-        $value = length $value;
+        $value = length( $value // '' );
     }
     
     return $value;

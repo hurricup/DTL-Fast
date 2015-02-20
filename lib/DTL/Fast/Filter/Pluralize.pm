@@ -31,7 +31,7 @@ sub filter
 sub pluralize
 {
     my $self = shift;
-    my $value = shift;
+    my $value = shift // 0;
     my $suffix = shift;
     
     my $suffix_one = scalar @$suffix > 1 ? 
