@@ -10,9 +10,7 @@ sub filter
 {
     shift;  # self
     shift->{'safe'} = 1;    # filter_manager
-    my $value = shift;
-    DTL::Fast::html_protect($value);
-    return $value;    
+    return DTL::Fast::html_protect(shift);
 }
 
 1;

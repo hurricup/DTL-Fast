@@ -60,11 +60,9 @@ sub wrap_url
     $uri = 'http://'.$uri if
         $uri !~ m{^(http|ftp|https)://}i;
         
-    $text = unescape($self->normalize_text($text));
-    DTL::Fast::html_protect($text);
     return sprintf '<a href="%s" rel="nofollow">%s</a>%s'
         , $uri // 'undef'
-        , $text
+        , DTL::Fast::html_protect(unescape($self->normalize_text($text)))
         , $appendix
         ;
 }
@@ -77,12 +75,10 @@ sub wrap_email
     my $appendix = shift // '';
     
     my $uri = $text;
-    $text = unescape($self->normalize_text($text));
-    DTL::Fast::html_protect($text);
     
     return sprintf '<a href="mailto:%s" rel="nofollow">%s</a>%s'
         , $uri
-        , $text
+        , DTL::Fast::html_protect(unescape($self->normalize_text($text)))
         , $appendix
         ;
 }

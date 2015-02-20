@@ -9,12 +9,16 @@
 
 MODULE = DTL::Fast  PACKAGE = DTL::Fast
 
-void
+SV*
 spaceless( SV* scalar_string )
     CODE:
-        _spaceless( aTHX_ scalar_string );
+        RETVAL = _spaceless( aTHX_ scalar_string );
+    OUTPUT:
+        RETVAL
 
-void
+SV*
 html_protect( SV* scalar_string )
     CODE:
-        _html_protect(aTHX_ scalar_string );
+        RETVAL = _html_protect(aTHX_ scalar_string );
+    OUTPUT:
+        RETVAL

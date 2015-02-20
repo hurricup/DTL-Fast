@@ -27,14 +27,15 @@ typedef HE  perl_hash_entry;
 #define get_scalar_by_name  get_sv  // SV*  get_sv("package::varname", 0);
 
 // Creating scalars
-#define create_scalar                       newSV       // SV*  newSV(int);
-#define create_scalar_from_int              newSViv     // SV*  newSViv(IV);
-#define create_scalar_from_uint             nevSVuv     // SV*  newSVuv(UV);
-#define create_scalar_from_double           newSVnv     // SV*  newSVnv(double);
-#define create_scalar_from_string           newSVpv     // SV*  newSVpv(const char*, STRLEN);
-#define create_scalar_from_string_sized     newSVpvn    // SV*  newSVpvn(const char*, STRLEN); @bad
-#define create_scalar_from_string_formatted newSVpvf    // SV*  newSVpvf(const char*, ...);    @bad
-#define create_scalar_from_scalar           newSVsv     // SV*  newSVsv(SV*);
+#define create_scalar                       newSV           // SV*  newSV(int);
+#define create_scalar_from_int              newSViv         // SV*  newSViv(IV);
+#define create_scalar_from_uint             nevSVuv         // SV*  newSVuv(UV);
+#define create_scalar_from_double           newSVnv         // SV*  newSVnv(double);
+#define create_scalar_from_string           newSVpv         // SV*  newSVpv(const char*, STRLEN);
+#define create_scalar_from_string_sized     newSVpvn        // SV*  newSVpvn(const char*, STRLEN); @bad
+#define create_scalar_from_string_formatted newSVpvf        // SV*  newSVpvf(const char*, ...);    @bad
+#define create_mortal_scalar_from_scalar    sv_mortalcopy   // SV*  sv_mortalcopy(SV *const oldsv)
+#define create_scalar_from_scalar           newSVsv         // SV*  newSVsv(SV*);
 
 // modifying scalars
 #define set_scalar_int                      sv_setiv    // void  sv_setiv(SV*, IV);
@@ -125,6 +126,9 @@ typedef HE  perl_hash_entry;
 #define get_hash_entry_key_mortal       hv_iterkeysv    // SV*    hv_iterkeysv  (HE* entry);
 #define get_hash_entry_value            hv_iterval      // SV*    hv_iterval(HV*, HE* entry);            /* Return an SV pointer to the value of the HE               structure */
 #define get_next_hash_entry_key_value   hv_iternextsv   // SV*    hv_iternextsv(HV*, char** key, I32* retlen); /* This convenience routine combines hv_iternext,	       hv_iterkey, and hv_iterval.  The key and retlen	       arguments are return values for the key and its	       length.  The value is returned in the SV* argument */
+
+#define mortalize_scalar    sv2mortal   // SV*  sv_2mortal(SV *const sv)
+#define is_scalar_utf8      SvUTF8      // U32  SvUTF8(SV* sv)
 
 // hash entry, these looks pretty similar 
 // HePV(HE* he, STRLEN len)

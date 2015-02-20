@@ -1,15 +1,14 @@
 /* would be better to copy data only on occurance, not every char */
 void* _html_protect(pTHX_ perl_scalar* scalar_string){
 
-    // this stub is for contolling input values
     if( !(is_scalar_string(scalar_string)) || get_scalar_string_length(scalar_string) == 0  ){
-        return;
+        return(create_scalar_from_scalar(scalar_string));
     }
 
-    size_t  src_length = get_scalar_string_length(scalar_string);
     char*   src_buffer = get_scalar_string(scalar_string);
-
-
+    size_t  src_length = get_scalar_string_length(scalar_string);
+    U32    is_utf8 = is_scalar_utf8(scalar_string);
+    
     // making result escape
     size_t max_dst_length = src_length * 6; // worse case scenario, all symbols being converted
     char* dst_buffer = (char*)malloc(max_dst_length);
@@ -42,7 +41,7 @@ void* _html_protect(pTHX_ perl_scalar* scalar_string){
             memcpy( dst_buffer+ dst_offset, "&#39;", 5);
             dst_offset += 5;
         }
-        else{
+        else if(is_utf8){
             // UTF8 rest copy
             if(( current_char & 0x80 )== 0 ){
                 // ASCII
@@ -79,12 +78,23 @@ void* _html_protect(pTHX_ perl_scalar* scalar_string){
                 dst_offset += 6;
                 src_offset += 6-1;
             }
+            else
+            {
+                croak("Corrupted UTF8 data");
+            }
+        }
+        else // non utf symbol copy
+        {
+            *(dst_buffer+dst_offset) = current_char;
+            dst_offset++;
         }
 
         src_offset++;
     }
 
-    set_scalar_string_sized(scalar_string, dst_buffer, dst_offset);
+    perl_scalar* result = create_scalar_from_scalar(scalar_string);
+    set_scalar_string_sized(result, dst_buffer, dst_offset);
     free(dst_buffer);
+    return result;
 }
 

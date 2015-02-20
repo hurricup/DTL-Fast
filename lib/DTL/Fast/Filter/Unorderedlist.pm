@@ -52,14 +52,11 @@ sub make_list
         }
         else
         {
-            my $element_clone = $element; 
-            if( not $self->{'safeseq'} and not $self->{'global_safe'} )
-            {
-                DTL::Fast::html_protect($element_clone);
-            }
             push @values, sprintf(
                 "\t<li>%s</li>"
-                , $element_clone // 'undef'
+                , ( not $self->{'safeseq'} and not $self->{'global_safe'} )
+                    ? DTL::Fast::html_protect($element // '')
+                    : $element // ''
             )."\n";
         }
     }

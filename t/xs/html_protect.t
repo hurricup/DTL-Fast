@@ -16,6 +16,11 @@ $context = new DTL::Fast::Context({
 
 my $SET = [
     {
+        'template' => "",
+        'test' => '',
+        'title' => 'Empty string',
+    },
+    {
         'template' => ">",
         'test' => '&gt;',
         'title' => 'Greater than',
@@ -40,15 +45,37 @@ my $SET = [
         'test' => '&#39;',
         'title' => 'Single quote',
     },
+    {
+        'template' => " > ",
+        'test' => ' &gt; ',
+        'title' => 'Greater than',
+    },
+    {
+        'template' => " < ",
+        'test' => ' &lt; ',
+        'title' => 'Lesser than',
+    },
+    {
+        'template' => " & ",
+        'test' => ' &amp; ',
+        'title' => 'Ampersand',
+    },
+    {
+        'template' => " \" ",
+        'test' => ' &quot; ',
+        'title' => 'Double quote',
+    },
+    {
+        'template' => " ' ",
+        'test' => ' &#39; ',
+        'title' => 'Single quote',
+    },
 ];
 
 foreach my $data (@$SET)
 {
-    my $test = sub{
-        DTL::Fast::html_protect($data->{'template'});
-        return $data->{'template'};
-    };
-    is( $test->(), $data->{'test'}, $data->{'title'});
+    my $src = $data->{'template'};
+    is( DTL::Fast::html_protect($src), $data->{'test'}, $data->{'title'});
     
 }
 

@@ -97,15 +97,12 @@ sub render
     $value = $self->{'filter_manager'}->filter($value, $context)
         if $self->{'filter_manager'}->{'filters_number'};
     
-    DTL::Fast::html_protect($value) if
-        (
-            not $global_safe 
-            and not $self->{'filter_manager'}->{'safe'}
-        )
-    ;
-    
-        
-    return $value;
+    return (
+        not $global_safe 
+        and not $self->{'filter_manager'}->{'safe'}
+    ) 
+        ? DTL::Fast::html_protect($value)
+        : $value;
 }
 
 our $BOOL_PROCESSORS = {

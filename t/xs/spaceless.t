@@ -13,6 +13,11 @@ $context = new DTL::Fast::Context({
 
 my $SET = [
     {
+        'template' => "",
+        'test' => '',
+        'title' => 'Empty string',
+    },
+    {
         'template' => " <",
         'test' => '<',
         'title' => 'Heading space',
@@ -23,7 +28,7 @@ my $SET = [
         'title' => 'Heading space with space in tail',
     },
     {
-        'template' => ">",
+        'template' => "> ",
         'test' => '>',
         'title' => 'Tailing space',
     },
@@ -46,11 +51,7 @@ my $SET = [
 
 foreach my $data (@$SET)
 {
-    my $test = sub{
-        DTL::Fast::spaceless($data->{'template'});
-        return $data->{'template'};
-    };
-    is( $test->(), $data->{'test'}, $data->{'title'});
+    is( DTL::Fast::spaceless($data->{'template'}), $data->{'test'}, $data->{'title'});
     
 }
 
