@@ -12,11 +12,19 @@ sub new
 sub append
 {
     my $self = shift;
+    $self->{'need_join'} ||= 1;
     push @{$self->{'texts'}}, shift;
     return $self;
 }
 
-sub render{ return join '', @{shift->{'texts'}};}
+sub render
+{
+    my($self) = @_;
+    return $self->{'need_join'}
+        ? join '', @{$self->{'texts'}}
+        : $self->{'texts'}->[0]
+    ;
+}
 
 
 1;

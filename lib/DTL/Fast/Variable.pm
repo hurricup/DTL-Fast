@@ -1,5 +1,6 @@
 package DTL::Fast::Variable;
 use strict; use utf8; use warnings FATAL => 'all'; 
+no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::FilterManager;
@@ -65,6 +66,7 @@ sub new
     my $self = bless {
         'variable' => [@variable]
         , 'original' => $variable
+        , 'direct_read' => ( scalar @variable == 1 )
         , 'sign' => $sign
         , 'undef' => $undef
         , 'static' => $static
@@ -89,10 +91,18 @@ sub render
     
     if( not $self->{'undef'} )
     {
-        $value = $self->{'static'} ? 
-            $self->{'variable'}->[0]
-            : $context->get($self->{'variable'});
-
+        $value = $self->{'static'} 
+            ? $self->{'variable'}->[0]
+            : $self->{'direct_read'}
+                ? $context->{'ns'}->[-1]->{$self->{'variable'}->[0]}
+                : $context->get($self->{'variable'});
+                
+        while (ref $value eq 'CODE')
+        {
+            $value = 'lvalue' ~~ attributes::get($value) ?
+                $value->()
+                : $value->($self);
+        }
     }
     $value = $self->{'filter_manager'}->filter($value, $context)
         if $self->{'filter_manager'}->{'filters_number'};
