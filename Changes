@@ -8,6 +8,7 @@ Revision history for Perl extension DTL::Fast.
     - DTL::Fast::Utils::as_bool method now works without additional functions calls
     - Implemented and documented eval_sequence method
     - Documented custom tags creation, fixes #12
+    - Documented custom filters creation, fixes #13
 
 1.612 - Sun 15 Feb 2015 18:40 MSK
     - Fixed timeuntil test race condition, thanks to @eserte, fixes #59

@@ -623,7 +623,7 @@ Every tag is a separate class inherited from certain prototype.
 
 =head2 Simple tags
 
-Simple tags should be inherited from C<DTL::Fast::Tag::Simple> and should looks like this:
+Every simple tag implemented as class, inherited from L<C<DTL::Fast::Tag::Simple>>:
 
     package CustomTags::MyTag;                          # your tag class
     use strict; use utf8; use warnings FATAL => 'all';  # make a clean code
@@ -688,7 +688,7 @@ Basically, that's all. For more information you may view through the sources of 
 
 =head2 Block tags
 
-Block tags are little more complicated than simple tags described above.
+Every block tag in the library implemented as class, inherited from L<C<DTL::Fast::Tag>>:
 
     package CustomTags::MyBlockTag;                     # your tag class
     use strict; use utf8; use warnings FATAL => 'all';  # make a clean code
@@ -773,7 +773,49 @@ Basically, that's all. For more information you may view through the sources of 
 
 =head1 CUSTOM FILTERS
 
-To do...
+Every filter in the library implemented as a class, inherited from L<C<DTL::Fast::Filter>>:
+
+    package CustomFilters::MyFilter;                    # class name
+    use strict; use utf8; use warnings FATAL => 'all';  # make your code clean
+    use parent 'DTL::Fast::Filter';                     # parent class
+    
+    $DTL::Fast::FILTER_HANDLERS{'myfilter'} = __PACKAGE__;   # register your module as a filter handler
+    
+    # optional parameter parser, invoked on parsing phase.
+    # If your filter is parametrised, you may need to override this method to parse parameters, stored in
+    # the $self->{'parameter'} which is an array of DTL::Fast::Variable objects, one for each parameter
+    sub parse_parameters
+    {
+        my( $self ) = @_;
+        
+        ... here you may process your input parameters...
+        
+        return $self;   # important to return $self
+    }
+    
+    # main method 
+    sub filter
+    {
+        my( 
+            $self,              # filter object reference
+            $filter_manager,    # filter manager object reference
+            $value,             # filtering value
+            $context            # current context for parametrised filters
+        ) = @_;
+        
+        # here you may modify $value. Don't forget to make a shallow copies on arrays and hashes
+        ....
+        
+        return $value;
+    }
+
+After creating your filter class, you need to register it in C<DTL::Fast>, so library knew which module to load on tag keyword:
+
+    use DTL::Fast qw(register_filter);
+
+    register_filter( 'myfilter' => 'CustomFilters::MyFilter' );
+    
+Basically, that's all. For more information you may view through the sources of buit-in filters.
 
 =head1 CUSTOM OPERATORS
 
