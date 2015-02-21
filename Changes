@@ -3,6 +3,9 @@ Revision history for Perl extension DTL::Fast.
 1.613 - in development
     - implemented html_protect in C, test performance increased 17%, fixes #32
     - internal context access optimisation, total performance increase 30%
+    - variable context access optimisation for simple variables, total increase 36%
+    - shortcuted escape/unescape functions to URI::Escape::XS
+    - DTL::Fast::Utils::as_bool method now works without additional functions calls
 
 1.612 - Sun 15 Feb 2015 18:40 MSK
     - Fixed timeuntil test race condition, thanks to @eserte, fixes #59
