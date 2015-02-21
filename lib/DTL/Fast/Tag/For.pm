@@ -145,7 +145,7 @@ sub render_array
         my $source_size = scalar @$source_data;
         my $forloop = $self->get_forloop($context, $source_size);
 
-        $context->set('forloop' => $forloop);
+        $context->{'ns'}->[-1]->{'forloop'} = $forloop;
 
         my $variables_number = scalar @{$self->{'targets'}};
 
@@ -154,9 +154,7 @@ sub render_array
             my $value_type = ref $value;
             if( $variables_number == 1 )
             {
-                $context->set(
-                    $self->{'targets'}->[0] => $value,
-                );
+                $context->{'ns'}->[-1]->{$self->{'targets'}->[0]} = $value;
             }
             else
             {
@@ -170,15 +168,10 @@ sub render_array
                 {
                     if( scalar @$value >= $variables_number )
                     {
-                        my @argument = ();
                         for( my $i = 0; $i < $variables_number; $i++ )
                         {
-                            push @argument
-                                , $self->{'targets'}->[$i]
-                                , $value->[$i]
-                            ;
+                            $context->{'ns'}->[-1]->{$self->{'targets'}->[$i]} = $value->[$i];
                         }
-                        $context->set(@argument);
                     }
                     else
                     {
@@ -223,15 +216,13 @@ sub render_hash
         {
             $context->push_scope();
             my $forloop = $self->get_forloop($context, $source_size);
-            $context->set('forloop' => $forloop);
+            $context->{'ns'}->[-1]->{'forloop'} = $forloop;
 
             foreach my $key (@keys)
             {
                 my $val = $source_data->{$key};
-                $context->set(
-                    $self->{'targets'}->[0] => $key,
-                    $self->{'targets'}->[1] => $val,
-                );
+                $context->{'ns'}->[-1]->{$self->{'targets'}->[0]} = $key;
+                $context->{'ns'}->[-1]->{$self->{'targets'}->[1]} = $val;
                 $result .= $self->{'renderers'}->[0]->render($context) // '';
 
                 $self->step_forloop($forloop);
@@ -264,7 +255,7 @@ sub get_forloop
     my( $self, $context, $source_size ) = @_;
 
     return {
-        'parentloop' => $context->get('forloop')
+        'parentloop' => $context->{'ns'}->[-1]->{'forloop'}
         , 'counter' => 1
         , 'counter0' => 0
         , 'revcounter' => $source_size

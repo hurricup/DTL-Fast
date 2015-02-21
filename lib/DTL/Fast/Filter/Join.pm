@@ -49,7 +49,7 @@ sub filter
     if( $filter_manager->{'safeseq'} )
     {
         $separator = DTL::Fast::html_protect($separator) 
-            if not $context->get('_dtl_safe');
+            if not $context->{'ns'}->[-1]->{'_dtl_safe'};
             
         $filter_manager->{'safe'} = 1;
     }

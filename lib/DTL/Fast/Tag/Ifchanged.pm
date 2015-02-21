@@ -66,7 +66,7 @@ sub render
     my $context = shift;
     my $result = '';
 
-    my $forloop = $context->get('forloop');
+    my $forloop = $context->{'ns'}->[-1]->{'forloop'};
 
     if( defined $forloop )
     {

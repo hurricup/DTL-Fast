@@ -18,7 +18,7 @@ sub filter
         , ref $value || 'SCALAR'
     ) if ref $value ne 'ARRAY';
     
-    $self->{'global_safe'} = $context->get('_dtl_safe');
+    $self->{'global_safe'} = $context->{'ns'}->[-1]->{'_dtl_safe'};
     $self->{'safeseq'} = $filter_manager->{'safeseq'};
     $filter_manager->{'safe'} = 1;
     

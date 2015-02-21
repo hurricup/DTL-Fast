@@ -33,7 +33,7 @@ sub render
     my $context = shift;
     my $result;
     
-    my $ssi_dirs = $context->get('_dtl_ssi_dirs');
+    my $ssi_dirs = $context->{'ns'}->[-1]->{'_dtl_ssi_dirs'};
     
     if( 
         defined $ssi_dirs

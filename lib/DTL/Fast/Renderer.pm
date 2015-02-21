@@ -25,7 +25,7 @@ sub render
 {
     my( $self, $context, $global_safe ) = @_;
 
-    $global_safe ||= $context->get('_dtl_safe') // 0;
+    $global_safe ||= $context->{'ns'}->[-1]->{'_dtl_safe'};
   
     my $result = [];
     
