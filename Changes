@@ -1,6 +1,6 @@
 Revision history for Perl extension DTL::Fast.
 
-1.613 - in development
+1.613 - Sat 21 Feb 2015 14:15 MSK
     - implemented html_protect in C, test performance increased 17%, fixes #32
     - internal context access optimisation, total performance increase 30%
     - variable context access optimisation for simple variables, total increase 36%
