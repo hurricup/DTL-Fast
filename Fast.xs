@@ -22,3 +22,10 @@ html_protect( SV* scalar_string )
         RETVAL = _html_protect(aTHX_ scalar_string );
     OUTPUT:
         RETVAL
+        
+int
+eval_sequence()
+    CODE:
+        RETVAL = PL_evalseq;
+    OUTPUT:
+        RETVAL

@@ -288,6 +288,7 @@ t/tmpl2/simple2.txt
 t/tmpl2/simple3.txt
 t/xs/spaceless.t
 t/xs/html_protect.t
+t/xs/eval_sequence.t
 test.pl
 timetheese/cache/.dir
 timetheese/cache/dump_cache.pl
