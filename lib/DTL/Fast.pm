@@ -809,7 +809,7 @@ Every filter in the library implemented as a class, inherited from L<C<DTL::Fast
         return $value;
     }
 
-After creating your filter class, you need to register it in C<DTL::Fast>, so library knew which module to load on tag keyword:
+After creating your filter class, you need to register it in C<DTL::Fast>, so library knew which module to load on filter keyword:
 
     use DTL::Fast qw(register_filter);
 
