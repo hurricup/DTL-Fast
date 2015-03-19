@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.613'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.614'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -331,7 +331,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.613
+Version 1.614
 
 =head1 SYNOPSIS
 
@@ -824,6 +824,8 @@ To do...
 =head1 INCOMPATIBILITIES WITH DJANGO TEMPLATES
 
 =over
+
+=item * hashes being iterated differently from Python's. You can iterate hash only as C<key, val in hash>. No C<hash.items>, C<hash.keys>, C<hash.values> are supported.
 
 =item * C<{{ block.super }}> construction is currently supported, but depricated in favor of C<{% block_super %}> tag.
 

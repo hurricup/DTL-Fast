@@ -6,7 +6,8 @@ use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
 use Data::Dumper;
 
-local $SIG{__WARN__} = sub {}; # here we get the warning
+my @LAST_WARNING;
+local $SIG{__WARN__} = sub {@LAST_WARNING = @_;}; # here we get the warning
 
 my $dirs = ['./t/tmpl'];
 my( $template, $test_string, $context);
@@ -72,5 +73,8 @@ is( DTL::Fast::Template->new('{{ array.0 }}')->render($context), 'first', 'Inter
 is( DTL::Fast::Template->new('{{array.0|upper}}')->render($context), 'FIRST', 'Filter without spaces');
 is( DTL::Fast::Template->new('{{ array.0 | upper}}')->render($context), 'FIRST', 'Filter with spaces');
 is( DTL::Fast::Template->new('{{ missvar | default: "blabla"}}')->render($context), 'blabla', 'Default filter with spaces');
+
+$template = get_template('error_tag.txt', 'dirs' => $dirs)->render();
+ok( $LAST_WARNING[0] =~ /error_tag.txt/i, 'Template name on missing tag');
 
 done_testing();

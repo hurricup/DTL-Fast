@@ -112,9 +112,9 @@ sub parse_tag_chunk
     }
     else
     {
-        warn sprintf ('Unknown tag: %s in %s'
+        warn sprintf ('Unknown tag (probably duplicated close tag): %s in %s'
             , $tag_name // 'undef'
-            , ($DTL::Fast::Template::CURRENT_TEMPLATE // $self)->{'inherited'}->[0] // 'inline'
+            , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
         );
         $result = DTL::Fast::Text->new();
     }
