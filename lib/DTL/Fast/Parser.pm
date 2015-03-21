@@ -4,6 +4,7 @@ use parent 'DTL::Fast::Renderer';
 
 use DTL::Fast::Expression;
 use DTL::Fast::Text;
+use DTL::Fast::Template;
 
 sub new
 {
@@ -20,7 +21,8 @@ sub new
         ;
     
     $kwargs{'safe'} //= 0;
-
+    $kwargs{'source_line'} //= $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
+    
     my $self = $proto->SUPER::new(%kwargs)->parse_chunks();
     
     delete @{$self}{'raw_chunks'};
@@ -42,8 +44,9 @@ sub parse_next_chunk
 {
     my( $self ) = @_;
     my $chunk = shift @{$self->{'raw_chunks'}};
+    my $chunk_lines = scalar (my @tmp = $chunk =~ /(\n)/g ) || 0;
+    #warn "Chunk $chunk, plus $chunk_lines lines";
     
-#    warn "Processing chunk $chunk";
     if( $chunk =~ /^\{\{\s*(.+?)\s*\}\}$/s )
     {
         if( $1 eq 'block.super' )
@@ -75,12 +78,14 @@ sub parse_next_chunk
     }
     elsif( $chunk ne '' )
     {
-        $chunk = DTL::Fast::Text->new( $chunk );
+        $chunk = DTL::Fast::Text->new( $chunk);
     }
     else
     {
         $chunk = undef;
     }
+    
+    $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
     
     return $chunk;
 }
@@ -120,13 +125,13 @@ sub parse_tag_chunk
             warn sprintf ( <<'_EOM_'
      Unknown tag: %1$s
         Template: %2$s
-Possible reasons: duplicated or unopened close tag {%% %1$s %%}
-                  undisclosed block tag {%% %3$s %%}
-                  typo
+Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %3$s
+                  undisclosed block tag %4$s
 _EOM_
                 , $tag_name // 'undef'
                 , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
-                , $self->open_tag_syntax()
+                , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
+                , $self->open_tag_syntax_with_line_number()
             );
         }
         else # template parsing error
@@ -134,11 +139,11 @@ _EOM_
             warn sprintf ( <<'_EOM_'
      Unknown tag: %1$s
         Template: %2$s
-Possible reasons: duplicated or unopened close tag {%% %1$s %%}
-                  typo
+Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %3$s
 _EOM_
                 , $tag_name // 'undef'
                 , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
+                , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
             );
         }
         

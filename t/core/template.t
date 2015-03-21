@@ -74,11 +74,11 @@ is( DTL::Fast::Template->new('{{array.0|upper}}')->render($context), 'FIRST', 'F
 is( DTL::Fast::Template->new('{{ array.0 | upper}}')->render($context), 'FIRST', 'Filter with spaces');
 is( DTL::Fast::Template->new('{{ missvar | default: "blabla"}}')->render($context), 'blabla', 'Default filter with spaces');
 
-local $SIG{__WARN__} = undef;
 $template = get_template('error_tag.txt', 'dirs' => $dirs)->render();
 ok(
     (
         $LAST_WARNING[0] =~ /error_tag.txt/si
+        and $LAST_WARNING[0] =~ /at line 5/si
         and $LAST_WARNING[0] =~ /duplicate/si
     )
     , 'Template name on missing tag'
@@ -89,7 +89,9 @@ ok(
     (
         $LAST_WARNING[0] =~ /error_undisclosed.txt/si
         and $LAST_WARNING[0] =~ /endif/si
+        and $LAST_WARNING[0] =~ /at line 31/si
         and $LAST_WARNING[0] =~ /with/si
+        and $LAST_WARNING[0] =~ /at line 16/si
     )
     , 'Template name on undisclosed block tag'
 );

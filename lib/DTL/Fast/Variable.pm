@@ -5,6 +5,7 @@ no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::FilterManager;
 use DTL::Fast::Utils qw(as_bool);
+use DTL::Fast::Template;
 
 sub new
 {
@@ -70,6 +71,7 @@ sub new
         , 'sign' => $sign
         , 'undef' => $undef
         , 'static' => $static
+        , 'source_line' => $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
         , 'filter_manager' => DTL::Fast::FilterManager->new('replacement' => $kwargs{'replacement'})
     }, $proto;
 

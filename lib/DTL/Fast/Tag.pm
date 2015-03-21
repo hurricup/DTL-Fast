@@ -15,6 +15,7 @@ sub new
     $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} //= $proto->VERSION // DTL::Fast->VERSION;
     
     $kwargs{'parameter'} = $parameter;
+    
     return $proto->SUPER::new(%kwargs);
 }
 
@@ -64,11 +65,21 @@ sub open_tag_syntax
         grep(
             $_
             , (
-                $DTL::Fast::KNOWN_SLUGS{ref $self}
+                '{%'
+                , $DTL::Fast::KNOWN_SLUGS{ref $self}
                 , $self->{'parameter'}
+                , '%}'
             )
         )
     );
 }
+
+# returns restored opening tag
+sub open_tag_syntax_with_line_number
+{
+    my ($self) = @_;
+    return $self->open_tag_syntax().' at line '.($self->{'source_line'} // 'unknown');
+}
+
 
 1;

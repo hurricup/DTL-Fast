@@ -7,7 +7,8 @@ use DTL::Fast::Context;
 use DTL::Fast::Tags;
 use DTL::Fast::Filters;    
 
-our $CURRENT_TEMPLATE;  # global variable for linking  modules
+our $CURRENT_TEMPLATE;      # global variable for linking  modules
+our $CURRENT_TEMPLATE_LINE; # global variable for source line number
 
 #@Override
 sub new
@@ -36,12 +37,12 @@ sub parse_chunks
 {
     my( $self ) = @_;
     
-    my $current_template_backup = $CURRENT_TEMPLATE;
-    $CURRENT_TEMPLATE = $self;
+    my( $current_template_backup, $current_template_line_backup ) = ($CURRENT_TEMPLATE, $CURRENT_TEMPLATE_LINE);
+    ($CURRENT_TEMPLATE, $CURRENT_TEMPLATE_LINE) = ($self, 1);
     
     $self->SUPER::parse_chunks();
     
-    $CURRENT_TEMPLATE = $current_template_backup;
+    ($CURRENT_TEMPLATE, $CURRENT_TEMPLATE_LINE) = ($current_template_backup, $current_template_line_backup);
     return $self;
 }
 

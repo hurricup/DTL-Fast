@@ -14,11 +14,14 @@ sub parse_next_chunk
 {
     my $self = shift;
     my $chunk = shift @{$self->{'raw_chunks'}};
+    my $chunk_lines = scalar (my @tmp = $chunk =~ /(\n)/g ) || 0;
     
     if( $chunk =~ /^\{\%\s*endcomment\s*\%\}$/six )
     {
         $self->{'raw_chunks'} = []; # this stops parsing
     }
+
+    $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
     
     return;
 }

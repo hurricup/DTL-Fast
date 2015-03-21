@@ -222,7 +222,6 @@ sub register_tag
     {
         $DTL::Fast::KNOWN_TAGS{lc($slug)} = $module;
         $DTL::Fast::KNOWN_SLUGS{$module} = $slug;
-        warn "Registered slug $module => $slug";
     }
     
     return;

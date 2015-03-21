@@ -1,5 +1,9 @@
 Revision history for Perl extension DTL::Fast.
 
+1.615 - Sat 20 Mar 2015
+    - Improved error message on undisclosed/unknown tags, with source line numbers support
+    - Reverted Escape::XS mapping, not working on windows (no idea why)
+
 1.613 - Sat 21 Feb 2015 14:15 MSK
     - implemented html_protect in C, test performance increased 17%, fixes #32
     - internal context access optimisation, total performance increase 30%
