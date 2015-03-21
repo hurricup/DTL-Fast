@@ -2,6 +2,7 @@ package DTL::Fast::Tag;
 use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Parser';
 
+use DTL::Fast;
 use DTL::Fast::Template;
 
 sub new
@@ -54,5 +55,20 @@ sub parse_tag_chunk
     return $result;
 }
 
+# returns restored opening tag
+sub open_tag_syntax
+{
+    my ($self) = @_;
+    
+    return join( ' ',
+        grep(
+            $_
+            , (
+                $DTL::Fast::KNOWN_SLUGS{ref $self}
+                , $self->{'parameter'}
+            )
+        )
+    );
+}
 
 1;

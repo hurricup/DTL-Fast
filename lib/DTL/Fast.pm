@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.614'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.615'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -13,6 +13,7 @@ our %OPS_HANDLERS;
 
 # known but not loaded modules
 our %KNOWN_TAGS;        # plain map tag => module
+our %KNOWN_SLUGS;       # reversed module => tag
 our %KNOWN_FILTERS;     # plain map filter => module
 our %KNOWN_OPS;         # complex map priority => operator => module
 our %KNOWN_OPS_PLAIN;   # plain map operator => module
@@ -220,6 +221,8 @@ sub register_tag
     while( my( $slug, $module) = each %tags )
     {
         $DTL::Fast::KNOWN_TAGS{lc($slug)} = $module;
+        $DTL::Fast::KNOWN_SLUGS{$module} = $slug;
+        warn "Registered slug $module => $slug";
     }
     
     return;
@@ -331,7 +334,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.614
+Version 1.615
 
 =head1 SYNOPSIS
 

@@ -112,10 +112,36 @@ sub parse_tag_chunk
     }
     else
     {
-        warn sprintf ('Unknown tag (probably duplicated close tag): %s in %s'
-            , $tag_name // 'undef'
-            , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
-        );
+        if ( # block tag parsing error
+            $self->isa('DTL::Fast::Tag')
+            and not $self->isa('DTL::Fast::Tag::Simple')
+        ) 
+        {
+            warn sprintf ( <<'_EOM_'
+     Unknown tag: %1$s
+        Template: %2$s
+Possible reasons: duplicated or unopened close tag {%% %1$s %%}
+                  undisclosed block tag {%% %3$s %%}
+                  typo
+_EOM_
+                , $tag_name // 'undef'
+                , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
+                , $self->open_tag_syntax()
+            );
+        }
+        else # template parsing error
+        {
+            warn sprintf ( <<'_EOM_'
+     Unknown tag: %1$s
+        Template: %2$s
+Possible reasons: duplicated or unopened close tag {%% %1$s %%}
+                  typo
+_EOM_
+                , $tag_name // 'undef'
+                , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
+            );
+        }
+        
         $result = DTL::Fast::Text->new();
     }
     
