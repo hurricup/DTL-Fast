@@ -1,9 +1,9 @@
 Revision history for Perl extension DTL::Fast.
 
-1.616 - Sun 21 Mar 2015
+1.616 - Sun 22 Mar 2015
     - Updated Escape::XS version requirement to 0.12
 
-1.615 - Sat 20 Mar 2015
+1.615 - Sat 21 Mar 2015
     - Improved error message on undisclosed/unknown tags, with source line numbers support
     - Reverted Escape::XS mapping, not working on windows (no idea why)
 
