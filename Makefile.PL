@@ -16,14 +16,14 @@ WriteMakefile(
     },
     PREREQ_PM => {
         'Date::Format' => 0,
-        'URI::Escape::XS' => 0,
+        'URI::Escape::XS' => '0.12',
         'POSIX' => 0,
         'Storable' => 0,
         'Compress::Zlib' => 0, 
         'Digest::MD5' => 0, 
         'XSLoader' => 0,
-        'parent' => 0,
-        'Module::Load' => 0,
+		'parent' => 0,
+		'Module::Load' => 0,
     }, 
     META_MERGE        => {
         'meta-spec' => { 

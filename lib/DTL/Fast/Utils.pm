@@ -239,30 +239,18 @@ sub time2str_php
 }
 ### end of Dotiac::DTL code
 
+#Shortcuts below not working on mswin and perl =< 18.2
 push @EXPORT_OK, 'uri_escape';
-sub uri_escape{return URI::Escape::XS::uri_escape(shift);}
+*DTL::Fast::Utils::uri_escape = \&URI::Escape::XS::uri_escape;
 
 push @EXPORT_OK, 'uri_unescape';
-sub uri_unescape{return URI::Escape::XS::uri_unescape(shift);}
+*DTL::Fast::Utils::uri_unescape = \&URI::Escape::XS::uri_unescape;
 
 push @EXPORT_OK, 'escape';
-sub escape{return URI::Escape::XS::encodeURIComponent(shift);}
+*DTL::Fast::Utils::escape = \&URI::Escape::XS::encodeURIComponent;
 
 push @EXPORT_OK, 'unescape';
-sub unescape{return URI::Escape::XS::decodeURIComponent(shift);}
-
-#Shortcuts below not working on mswin and perl =< 18.2
-#push @EXPORT_OK, 'uri_escape';
-#*DTL::Fast::Utils::uri_escape = \&URI::Escape::XS::uri_escape;
-#
-#push @EXPORT_OK, 'uri_unescape';
-#*DTL::Fast::Utils::uri_unescape = \&URI::Escape::XS::uri_unescape;
-#
-#push @EXPORT_OK, 'escape';
-#*DTL::Fast::Utils::escape = \&URI::Escape::XS::encodeURIComponent;
-#
-#push @EXPORT_OK, 'unescape';
-#*DTL::Fast::Utils::unescape = \&URI::Escape::XS::decodeURIComponent;
+*DTL::Fast::Utils::unescape = \&URI::Escape::XS::decodeURIComponent;
 
 push @EXPORT_OK, 'as_bool';
 sub as_bool
