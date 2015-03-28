@@ -1,5 +1,6 @@
 package DTL::Fast::Variable;
-use strict; use utf8; use warnings FATAL => 'all'; 
+use strict; use utf8; use warnings FATAL => 'all';
+use parent 'DTL::Fast::Replacer';
 no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 use Scalar::Util qw(looks_like_number);
@@ -10,6 +11,8 @@ use DTL::Fast::Template;
 sub new
 {
     my( $proto, $variable, %kwargs ) = @_;
+    
+    printf STDERR "Created variable `%s` at line: %s\n", $variable, $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
     
     $variable =~ s/(^\s+|\s+$)//gsi;
     my @filters = split /\s*\|+\s*/, $variable;
@@ -64,16 +67,16 @@ sub new
         @variable = split /\.+/, $variable_name;
     }
     
-    my $self = bless {
+    $proto = ref $proto || $proto;
+    my $self = $proto->SUPER::new(
         'variable' => [@variable]
         , 'original' => $variable
         , 'direct_read' => ( scalar @variable == 1 )
         , 'sign' => $sign
         , 'undef' => $undef
         , 'static' => $static
-        , 'source_line' => $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
         , 'filter_manager' => DTL::Fast::FilterManager->new('replacement' => $kwargs{'replacement'})
-    }, $proto;
+    );
 
     if( scalar @filters )
     {

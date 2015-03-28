@@ -9,7 +9,7 @@ sub new
     my( $proto, %kwargs ) = @_;
 
     $kwargs{'chunks'} = [];
-
+    
     return $proto->SUPER::new(%kwargs);
 }
 
@@ -36,5 +36,7 @@ sub render
         
     return join '', @$result;
 }
+
+
 
 1;

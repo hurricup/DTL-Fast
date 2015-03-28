@@ -10,7 +10,8 @@ sub new
     
     return bless {
         'texts' => [$text]
-        , 'source_line' => $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
+        , '_template' => $DTL::Fast::Template::CURRENT_TEMPLATE
+        , '_template_line' => $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
     }, $proto;
 }
 

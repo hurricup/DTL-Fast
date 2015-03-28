@@ -9,12 +9,15 @@ sub new
 {
     my( $proto, %kwargs ) = @_;
     
-    my $self = bless
-    {
+    $proto = ref $proto || $proto;
+    
+    printf STDERR "Created filter manager at line: %s\n", $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
+    
+    my $self = $proto->SUPER::new(
         'filters' => [],
         'filters_number' => 0,
         'replacement' => $kwargs{'replacement'},    # if strings were back-uped before
-    }, $proto;
+    );
     
     if( $self->{'replacement'} )
     {
@@ -107,7 +110,7 @@ sub add_filter
     }
     else
     {
-        warn "Unknown filter: $filter_name.";
+        warn $self->get_parse_error( "unknown filter $filter_name" );
     }
     
     return $self;

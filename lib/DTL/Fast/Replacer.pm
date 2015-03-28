@@ -10,6 +10,9 @@ sub new
 {
     my( $proto, %kwargs ) = @_;
 
+    $kwargs{'_template'} = $DTL::Fast::Template::CURRENT_TEMPLATE;
+    $kwargs{'_template_line'} = $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
+    
     my $self = bless {%kwargs}, $proto;
 
     return $self;
@@ -126,6 +129,59 @@ sub parse_sources
     return $result;
 }
 
+sub get_parse_error
+{
+    my ($self, $message, @messages) = @_;
+    
+    return $self->get_error(
+        $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
+        , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
+        , '   Parsing error: '.($message // 'undef')
+        , @messages
+    );
+}
 
+sub get_render_error
+{
+    my ($self, $message, $context) = @_;
+    
+    my @params = (
+        $self->{'_template'}->{'file_path'}
+        , $self->{'_template_line'}
+        , ' Rendering error: '.($message // 'undef')
+    );
+    
+    if ( scalar @{$context->{'ns'}->[-1]->{'_dtl_include_path'}} > 1 ) # has inclusions, appending stack trace
+    {
+        push @params, sprintf( <<'_EOM_'
+     Stack trace: %s
+_EOM_
+            , join( "\n                 ", @{$context->{'ns'}->[-1]->{'_dtl_include_path'}})
+        );
+    }
+    
+    return $self->get_error( @params );
+}
+
+sub get_error
+{
+    my ($self, $template, $line, $message, @messages ) = @_;
+    
+    my $result = sprintf <<'_EOM_'
+%s
+        Template: %s, line %s
+_EOM_
+        , $message // 'undef'
+        , $template // 'undef'
+        , $line // 'undef'
+    ;
+    
+    if ( scalar @messages )
+    {
+        $result .= join "\n", @messages;
+    }
+    
+    return $result;
+}
 
 1;

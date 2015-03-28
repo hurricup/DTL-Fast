@@ -12,6 +12,8 @@ sub new
     
     $parameter =~ s/(^\s+|\s+$)//gs;
 
+    printf STDERR "Found tag `%s` at line: %s\n", $proto, $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
+    
     $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} //= $proto->VERSION // DTL::Fast->VERSION;
     
     $kwargs{'parameter'} = $parameter;
@@ -78,7 +80,7 @@ sub open_tag_syntax
 sub open_tag_syntax_with_line_number
 {
     my ($self) = @_;
-    return $self->open_tag_syntax().' at line '.($self->{'source_line'} // 'unknown');
+    return $self->open_tag_syntax().' at line '.($self->{'_template_line'} // 'unknown');
 }
 
 

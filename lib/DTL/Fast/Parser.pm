@@ -21,7 +21,6 @@ sub new
         ;
     
     $kwargs{'safe'} //= 0;
-    $kwargs{'source_line'} //= $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
     
     my $self = $proto->SUPER::new(%kwargs)->parse_chunks();
     
@@ -117,33 +116,35 @@ sub parse_tag_chunk
     }
     else
     {
+        my $full_tag_name = join ' ', grep $_, ($tag_name, $tag_param);
+        
         if ( # block tag parsing error
             $self->isa('DTL::Fast::Tag')
             and not $self->isa('DTL::Fast::Tag::Simple')
         ) 
         {
-            warn sprintf ( <<'_EOM_'
-     Unknown tag: %1$s
-        Template: %2$s
-Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %3$s
-                  undisclosed block tag %4$s
+            warn $self->get_parse_error(
+                sprintf( 'unknown tag {%% %s %%}', $full_tag_name )
+                , sprintf( <<'_EOM_'
+Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %2$s
+                  undisclosed block tag %3$s
 _EOM_
-                , $tag_name // 'undef'
-                , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
-                , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
-                , $self->open_tag_syntax_with_line_number()
+                    , $tag_name // 'undef'
+                    , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE // 'unknown'
+                    , $self->open_tag_syntax_with_line_number()
+                )
             );
         }
         else # template parsing error
         {
-            warn sprintf ( <<'_EOM_'
-     Unknown tag: %1$s
-        Template: %2$s
-Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %3$s
+            warn $self->get_parse_error(
+                sprintf( 'unknown tag {%% %s %%}', $full_tag_name )
+                , sprintf( <<'_EOM_'
+Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %2$s
 _EOM_
-                , $tag_name // 'undef'
-                , $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
-                , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
+                    , $tag_name // 'undef'
+                    , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE // 'unknown'
+                )
             );
         }
         

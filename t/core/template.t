@@ -7,7 +7,10 @@ use DTL::Fast::Context;
 use Data::Dumper;
 
 my @LAST_WARNING;
-local $SIG{__WARN__} = sub {@LAST_WARNING = @_;}; # here we get the warning
+local $SIG{__WARN__} = sub { # here we get the warning
+    @LAST_WARNING = @_;
+    print STDERR $_[0];
+}; 
 
 my $dirs = ['./t/tmpl'];
 my( $template, $test_string, $context);
@@ -78,13 +81,25 @@ $template = get_template('error_tag.txt', 'dirs' => $dirs)->render();
 ok(
     (
         $LAST_WARNING[0] =~ /error_tag.txt/si
-        and $LAST_WARNING[0] =~ /at line 5/si
+        and $LAST_WARNING[0] =~ /, line 5/si
         and $LAST_WARNING[0] =~ /duplicate/si
     )
-    , 'Template name on missing tag'
+    , 'Template name and line on missing tag'
 );
 
 $template = get_template('error_undisclosed.txt', 'dirs' => $dirs)->render();
+ok(
+    (
+        $LAST_WARNING[0] =~ /error_undisclosed.txt/si
+        and $LAST_WARNING[0] =~ /endif/si
+        and $LAST_WARNING[0] =~ /, line 31/si
+        and $LAST_WARNING[0] =~ /with/si
+        and $LAST_WARNING[0] =~ /at line 19/si
+    )
+    , 'Template name and line on undisclosed block tag'
+);
+
+$template = get_template('error_unknown_filter.txt', 'dirs' => $dirs)->render();
 ok(
     (
         $LAST_WARNING[0] =~ /error_undisclosed.txt/si
@@ -93,7 +108,7 @@ ok(
         and $LAST_WARNING[0] =~ /with/si
         and $LAST_WARNING[0] =~ /at line 16/si
     )
-    , 'Template name on undisclosed block tag'
+    , 'Template name and line on unknown filter'
 );
 
 done_testing();
