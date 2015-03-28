@@ -4,6 +4,7 @@ use Test::Harness;
 
 runtests(
     't/core/context.t',
+    't/core/errors.t',
     't/core/expression.t',
     't/core/loader.t',
     't/core/template.t',

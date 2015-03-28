@@ -9,7 +9,7 @@ use Data::Dumper;
 my @LAST_WARNING;
 local $SIG{__WARN__} = sub { # here we get the warning
     @LAST_WARNING = @_;
-    print STDERR $_[0];
+#    print STDERR $_[0];
 }; 
 
 my $dirs = ['./t/tmpl'];
@@ -76,39 +76,5 @@ is( DTL::Fast::Template->new('{{ array.0 }}')->render($context), 'first', 'Inter
 is( DTL::Fast::Template->new('{{array.0|upper}}')->render($context), 'FIRST', 'Filter without spaces');
 is( DTL::Fast::Template->new('{{ array.0 | upper}}')->render($context), 'FIRST', 'Filter with spaces');
 is( DTL::Fast::Template->new('{{ missvar | default: "blabla"}}')->render($context), 'blabla', 'Default filter with spaces');
-
-$template = get_template('error_tag.txt', 'dirs' => $dirs)->render();
-ok(
-    (
-        $LAST_WARNING[0] =~ /error_tag.txt/si
-        and $LAST_WARNING[0] =~ /, line 5/si
-        and $LAST_WARNING[0] =~ /duplicate/si
-    )
-    , 'Template name and line on missing tag'
-);
-
-$template = get_template('error_undisclosed.txt', 'dirs' => $dirs)->render();
-ok(
-    (
-        $LAST_WARNING[0] =~ /error_undisclosed.txt/si
-        and $LAST_WARNING[0] =~ /endif/si
-        and $LAST_WARNING[0] =~ /, line 31/si
-        and $LAST_WARNING[0] =~ /with/si
-        and $LAST_WARNING[0] =~ /at line 19/si
-    )
-    , 'Template name and line on undisclosed block tag'
-);
-
-$template = get_template('error_unknown_filter.txt', 'dirs' => $dirs)->render();
-ok(
-    (
-        $LAST_WARNING[0] =~ /error_undisclosed.txt/si
-        and $LAST_WARNING[0] =~ /endif/si
-        and $LAST_WARNING[0] =~ /at line 31/si
-        and $LAST_WARNING[0] =~ /with/si
-        and $LAST_WARNING[0] =~ /at line 16/si
-    )
-    , 'Template name and line on unknown filter'
-);
 
 done_testing();

@@ -61,7 +61,7 @@ sub add_chunk
 #@Override
 sub parse_tag_chunk
 {
-    my( $self, $tag_name, $tag_param ) = @_;
+    my( $self, $tag_name, $tag_param, $chunk_lines ) = @_;
 
     my $result = undef;
 
@@ -69,16 +69,17 @@ sub parse_tag_chunk
     {
         if( scalar @{$self->{'renderers'}} == 2 )
         {
-            die "There can be only one empty block";
+            die $self->get_block_parse_error("there can be only one {% empty %} block, ingoring");
         }
         else
         {
             $self->add_renderer;
         }
+        $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
     }
     else
     {
-        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
+        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param, $chunk_lines);
     }
 
     return $result;

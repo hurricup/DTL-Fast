@@ -5,6 +5,7 @@ use parent 'DTL::Fast::Renderer';
 use DTL::Fast::Expression;
 use DTL::Fast::Text;
 use DTL::Fast::Template;
+use DTL::Fast qw(count_lines);
 
 sub new
 {
@@ -22,7 +23,7 @@ sub new
     
     $kwargs{'safe'} //= 0;
     
-    my $self = $proto->SUPER::new(%kwargs)->parse_chunks();
+    my $self = $proto->SUPER::new(%kwargs)->parse_chunks();;
     
     delete @{$self}{'raw_chunks'};
     
@@ -42,11 +43,17 @@ sub parse_chunks
 sub parse_next_chunk
 {
     my( $self ) = @_;
+
     my $chunk = shift @{$self->{'raw_chunks'}};
-    my $chunk_lines = scalar (my @tmp = $chunk =~ /(\n)/g ) || 0;
-    #warn "Chunk $chunk, plus $chunk_lines lines";
+    my $chunk_lines = count_lines($chunk);
     
-    if( $chunk =~ /^\{\{\s*(.+?)\s*\}\}$/s )
+    if(
+        $chunk =~ /^
+            \{\{\s*   # open sequence 
+            (.+?)     # variable name or value $1
+            \s*\}\}   # close sequence 
+        $/xs
+    )
     {
         if( $1 eq 'block.super' )
         {
@@ -54,44 +61,54 @@ sub parse_next_chunk
             $chunk = DTL::Fast::Tag::BlockSuper->new(
                 ''
                 , 'dirs' => $self->{'dirs'}
+                , '_open_tag_lines' => $chunk_lines
             );
         }
         else
         {
             $chunk = DTL::Fast::Variable->new($1);
+            $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
         }
     }
     elsif
     ( 
-        $chunk =~ /^\{\%\s*([^\s]+?)(?:\s+(.*?))?\s*\%\}$/s
+        $chunk =~ /^
+            \{\%\s*     # open sequence 
+            ([^\s]+?)   # tag keyword $1
+            (?:
+                \s+     # spaces
+                (.*?)   # parameters $2
+            )?
+            \s*\%\}     # close sequence 
+        $/xs
     )
     {
-        $chunk = $self->parse_tag_chunk(lc $1, $2);
+        $chunk = $self->parse_tag_chunk(lc $1, $2, $chunk_lines);
     }
     elsif
     ( 
         $chunk =~ /^\{\#.*\#\}$/s 
     )
     {
+        $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
         $chunk = undef;
     }
     elsif( $chunk ne '' )
     {
         $chunk = DTL::Fast::Text->new( $chunk);
+        $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
     }
     else
     {
         $chunk = undef;
     }
     
-    $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
-    
     return $chunk;
 }
 
 sub parse_tag_chunk
 {
-    my( $self, $tag_name, $tag_param ) = @_;
+    my( $self, $tag_name, $tag_param, $chunk_lines ) = @_;
     
     my $result = undef;
 
@@ -106,15 +123,17 @@ sub parse_tag_chunk
         $DTL::Fast::LOADED_MODULES{$DTL::Fast::KNOWN_TAGS{$tag_name}} = time;            
     }
 
+    # handling tag
     if( exists $DTL::Fast::TAG_HANDLERS{$tag_name} )
     {     
         $result = $DTL::Fast::TAG_HANDLERS{$tag_name}->new(
             $tag_param
             , 'raw_chunks' => $self->{'raw_chunks'}
             , 'dirs' => $self->{'dirs'}
+            , '_open_tag_lines' => $chunk_lines
         );
     }
-    else
+    else # not found
     {
         my $full_tag_name = join ' ', grep $_, ($tag_name, $tag_param);
         
@@ -126,8 +145,10 @@ sub parse_tag_chunk
             warn $self->get_parse_error(
                 sprintf( 'unknown tag {%% %s %%}', $full_tag_name )
                 , sprintf( <<'_EOM_'
-Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %2$s
-                  undisclosed block tag %3$s
+      Possible reasons: typo in tag name
+                        duplicated close tag {%% %1$s %%}
+                        unopened close tag {%% %1$s %%}
+                        undisclosed block tag %3$s
 _EOM_
                     , $tag_name // 'undef'
                     , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE // 'unknown'
@@ -140,13 +161,15 @@ _EOM_
             warn $self->get_parse_error(
                 sprintf( 'unknown tag {%% %s %%}', $full_tag_name )
                 , sprintf( <<'_EOM_'
-Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %2$s
+      Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %2$s
 _EOM_
                     , $tag_name // 'undef'
                     , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE // 'unknown'
                 )
             );
         }
+        
+        $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
         
         $result = DTL::Fast::Text->new();
     }

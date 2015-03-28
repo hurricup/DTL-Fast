@@ -10,10 +10,8 @@ sub new
     my( $proto, $parameter, %kwargs ) = @_;
     $parameter //= '';
     
-    $parameter =~ s/(^\s+|\s+$)//gs;
+    $parameter =~ s/^\s+|\s+$//gs;
 
-    printf STDERR "Found tag `%s` at line: %s\n", $proto, $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
-    
     $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} //= $proto->VERSION // DTL::Fast->VERSION;
     
     $kwargs{'parameter'} = $parameter;
@@ -27,6 +25,10 @@ sub parse_chunks
 {
     my( $self ) = @_;
     $self->parse_parameters();
+    
+    $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $self->{'_open_tag_lines'}
+        if $self->{'_open_tag_lines'};
+    
     return $self->SUPER::parse_chunks();
 }
 
@@ -42,17 +44,18 @@ sub get_close_tag
 # Close tag processor
 sub parse_tag_chunk
 {
-    my( $self, $tag_name, $tag_param ) = @_;
+    my( $self, $tag_name, $tag_param, $chunk_lines ) = @_;
     
     my $result = undef;
 
     if( $tag_name eq $self->get_close_tag )
     {
         $self->{'raw_chunks'} = []; # this stops parsing
+        $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
     }
     else
     {
-        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
+        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param, $chunk_lines);
     }
     
     return $result;
@@ -83,5 +86,17 @@ sub open_tag_syntax_with_line_number
     return $self->open_tag_syntax().' at line '.($self->{'_template_line'} // 'unknown');
 }
 
+sub get_block_parse_error
+{
+    my ($self, $message) = @_;
+    return $self->get_parse_error(
+        $message,
+        sprintf(
+            "                 Block: %s at line %s"
+            , ref $self
+            , $self->{'_template_line'} // 'unknown'
+        )
+    );
+}
 
 1;

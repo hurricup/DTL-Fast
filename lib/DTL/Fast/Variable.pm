@@ -12,8 +12,6 @@ sub new
 {
     my( $proto, $variable, %kwargs ) = @_;
     
-    printf STDERR "Created variable `%s` at line: %s\n", $variable, $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
-    
     $variable =~ s/(^\s+|\s+$)//gsi;
     my @filters = split /\s*\|+\s*/, $variable;
     

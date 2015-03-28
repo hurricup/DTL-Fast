@@ -32,21 +32,23 @@ sub add_chunk
 #@Override
 sub parse_tag_chunk
 {
-    my( $self, $tag_name, $tag_param ) = @_;
+    my( $self, $tag_name, $tag_param, $chunk_lines ) = @_;
     
     my $result = undef;
 
     if( $tag_name eq 'elif' or $tag_name eq 'elsif' )
     {
         $self->add_condition($tag_param);
+        $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
     }
     elsif( $tag_name eq 'else' )
     {
         $self->add_condition(1);
+        $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines;
     }
     else
     {
-        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
+        $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param, $chunk_lines);
     }
     
     return $result;

@@ -1,5 +1,10 @@
 Revision history for Perl extension DTL::Fast.
 
+1.617 - In development
+    - Implemented DTL::Fast::count_lines function in C, counts newline symbols in the string
+    - Implemented proper lines counting for multi-line syntax constructions, fixes #64
+    - for tag now dies with pretty message on duplicate empty tag
+
 1.616 - Sun 22 Mar 2015
     - Updated Escape::XS version requirement to 0.12
 

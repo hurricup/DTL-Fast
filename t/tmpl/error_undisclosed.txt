@@ -8,13 +8,15 @@ asdf
     dd
     dd
     f
-    {{blalba}}
+    {{blalba
+    }}
     {% verbatim %}
         this is {%if 1 %}
         plain
         code
         {% with %}
-    {% endverbatim%}
+    {% endverbatim
+    %}
 
     {% with bla=1 bla1=2 %}
         {% comment %} this is

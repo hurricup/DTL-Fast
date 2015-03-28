@@ -27,7 +27,7 @@ XSLoader::load('DTL::Fast', $VERSION);
 
 our $RUNTIME_CACHE;
 
-our @EXPORT_OK;
+our @EXPORT_OK = qw(count_lines);
 
 push @EXPORT_OK, 'get_template';
 sub get_template
@@ -722,9 +722,10 @@ Every block tag in the library implemented as class, inherited from L<C<DTL::Fas
     sub parse_tag_chunk
     {
         my(
-            $self,      # reference to the tag object
-            $tag_name,  # tag keyword
-            $tag_param  # everything after tag keyword (constructor's $parameter)
+            $self,       # reference to the tag object
+            $tag_name,   # tag keyword
+            $tag_param,  # everything after tag keyword (constructor's $parameter)
+            $chunk_lines # chunk size in lines, used for proper debugging output
         ) = @_;
         
         my $result;
@@ -732,15 +733,17 @@ Every block tag in the library implemented as class, inherited from L<C<DTL::Fas
         # here you may interpret additional tag keywords, like else, elsif and so on.
         if( $tag_name eq 'my_tag_else' )
         {
-            ... do smth special 
+            ... do smth special
+            $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines; # set proper line number for next source block
         }
         elsif( $tag_name eq 'my_tag_alternative_end' )
         {
             $self->{'raw_chunks'} = []; # this construction ends current block parsing
+            $DTL::Fast::Template::CURRENT_TEMPLATE_LINE += $chunk_lines; # set proper line number for next source block
         }
         else    # if it was not special keyword, just do regular work
         {
-            $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param);
+            $result = $self->SUPER::parse_tag_chunk($tag_name, $tag_param, $chunk_lines);
         }
         
         return $result;  # result must be a generated chunk or undef if there is no one

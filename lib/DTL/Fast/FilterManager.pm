@@ -11,8 +11,6 @@ sub new
     
     $proto = ref $proto || $proto;
     
-    printf STDERR "Created filter manager at line: %s\n", $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
-    
     my $self = $proto->SUPER::new(
         'filters' => [],
         'filters_number' => 0,
