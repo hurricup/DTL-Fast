@@ -95,6 +95,7 @@ runtests(
     't/tag/verbatim.t',
     't/tag/widthratio.t',
     't/tag/with.t',
+    't/xs/count_lines.t',
     't/xs/spaceless.t',
     't/xs/eval_sequence.t',
     't/xs/html_protect.t',

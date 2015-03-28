@@ -6,6 +6,7 @@
 #include "src/perl_mnemonic.h"
 #include "src/spaceless.h"
 #include "src/html_protect.h"
+#include "src/count_lines.h"
 
 MODULE = DTL::Fast  PACKAGE = DTL::Fast
 
@@ -27,5 +28,12 @@ int
 eval_sequence()
     CODE:
         RETVAL = PL_evalseq;
+    OUTPUT:
+        RETVAL
+
+SV*
+count_lines(SV* scalar_string)
+    CODE:
+        RETVAL = _count_lines(aTHX_ scalar_string );
     OUTPUT:
         RETVAL

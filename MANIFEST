@@ -138,6 +138,7 @@ lib/DTL/Fast/Variable.pm
 Makefile.PL
 MANIFEST            This list of files
 README
+src/count_lines.h
 src/spaceless.h
 src/html_protect.h
 src/perl_mnemonic.h
@@ -289,6 +290,7 @@ t/tmpl2/childother.txt
 t/tmpl2/simple.txt
 t/tmpl2/simple2.txt
 t/tmpl2/simple3.txt
+t/xs/count_lines.t
 t/xs/spaceless.t
 t/xs/html_protect.t
 t/xs/eval_sequence.t
