@@ -41,4 +41,7 @@ ok($@ =~ /at line 46/si, 'Double empty block message: template line');
 ok($@ =~ /\QDTL::Fast::Tag::For\E/si, 'Double empty block message: parent block');
 ok($@ =~ /at line 42/si, 'Double empty block message: parent block line');
 
+eval{$template = DTL::Fast::Template->new('{{var1|date:"D"}}');};
+ok( $@ eq '', "Undef time value passed");
+
 done_testing();

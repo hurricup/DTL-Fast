@@ -35,8 +35,8 @@ our @timespotnames=qw/midnight noon/;
 our @datesuffixes=qw/th st nd rd/; #qw/Default day1 day2 day3 day4 day5...
 sub time2str_php
 {
-    my $format = shift;
-    my $time = shift;
+    my $format = shift // "";
+    my $time = shift // 0;
 
     my @t = localtime($time);
     my @s = split //, $format;
