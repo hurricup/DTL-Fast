@@ -105,6 +105,9 @@ lib/DTL/Fast/Tag/Block.pm
 lib/DTL/Fast/Tag/BlockSuper.pm
 lib/DTL/Fast/Tag/Comment.pm
 lib/DTL/Fast/Tag/Cycle.pm
+lib/DTL/Fast/Tag/Dump.pm
+lib/DTL/Fast/Tag/DumpHTML.pm
+lib/DTL/Fast/Tag/DumpWarn.pm
 lib/DTL/Fast/Tag/Debug.pm
 lib/DTL/Fast/Tag/Extends.pm
 lib/DTL/Fast/Tag/Filter.pm
@@ -127,7 +130,6 @@ lib/DTL/Fast/Tag/Ssi.pm
 lib/DTL/Fast/Tag/Templatetag.pm
 lib/DTL/Fast/Tag/Url.pm
 lib/DTL/Fast/Tag/Verbatim.pm
-lib/DTL/Fast/Tag/Warn.pm
 lib/DTL/Fast/Tag/Widthratio.pm
 lib/DTL/Fast/Tag/With.pm
 lib/DTL/Fast/Tags.pm
@@ -218,6 +220,9 @@ t/tag/autoescape.t
 t/tag/comment.t
 t/tag/cycle.t
 t/tag/debug.t
+t/tag/dump.t
+t/tag/dump_html.t
+t/tag/dump_warn.t
 t/tag/filter.t
 t/tag/firstof.t
 t/tag/firstofdefined.t

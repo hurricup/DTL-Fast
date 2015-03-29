@@ -27,7 +27,6 @@ register_tag(qw(
     templatetag DTL::Fast::Tag::Templatetag
     url         DTL::Fast::Tag::Url
     verbatim    DTL::Fast::Tag::Verbatim
-    warn        DTL::Fast::Tag::Warn
     widthratio  DTL::Fast::Tag::Widthratio
     with        DTL::Fast::Tag::With
 ));
@@ -37,6 +36,9 @@ register_tag(qw(
     firstofdefined  DTL::Fast::Tag::Firstofdefined
     sprintf         DTL::Fast::Tag::Sprintf
     block_super     DTL::Fast::Tag::BlockSuper
+    dump            DTL::Fast::Tag::Dump
+    dump_html       DTL::Fast::Tag::DumpHTML
+    dump_warn       DTL::Fast::Tag::DumpWarn
 ));
 
 1;

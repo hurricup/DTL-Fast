@@ -564,13 +564,24 @@ Works exactly like a perl's sprintf function with pattern and substitutions. Thi
 
 C<url> tag works a different way. Because there is no framework around, we can't obtain model's path the same way. But you may pass C<url_source> parameter into template constructor or C<get_template>/C<select_template> function. This parameter MUST be a reference to a function, that will return to templating engine url template by some 'model path' (first parameter of C<url> tag). Second parameter passed to the C<url_source> handler will be a reference to array of argument values (in case of positional arguments) or reference to a hash of arguments (in case of named ones). Url source handler may just return a regexp template by model path and templating engine will try to restore it with specified arguments. Or, you may restore it yourself, alter replacement arguments or do whatever you want. 
 
-=head3 warn
+=head3 dump
 
-    {% warn var1 var2 ... varn %}
+    {% dump var1 var2 ... varn %}
 
-C<warn> tag is useful for development and debugging. Dumps variable using L<C<Data::Dumper>> to C<STDERR>.
+C<dump> tag is useful for development and debugging. Dumps context variables using L<C<Data::Dumper>> to the rendered template as is.
 
-Without and argument dumps full context object.
+=head3 dump_html
+
+    {% dump_html var1 var2 ... varn %}
+
+Works exactly as the C<dump> tag, but escapes result and writes it to the rendered template, wrapped with C<textarea> tags. Textarea has C<dtl_fast_dump_area> class selector, so you may do any styling on your side. Useful for debugging HTML pages.
+
+=head3 dump_warn
+
+    {% dump_warn var1 var2 ... varn %}
+
+Works exactly as the C<dump> tag, warns output, instead of putting it into the rendered template.
+
 
 =head2 Filters
 

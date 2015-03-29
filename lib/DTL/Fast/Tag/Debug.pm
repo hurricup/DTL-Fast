@@ -4,15 +4,14 @@ use parent 'DTL::Fast::Tag::Simple';
 
 $DTL::Fast::TAG_HANDLERS{'debug'} = __PACKAGE__;
 
-use Data::Dumper;
-
 #@Override
 sub render
 {
     my $self = shift;
     my $context = shift;
 
-    my $result = Dumper($context);
+    require Data::Dumper;
+    my $result = Data::Dumper->Dump([$context], ['context']);
  
     return $result;
 }
