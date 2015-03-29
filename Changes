@@ -8,6 +8,7 @@ Revision history for Perl extension DTL::Fast.
     - Undefined time value in date filter treated as 0, fixes #61
     - Implemented dump, dump_html and dump_warn tags for dumping context variables in different ways, fixes #68
     - warn tag removed in favor of dump_warn
+    - Added variable name validation and restrictions, fixes #62
 
 1.616 - Sun 22 Mar 2015
     - Updated Escape::XS version requirement to 0.12

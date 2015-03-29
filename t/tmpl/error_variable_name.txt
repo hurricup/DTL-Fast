@@ -36,18 +36,10 @@ and 2 == 2
         {% if 
             2 
                 > 
-            1
+            1 and
+            a=b
         %}
             thi si
-            {% for a in b %}
-            {% 
-                empty 
-            %}
-            {% empty 
-            %}
-            {%
-                endfor
-            %}
             test
         {% endif %}
         sdfsdfa

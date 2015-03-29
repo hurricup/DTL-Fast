@@ -44,4 +44,9 @@ ok($@ =~ /at line 42/si, 'Double empty block message: parent block line');
 eval{$template = DTL::Fast::Template->new('{{var1|date:"D"}}');};
 ok( $@ eq '', "Undef time value passed");
 
+eval{get_template('error_variable_name.txt', 'dirs' => $dirs);};
+ok( $@ =~ /\Qvariable `a=b` contains incorrect symbols\E/, 'Wrong variable name: error message');
+ok( $@ =~ /\Qsyntax began at line 36\E/, 'Wrong variable name: error line');
+print $@;
+
 done_testing();

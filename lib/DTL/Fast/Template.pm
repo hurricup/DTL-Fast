@@ -24,7 +24,6 @@ sub new
     $kwargs{'modules'} //= {
         'DTL::Fast' => $DTL::Fast::VERSION,
     };
-
     
     my $self = $proto->SUPER::new(%kwargs);
     

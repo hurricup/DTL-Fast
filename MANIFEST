@@ -269,6 +269,7 @@ t/tmpl/error_double_empty.txt
 t/tmpl/error_tag.txt
 t/tmpl/error_undisclosed.txt
 t/tmpl/error_unknown_filter.txt
+t/tmpl/error_variable_name.txt
 t/tmpl/include_recursive0.txt
 t/tmpl/include_recursive1.txt
 t/tmpl/include_recursive2.txt

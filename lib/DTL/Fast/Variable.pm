@@ -11,12 +11,14 @@ use DTL::Fast::Template;
 sub new
 {
     my( $proto, $variable, %kwargs ) = @_;
+
+    $proto = ref $proto || $proto;
     
     $variable =~ s/(^\s+|\s+$)//gsi;
     my @filters = split /\s*\|+\s*/, $variable;
     
     my $variable_name = shift @filters;
-
+    
     if( 
         $kwargs{'replacement'} 
         and my $replacement = $kwargs{'replacement'}->get_replacement($variable_name)
@@ -60,12 +62,19 @@ sub new
     }
     else
     {
-        die "Variable can't contain brackets: $variable_name" 
-            if $variable_name =~ /[()]/;
+        if ( $variable_name =~ /[^\w\-\.]/)
+        {
+            die $proto->get_parse_error(
+                "variable `$variable_name` contains incorrect symbols (not /alphanumeric/-/_/./ )"
+                , <<'_EOM_'
+      Possible reasons: typo in variable name
+                        typo in logical operator `=` instead of `==`, for example
+_EOM_
+            );
+        }
         @variable = split /\.+/, $variable_name;
     }
     
-    $proto = ref $proto || $proto;
     my $self = $proto->SUPER::new(
         'variable' => [@variable]
         , 'original' => $variable

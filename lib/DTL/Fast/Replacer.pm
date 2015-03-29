@@ -6,14 +6,27 @@ use DTL::Fast::Variable;
 
 our $VERSION = '1.00';
 
+use Scalar::Util qw(weaken);
+
 sub new
 {
     my( $proto, %kwargs ) = @_;
 
-    $kwargs{'_template'} = $DTL::Fast::Template::CURRENT_TEMPLATE;
-    $kwargs{'_template_line'} = $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
+    $proto = ref $proto || $proto;
     
     my $self = bless {%kwargs}, $proto;
+
+    if( $self->isa('DTL::Fast::Template'))
+    {
+        $self->{'_template'} = $self;
+        weaken $self->{'_template'};
+        $self->{'_template_line'} = 1;
+    }
+    else
+    {
+        $self->{'_template'} = $DTL::Fast::Template::CURRENT_TEMPLATE;
+        $self->{'_template_line'} = $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
+    }
     
     return $self;
 }
