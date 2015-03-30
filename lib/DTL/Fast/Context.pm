@@ -73,9 +73,14 @@ sub traverse
         }
         elsif( UNIVERSAL::can($variable, $step) )
         {
-            $variable = 'lvalue' ~~ attributes::get($variable->can($step)) ?
-                $variable->$step()
-                : $variable->$step($self);
+            my $is_DTL = $self->isa('DTL::Fast');
+            my $is_lvalue = 'lvalue' ~~ attributes::get($variable->can($step));
+
+            if ( $is_DTL && $is_lvalue ) {
+                $variable->$step($self);
+            } else {
+                $variable->$step();
+            }
         }
         elsif( $current_type )
         {
