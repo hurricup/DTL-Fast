@@ -1,7 +1,7 @@
 package DTL::Fast::Context;
 use strict; use utf8; use warnings FATAL => 'all';
-no if $] >= 5.017011, warnings => 'experimental::smartmatch';
-use attributes;
+
+use Scalar::Util qw(reftype blessed);
 
 sub new
 {
@@ -39,9 +39,7 @@ sub get
 
     while( ref $variable eq 'CODE' )
     {
-        $variable = 'lvalue' ~~ attributes::get($variable) ?
-            $variable->()
-            : $variable->($self);
+        $variable = $variable->();
     }
 
     $variable = $self->traverse($variable, $variable_path)
@@ -59,8 +57,14 @@ sub traverse
 
     foreach my $step (@$path)
     {
-        my $current_type = ref $variable;
-        if( $current_type eq 'HASH' )
+        my $current_type = reftype $variable;
+        if(
+            blessed($variable)
+            and $variable->can($step) )
+        {
+            $variable = $variable->$step();
+        }
+        elsif( $current_type eq 'HASH' )
         {
             $variable = $variable->{$step};
         }
@@ -70,16 +74,6 @@ sub traverse
         )
         {
             $variable = $variable->[$step];
-        }
-        elsif( UNIVERSAL::can($variable, $step) )
-        {
-            $variable = 'lvalue' ~~ attributes::get($variable->can($step)) ?
-                $variable->$step()
-                : $variable->$step($self);
-        }
-        elsif( $current_type )
-        {
-            $variable = $variable->{$step};
         }
         else
         {
@@ -93,9 +87,7 @@ sub traverse
 
     while( ref $variable eq 'CODE' )
     {
-        $variable = 'lvalue' ~~ attributes::get($variable) ?
-            $variable->()
-            : $variable->($self);
+        $variable = $variable->();
     }
 
     return $variable;

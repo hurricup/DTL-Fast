@@ -1,7 +1,6 @@
 package DTL::Fast::Variable;
 use strict; use utf8; use warnings FATAL => 'all';
 use parent 'DTL::Fast::Replacer';
-no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 use Scalar::Util qw(looks_like_number);
 use DTL::Fast::FilterManager;
@@ -111,9 +110,7 @@ sub render
                 
         while (ref $value eq 'CODE')
         {
-            $value = 'lvalue' ~~ attributes::get($value) ?
-                $value->()
-                : $value->($self);
+            $value = $value->();
         }
     }
     $value = $self->{'filter_manager'}->filter($value, $context)
