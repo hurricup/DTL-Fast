@@ -7,6 +7,7 @@
 #include "src/spaceless.h"
 #include "src/html_protect.h"
 #include "src/count_lines.h"
+#include "src/dump_string.h"
 
 MODULE = DTL::Fast  PACKAGE = DTL::Fast
 
@@ -37,3 +38,9 @@ count_lines(SV* scalar_string)
         RETVAL = _count_lines(aTHX_ scalar_string );
     OUTPUT:
         RETVAL
+
+void
+dump_string(SV* scalar_string)
+    CODE:
+        _dump_string(aTHX_ scalar_string );
+
