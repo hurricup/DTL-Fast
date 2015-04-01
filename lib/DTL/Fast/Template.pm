@@ -30,6 +30,16 @@ sub new
     return $self;
 }
 
+#@Override self-linking
+sub remember_template
+{
+    my ($self) = @_;
+    
+    $self->{'_template'} = $self;
+    $self->{'_template_line'} = 1;
+    
+    return $self;
+}
 
 #@Override
 sub parse_chunks

@@ -1,5 +1,6 @@
 package DTL::Fast::Filter;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use parent 'DTL::Fast::Entity';
 
 use DTL::Fast::Template;
 
@@ -7,13 +8,14 @@ sub new
 {
     my( $proto, $parameter, %kwargs)  = @_;
     
+    $proto = ref $proto || $proto;
+    
     $kwargs{'parameter'} = $parameter // [];
     
-    die "Parameter must be an ARRAY reference" 
+    die $proto->get_parse_error("Parameter must be an ARRAY reference")
         if ref $kwargs{'parameter'} ne 'ARRAY';
 
-    $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} = $proto->VERSION // DTL::Fast->VERSION;
-    my $self = bless {%kwargs}, $proto;
+    my $self = $proto->SUPER::new(%kwargs);
     
     return $self->parse_parameters();
 }
@@ -22,7 +24,8 @@ sub parse_parameters{return shift;}
 
 sub filter
 {
-    die "This is abstract method and it must be overrided";
+    my ($self) = @_;
+    die sprintf( "filter method must be overriden in %s", ref $self );
 }
 
 1;

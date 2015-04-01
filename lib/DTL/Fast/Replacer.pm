@@ -1,36 +1,11 @@
 package DTL::Fast::Replacer;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use parent 'DTL::Fast::Entity';
 
 use DTL::Fast::Replacer::Replacement;
 use DTL::Fast::Variable;
 
 our $VERSION = '1.00';
-
-use Scalar::Util qw(weaken);
-
-sub new
-{
-    my( $proto, %kwargs ) = @_;
-
-    $proto = ref $proto || $proto;
-    
-    my $self = bless {%kwargs}, $proto;
-
-    if( $self->isa('DTL::Fast::Template'))
-    {
-        $self->{'_template'} = $self;
-        weaken $self->{'_template'};
-        $self->{'_template_line'} = 1;
-    }
-    else
-    {
-        $self->{'_template'} = $DTL::Fast::Template::CURRENT_TEMPLATE;
-        $self->{'_template_line'} = $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
-    }
-    
-    return $self;
-}
-
 
 sub backup_strings
 {
@@ -139,63 +114,6 @@ sub parse_sources
         }
     }
 
-    return $result;
-}
-
-sub get_parse_error
-{
-    my ($self, $message, @messages) = @_;
-    
-    return $self->get_error(
-        $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
-        , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
-        , '         Parsing error: '.($message // 'undef')
-        , @messages
-    );
-}
-
-sub get_render_error
-{
-    my ($self, $message, $context) = @_;
-    
-    my @params = (
-        $self->{'_template'}->{'file_path'}
-        , $self->{'_template_line'}
-        , '       Rendering error: '.($message // 'undef')
-    );
-    
-    if ( scalar @{$context->{'ns'}->[-1]->{'_dtl_include_path'}} > 1 ) # has inclusions, appending stack trace
-    {
-        push @params, sprintf( <<'_EOM_'
-           Stack trace: %s
-_EOM_
-            , join( "\n                 ", @{$context->{'ns'}->[-1]->{'_dtl_include_path'}})
-        );
-    }
-    
-    return $self->get_error( @params );
-}
-
-sub get_error
-{
-    my ($self, $template, $line, $message, @messages ) = @_;
-    
-    my $result = sprintf <<'_EOM_'
-%s
-              Template: %s, syntax began at line %s
-_EOM_
-        , $message // 'undef'
-        , $template // 'undef'
-        , $line // 'undef'
-    ;
-    
-    if ( scalar @messages )
-    {
-        $result .= join "\n", @messages;
-    }
-    
-    $result .= "\n" if $result !~ /\n$/s;
-    
     return $result;
 }
 

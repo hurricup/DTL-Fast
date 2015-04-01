@@ -11,12 +11,12 @@ sub new
 {
     my( $proto, %kwargs ) = @_;
 
-    die 'No directory arrays passed into constructor'
+    die $proto->get_parse_error('No directory arrays passed into constructor')
         if not $kwargs{'dirs'}
             or ref $kwargs{'dirs'} ne 'ARRAY'
         ;
     
-    die 'No raw chunks array passed into constructor'
+    die $proto->get_parse_error('No raw chunks array passed into constructor')
         if not $kwargs{'raw_chunks'}
             or ref $kwargs{'raw_chunks'} ne 'ARRAY'
         ;

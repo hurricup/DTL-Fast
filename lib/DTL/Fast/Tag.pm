@@ -12,8 +12,6 @@ sub new
     
     $parameter =~ s/^\s+|\s+$//gs;
 
-    $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} //= $proto->VERSION // DTL::Fast->VERSION;
-    
     $kwargs{'parameter'} = $parameter;
     
     return $proto->SUPER::new(%kwargs);

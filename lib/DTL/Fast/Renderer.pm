@@ -37,6 +37,4 @@ sub render
     return join '', @$result;
 }
 
-
-
 1;
