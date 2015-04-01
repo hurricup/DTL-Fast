@@ -1,6 +1,6 @@
 Revision history for Perl extension DTL::Fast.
 
-1.618 - In development
+1.618 - In development (branch)
     - Changed context variable traversing: context is not being passed to the code references or object methods anymore, fixes #69, thanks @cblake777
 
 1.617 - Sun 29 Mar 2015
