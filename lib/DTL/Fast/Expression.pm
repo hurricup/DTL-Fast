@@ -59,7 +59,7 @@ sub _parse_brackets
             $self->backup_expression($1)
         /xge ){};
     
-    die 'Unpaired brackets in: '.$self->{'expression'}
+    die $self->get_parse_error('unpaired brackets')
         if $expression =~ /[()]/;
     
     return $expression;
@@ -75,13 +75,12 @@ sub _parse_expression
     for( my $level = $self->{'level'}; $level < scalar @DTL::Fast::OPS_RE; $level++ )
     {
         my $operators = $DTL::Fast::OPS_RE[$level];
-
         my @result = ();
         my @source = split /
                 (?:^|\s+)
                     ($operators)
                 (?:$|\s+)
-            /x, $expression;
+            /six, $expression;
 
         if( scalar @source > 1 ) 
         {
@@ -92,7 +91,7 @@ sub _parse_expression
             {
                 next if $token eq ''; 
                 
-                if( $token =~ /^$operators$/x ) # operation
+                if( $token =~ /^$operators$/six ) # operation
                 {
                     push @result, $token;
                 }
@@ -110,7 +109,7 @@ sub _parse_expression
                 {
                     if( defined $result )
                     {
-                        die 'Two operands in a row: '.$self->{'expression'};
+                        die $self->get_parse_error('two operands in a row');
                     }
                     else
                     {
@@ -136,7 +135,7 @@ sub _parse_expression
                             $DTL::Fast::OPS_HANDLERS{$token} = $DTL::Fast::KNOWN_OPS_PLAIN{$token};
                         }
                         
-                        my $handler = $DTL::Fast::OPS_HANDLERS{$token} || die "There is no processor for $token operator";
+                        my $handler = $DTL::Fast::OPS_HANDLERS{$token} || die $self->get_parse_error("There is no processor for $token operator");
                         
                         if($handler->isa('DTL::Fast::Expression::Operator::Binary'))
                         {
@@ -146,9 +145,11 @@ sub _parse_expression
                             }
                             else
                             {
-                                die sprintf('Binary operator %s has no left argument: %s'
-                                    , $token // 'undef'
-                                    , $self->{'expression'} // 'undef'
+                                die $self->get_parse_error(
+                                    sprintf('Binary operator %s has no left argument: %s'
+                                        , $token // 'undef'
+                                        , $self->{'expression'} // 'undef'
+                                    )
                                 );
                             }
                         }
@@ -156,9 +157,11 @@ sub _parse_expression
                         {
                             if( defined $result )
                             {
-                                die sprintf('Unary operator %s got left argument: %s'
-                                    , $token // 'undef'
-                                    , $self->{'expression'} // 'undef'
+                                die $self->get_parse_error(
+                                    sprintf('Unary operator %s got left argument: %s'
+                                        , $token // 'undef'
+                                        , $self->{'expression'} // 'undef'
+                                    )
                                 );
                             }
                             else
@@ -168,18 +171,20 @@ sub _parse_expression
                         }
                         else
                         {
-                            die 'Unknown operator handler: '.$handler;
+                            die $self->get_parse_error('Unknown operator handler: '.$handler);
                         }
                     }
                     else # got operator but there is no more operands
                     {
-                        die sprintf('No right argument for %s (%s, %s, %s, %s): %s'
-                            , $token // 'undef'
-                            , scalar @result
-                            , ref $result[0] // 'undef'
-                            , $result // 'undef'
-                            , $result[0] // 'undef'
-                            , $self->{'expression'} // 'undef'
+                        die $self->get_parse_error(
+                            sprintf('No right argument for %s (%s, %s, %s, %s): %s'
+                                , $token // 'undef'
+                                , scalar @result
+                                , ref $result[0] // 'undef'
+                                , $result // 'undef'
+                                , $result[0] // 'undef'
+                                , $self->{'expression'} // 'undef'
+                            )
                         );
                     }
                 }

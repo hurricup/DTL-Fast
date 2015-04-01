@@ -8,6 +8,7 @@ lib/DTL/Fast/Cache/Memcached.pm
 lib/DTL/Fast/Cache/Runtime.pm
 lib/DTL/Fast/Cache/Serialized.pm
 lib/DTL/Fast/Context.pm
+lib/DTL/Fast/Entity.pm
 lib/DTL/Fast/Expression.pm
 lib/DTL/Fast/Expression/Operator.pm
 lib/DTL/Fast/Expression/Operator/Binary.pm
@@ -265,6 +266,7 @@ t/tmpl/cycle_escape_autoescape.txt
 t/tmpl/cycle_escape_safe.txt
 t/tmpl/cycle_for.txt
 t/tmpl/cycle_simple.txt
+t/tmpl/error_autoescape_bla.txt
 t/tmpl/error_double_empty.txt
 t/tmpl/error_tag.txt
 t/tmpl/error_undisclosed.txt

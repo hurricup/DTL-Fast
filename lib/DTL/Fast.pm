@@ -542,6 +542,25 @@ This function returns internal perl eval counter. This counter being increased o
   
 =head1 TEMPLATING LANGUAGE
 
+=head2 Operators and Expressions
+
+Expressions used in C<if> tag consists of variables, operators and brackets. All operators MUST have at least one space symbol before and after it. This is an after-effect of custom parsing algorythm. 
+
+    {% if var1 == var2 %}   # correct
+    {% if var1==var2 %}     # not correct, no spaces around ==
+    
+Module supports following operators (with precedence):
+
+    pow, **                     # left operand in power of the right one
+    defined                     # check if right operand is defined
+    not                         # negating the right operand
+    in, not in                  # check that left operand exists in a hash or an array (right operand)
+    *, /, %, mod                # multiplying, dividing and modulus
+    +, -                        # plus and minus
+    ==, !=, <>, <, >, <=, >=    # comparision operators
+    and                         # logical and
+    or                          # logical or
+
 =head2 Tags
 
 This module supports almost all built-in tags documented on L<official Django site|https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference>. Don't forget to read L<incompatibilities|/INCOMPATIBILITIES WITH DJANGO TEMPLATES> and L<extensions|/EXTENSIONS OF DJANGO TEMPLATES> sections.

@@ -47,6 +47,16 @@ ok( $@ eq '', "Undef time value passed");
 eval{get_template('error_variable_name.txt', 'dirs' => $dirs);};
 ok( $@ =~ /\Qvariable `a=b` contains incorrect symbols\E/, 'Wrong variable name: error message');
 ok( $@ =~ /\Qsyntax began at line 36\E/, 'Wrong variable name: error line');
+
+eval{get_template('error_autoescape_bla.txt', 'dirs' => $dirs);};
 print $@;
+
+# unpaired brackets
+# two operators
+# no operator processor
+# binary operator missing left argument
+# unary operator got left argumet
+# unknown operator handler
+# no right argument
 
 done_testing();
