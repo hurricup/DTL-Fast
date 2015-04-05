@@ -355,7 +355,7 @@ And load and render it:
 
 =head1 DESCRIPTION
 
-This module is a Perl and stand-alone templating system, cloned from Django templating sytem, described in L<here|https://docs.djangoproject.com/en/1.7/topics/templates/>.
+This module is a Perl and stand-alone templating system, cloned from Django templating sytem, described in L<here|https://docs.djangoproject.com/en/1.8/topics/templates/>.
 
 =head2 Goals
 
@@ -563,7 +563,7 @@ Module supports following operators (with precedence):
 
 =head2 Tags
 
-This module supports almost all built-in tags documented on L<official Django site|https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-tag-reference>. Don't forget to read L<incompatibilities|/INCOMPATIBILITIES WITH DJANGO TEMPLATES> and L<extensions|/EXTENSIONS OF DJANGO TEMPLATES> sections.
+This module supports almost all built-in tags documented on L<official Django site|https://docs.djangoproject.com/en/1.8/ref/templates/builtins/#built-in-tag-reference>. Don't forget to read L<incompatibilities|/INCOMPATIBILITIES WITH DJANGO TEMPLATES> and L<extensions|/EXTENSIONS OF DJANGO TEMPLATES> sections.
 
 =head3 block_super
 
@@ -604,7 +604,7 @@ Works exactly as the C<dump> tag, warns output, instead of putting it into the r
 
 =head2 Filters
 
-This module supports all built-in filters documented on L<official Django site|https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#built-in-filter-reference>. Don't forget to read L<incompatibilities|/INCOMPATIBILITIES WITH DJANGO TEMPLATES> and L<extensions|/EXTENSIONS OF DJANGO TEMPLATES> sections.
+This module supports all built-in filters documented on L<official Django site|https://docs.djangoproject.com/en/1.8/ref/templates/builtins/#built-in-filter-reference>. Don't forget to read L<incompatibilities|/INCOMPATIBILITIES WITH DJANGO TEMPLATES> and L<extensions|/EXTENSIONS OF DJANGO TEMPLATES> sections.
 
 =head3 numberformat
 
@@ -1024,7 +1024,7 @@ Tests shows, that C<DTL::Fast> works 27% faster, than L<C<Dotiac::DTL>> in CGI e
 
 =item * CPAN Ratings: L<http://cpanratings.perl.org/d/DTL-Fast>
 
-=item * Original Django templating documentation: L<https://docs.djangoproject.com/en/1.7/topics/templates/>
+=item * Original Django templating documentation: L<https://docs.djangoproject.com/en/1.8/topics/templates/>
 
 =item * Other implementaion: L<http://search.cpan.org/~maluku/Dotiac-0.8/lib/Dotiac/DTL.pm>
 

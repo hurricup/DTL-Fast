@@ -6,6 +6,7 @@ Revision history for Perl extension DTL::Fast.
         - `ssi` tag is now depricated, warning added
     - Documentation
         - Documented supported operators and some syntax features
+        - Documentation links to Django site now leads to the 1.8 version
     - Bugfix
         - forloop.last has a proper value on 1 item array, fixes #72
 
