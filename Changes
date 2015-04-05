@@ -3,6 +3,7 @@ Revision history for Perl extension DTL::Fast.
 1.618 - In development (branch)
     - Improvement
         - Changed context variable traversing: context is not being passed to the code references or object methods anymore, fixes #69, thanks @cblake777
+        - `ssi` tag is now depricated, warning added
     - Documentation
         - Documented supported operators and some syntax features
     - Bugfix

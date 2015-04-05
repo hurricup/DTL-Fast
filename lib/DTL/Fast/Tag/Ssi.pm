@@ -16,6 +16,7 @@ sub parse_parameters
             DTL::Fast::Variable->new($1)
             , $2 
         );
+        warn '`ssi` tag is now depricated and will be removed in future versions. Please, use `include` tag';
     }
     else
     {
