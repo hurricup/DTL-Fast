@@ -5,14 +5,30 @@ use parent 'DTL::Fast::Tag::Simple';
 $DTL::Fast::TAG_HANDLERS{'now'} = __PACKAGE__;
 
 use DTL::Fast::Utils;
+use DTL::Fast::Variable;
 
 #@Override
 sub parse_parameters
 {
     my $self = shift;
     
-    die "No time format specified" unless $self->{'parameter'};
-    $self->{'format'} = $self->parse_sources($self->{'parameter'})->[0];
+    if(
+        $self->{'parameter'} =~ /^
+            \s*
+            (.+?)
+            (?:\s+as\s+(.+)\s*)?
+        $/xsi
+    )
+    {
+        @{$self}{'format', 'target_variable'} = (
+            DTL::Fast::Variable->new( $1 ) 
+            , $2
+        );
+    }
+    else
+    {
+        die $self->get_parse_error("No time format specified") unless $self->{'parameter'};
+    }
     
     return $self;
 }
@@ -20,10 +36,18 @@ sub parse_parameters
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my ($self, $context) = @_;
+
+    my $result = DTL::Fast::Utils::time2str_php( $self->{'format'}->render($context), time);
+
+    if ( $self->{'target_variable'} ) {
+        $context->set(
+            $self->{'target_variable'} => $result
+        );
+        $result = '';
+    }
     
-    return DTL::Fast::Utils::time2str_php( $self->{'format'}->render($context), time);
+    return $result;
 }
 
 

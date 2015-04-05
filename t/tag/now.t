@@ -24,15 +24,23 @@ $context = DTL::Fast::Context->new({
 });
 
 
-$template = '{% now format1 %}';
 $test_string = DTL::Fast::Utils::time2str_php($context->get('format1'), time);
 
+$template = '{% now format1 %}';
 is( DTL::Fast::Template->new($template)->render($context), $test_string, 'Now formatting from variable.');
 
-$template = '{% now "Z-z-\B-y-Y" %}';
+$template = '{% now format1 as res_format %} a {{res_format}}';
+$test_string = ' a '.$test_string;
+is( DTL::Fast::Template->new($template)->render($context), $test_string, 'Now formatting from variable with as');
+
 $test_string = DTL::Fast::Utils::time2str_php('Z-z-\B-y-Y', time);
 
+$template = '{% now "Z-z-\B-y-Y" %}';
 is( DTL::Fast::Template->new($template)->render($context), $test_string, 'Static now formatting.');
+
+$template = '{% now "Z-z-\B-y-Y" as test_result%} a {{test_result}}';
+$test_string = ' a '.$test_string;
+is( DTL::Fast::Template->new($template)->render($context), $test_string, 'Static now formatting with as.');
 
 
 done_testing();
