@@ -56,15 +56,25 @@ eval{get_template('error_now_parameter.txt', 'dirs' => $dirs);};
 ok( $@ =~ m{\Qno time format specified\E}, '`now` without a parameter: error message');
 ok( $@ =~ m{\Q./t/tmpl/error_now_parameter.txt, syntax began at line 41\E}, '`now` without a parameter: filename and line number');
 
-
 # expression
-# unpaired brackets
-# two operators
-# no operator processor
-# binary operator missing left argument
-# unary operator got left argumet
-# unknown operator handler
-# no right argument
+eval{get_template('error_expression_unpaired_brackets.txt', 'dirs' => $dirs);};
+ok( $@ =~ m{\Qunpaired brackets in expression\E}, 'Unpaired brackets: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_expression_unpaired_brackets.txt, syntax began at line 36\E}, 'Unpaired brackets: filename and line number');
+ok( $@ =~ m{\Q(2 > 1\E}, 'Unpaired brackets: expression');
 
+eval{get_template('error_expression_binary_no_left.txt', 'dirs' => $dirs);};
+ok( $@ =~ m{\Qbinary operator `>` has no left argument\E}, 'Missing left argument: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_expression_binary_no_left.txt, syntax began at line 36\E}, 'Missing left argument: filename and line number');
+ok( $@ =~ m{\Q> 1\E}, 'Missing left argument: expression');
+
+eval{get_template('error_expression_binary_no_right.txt', 'dirs' => $dirs);};
+ok( $@ =~ m{\Qoperator `==` has no right argument\E}, 'Missing right argument: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_expression_binary_no_right.txt, syntax began at line 36\E}, 'Missing right argument: filename and line number');
+ok( $@ =~ m{\Qa ==\E}, 'Missing right argument: expression');
+
+eval{get_template('error_expression_unary_got_left.txt', 'dirs' => $dirs);};
+ok( $@ =~ m{\Qunary operator `not` got left argument\E}, 'Extra left argument: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_expression_unary_got_left.txt, syntax began at line 36\E}, 'Extra left argument: filename and line number');
+ok( $@ =~ m{\Qa not b\E}, 'Extra left argument: expression');
 
 done_testing();

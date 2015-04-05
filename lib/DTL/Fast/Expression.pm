@@ -18,7 +18,7 @@ sub new
     my( $proto, $expression, %kwargs ) = @_;
     my $result = undef;
 
-    $expression =~ s/(^\s+|\s+$)//xgsi;
+    $expression =~ s/^\s+|\s+$//xgsi;
     
     if( 
         not $kwargs{'replacement'}          # cache only top-level expressions
@@ -59,12 +59,22 @@ sub _parse_brackets
             $self->backup_expression($1)
         /xge ){};
     
-    die $self->get_parse_error('unpaired brackets')
+    die $self->get_parse_error('unpaired brackets in expression')
         if $expression =~ /[()]/;
     
     return $expression;
 }
 
+sub get_parse_error
+{
+    my ($self, $message, @additional) = @_;
+    
+    return $self->SUPER::get_parse_error(
+        $message
+        , @additional
+        , '            Expression: '.$self->{'expression'}
+    );
+}
 
 sub _parse_expression
 {
@@ -84,8 +94,6 @@ sub _parse_expression
 
         if( scalar @source > 1 ) 
         {
- #           warn "Parsed $expression as ".Dumper(\@source);
-            
             # processing operands
             while( defined ( my $token = shift @source) )
             {
@@ -104,17 +112,9 @@ sub _parse_expression
             # processing operators
             while( my $token  = shift @result )
             {
-#                warn "Processing token $token";
                 if( ref $token ) # operand
                 {
-                    if( defined $result )
-                    {
-                        die $self->get_parse_error('two operands in a row');
-                    }
-                    else
-                    {
-                        $result = $token;
-                    }
+                    $result = $token;
                 }
                 else    # operator
                 {
@@ -135,7 +135,7 @@ sub _parse_expression
                             $DTL::Fast::OPS_HANDLERS{$token} = $DTL::Fast::KNOWN_OPS_PLAIN{$token};
                         }
                         
-                        my $handler = $DTL::Fast::OPS_HANDLERS{$token} || die $self->get_parse_error("There is no processor for $token operator");
+                        my $handler = $DTL::Fast::OPS_HANDLERS{$token} || die $self->get_parse_error("there is no processor for $token operator");
                         
                         if($handler->isa('DTL::Fast::Expression::Operator::Binary'))
                         {
@@ -146,9 +146,8 @@ sub _parse_expression
                             else
                             {
                                 die $self->get_parse_error(
-                                    sprintf('Binary operator %s has no left argument: %s'
+                                    sprintf('binary operator `%s` has no left argument'
                                         , $token // 'undef'
-                                        , $self->{'expression'} // 'undef'
                                     )
                                 );
                             }
@@ -158,9 +157,8 @@ sub _parse_expression
                             if( defined $result )
                             {
                                 die $self->get_parse_error(
-                                    sprintf('Unary operator %s got left argument: %s'
+                                    sprintf('unary operator `%s` got left argument'
                                         , $token // 'undef'
-                                        , $self->{'expression'} // 'undef'
                                     )
                                 );
                             }
@@ -177,13 +175,8 @@ sub _parse_expression
                     else # got operator but there is no more operands
                     {
                         die $self->get_parse_error(
-                            sprintf('No right argument for %s (%s, %s, %s, %s): %s'
+                            sprintf('operator `%s` has no right argument'
                                 , $token // 'undef'
-                                , scalar @result
-                                , ref $result[0] // 'undef'
-                                , $result // 'undef'
-                                , $result[0] // 'undef'
-                                , $self->{'expression'} // 'undef'
                             )
                         );
                     }
