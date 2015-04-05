@@ -262,7 +262,7 @@ sub get_forloop
         , 'revcounter' => $source_size
         , 'revcounter0' => $source_size-1
         , 'first' => 1
-        , 'last' => 0
+        , 'last' => $source_size == 1 ? 1: 0
         , 'length' => $source_size
         , 'odd' => 1
         , 'odd0' => 0

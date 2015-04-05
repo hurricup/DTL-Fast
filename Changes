@@ -1,7 +1,12 @@
 Revision history for Perl extension DTL::Fast.
 
 1.618 - In development (branch)
-    - Changed context variable traversing: context is not being passed to the code references or object methods anymore, fixes #69, thanks @cblake777
+    - Improvement
+        - Changed context variable traversing: context is not being passed to the code references or object methods anymore, fixes #69, thanks @cblake777
+    - Documentation
+        - Documented supported operators and some syntax features
+    - Bugfix
+        - forloop.last has a proper value on 1 item array, fixes #72
 
 1.617 - Sun 29 Mar 2015
     - Implemented DTL::Fast::count_lines function in C, counts newline symbols in the string

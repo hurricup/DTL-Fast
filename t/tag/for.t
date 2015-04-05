@@ -28,6 +28,7 @@ $context = new DTL::Fast::Context({
         'key3' => 'val3',
         'key4' => 'val4',
     }
+    , 'one_item_array' => ['test']
     , 'empty_array' => []
     , 'empty_hash' => {}
 });
@@ -168,6 +169,22 @@ $test_string .= "\n";
 
 is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Hash rendering');
 
+# issue #72
+$template = <<'_EOT_';
+{% for val in one_item_array %}This is a {{ val }}-{{ forloop.counter }}-{{ forloop.counter0 }}-{{ forloop.revcounter }}-{{ forloop.revcounter0 }}-{{ forloop.first }}-{{ forloop.last }}-{{ forloop.odd }}-{{ forloop.odd0 }}-{{ forloop.even }}-{{ forloop.even0 }}
+{% endfor %}
+_EOT_
+
+$test_string = <<'_EOT_';
+This is a test-1-0-1-0-1-1-1-0-0-1
+
+_EOT_
+
+is( DTL::Fast::Template->new($template, 'dirs' => $dirs)->render($context), $test_string, 'Array rendering with forloop values');
+
+
 # @todo reversed hash rendering
+
+
 
 done_testing();
