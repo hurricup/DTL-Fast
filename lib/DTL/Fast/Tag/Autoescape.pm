@@ -22,7 +22,7 @@ sub parse_parameters
     }
     else
     {
-        die $self->get_parse_error("Autoescape tag undertands only on and off parameter");
+        die $self->get_parse_error("autoescape tag undertands only `on` and `off` parameters");
     }
     return $self;
 }

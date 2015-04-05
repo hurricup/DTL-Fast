@@ -49,8 +49,15 @@ ok( $@ =~ /\Qvariable `a=b` contains incorrect symbols\E/, 'Wrong variable name:
 ok( $@ =~ /\Qsyntax began at line 36\E/, 'Wrong variable name: error line');
 
 eval{get_template('error_autoescape_bla.txt', 'dirs' => $dirs);};
-print $@;
+ok( $@ =~ m{\Qautoescape tag undertands only `on` and `off` parameters\E}, 'Wrong autoescape parameter: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_autoescape_bla.txt, syntax began at line 41\E}, 'Wrong autoescape parameter: filename and line number');
 
+eval{get_template('error_now_parameter.txt', 'dirs' => $dirs);};
+ok( $@ =~ m{\Qno time format specified\E}, '`now` without a parameter: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_now_parameter.txt, syntax began at line 41\E}, '`now` without a parameter: filename and line number');
+
+
+# expression
 # unpaired brackets
 # two operators
 # no operator processor
@@ -58,5 +65,6 @@ print $@;
 # unary operator got left argumet
 # unknown operator handler
 # no right argument
+
 
 done_testing();

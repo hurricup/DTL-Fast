@@ -27,7 +27,7 @@ sub parse_parameters
     }
     else
     {
-        die $self->get_parse_error("No time format specified") unless $self->{'parameter'};
+        die $self->get_parse_error("no time format specified") unless $self->{'parameter'};
     }
     
     return $self;

@@ -38,9 +38,7 @@ and 2 == 2
             and
                 a == b
         %}
-{% autoescape 
-bla 
-%}
+{% now %}
             thi si
             test
 {% endautoescape %}

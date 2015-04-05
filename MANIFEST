@@ -269,6 +269,7 @@ t/tmpl/cycle_simple.txt
 t/tmpl/error_autoescape_bla.txt
 t/tmpl/error_double_empty.txt
 t/tmpl/error_tag.txt
+t/tmpl/error_now_parameter.txt
 t/tmpl/error_undisclosed.txt
 t/tmpl/error_unknown_filter.txt
 t/tmpl/error_variable_name.txt
