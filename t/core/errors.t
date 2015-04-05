@@ -77,4 +77,13 @@ ok( $@ =~ m{\Qunary operator `not` got left argument\E}, 'Extra left argument: e
 ok( $@ =~ m{\Q./t/tmpl/error_expression_unary_got_left.txt, syntax began at line 36\E}, 'Extra left argument: filename and line number');
 ok( $@ =~ m{\Qa not b\E}, 'Extra left argument: expression');
 
+eval{get_template('error_block_unnamed.txt', 'dirs' => $dirs);};
+ok( $@ =~ m{\Qno name specified in the block tag\E}, 'Unnamed block: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_block_unnamed.txt, syntax began at line 23\E}, 'Unnamed block: filename and line number');
+
+eval{get_template('error_block_duplicated.txt', 'dirs' => $dirs);};
+ok( $@ =~ m{\Qblock name `abc` must be unique in the template\E}, 'Duplicate block: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_block_duplicated.txt, syntax began at line 27\E}, 'Duplicate block: filename and line number');
+ok( $@ =~ m{\Qblock `abc` was already defined at line 2\E}, 'Duplicate block: first definition');
+       
 done_testing();

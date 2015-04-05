@@ -267,6 +267,8 @@ t/tmpl/cycle_escape_safe.txt
 t/tmpl/cycle_for.txt
 t/tmpl/cycle_simple.txt
 t/tmpl/error_autoescape_bla.txt
+t/tmpl/error_block_unnamed.txt
+t/tmpl/error_block_duplicated.txt
 t/tmpl/error_double_empty.txt
 t/tmpl/error_expression_binary_no_left.txt
 t/tmpl/error_expression_binary_no_right.txt

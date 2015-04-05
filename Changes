@@ -1,11 +1,12 @@
 Revision history for Perl extension DTL::Fast.
 
-1.618 - In development (branch)
+1.618 - Sun 05 Apr 2015
     - Improvement
         - Changed context variable traversing: context is not being passed to the code references or object methods anymore, fixes #69, thanks @cblake777
         - `ssi` tag is now depricated, warning added
         - `now` tag is now supports `.. as var_name` syntax from Django 1.8. Fixes #73
-        - parsing error messages in `autoescape` and `now` tags are now pretty
+        - parsing error messages in `autoescape`, `block` and `now` tags are now pretty
+        - expression parsing messages are now pretty
     - Documentation
         - Documented supported operators and some syntax features
         - Documentation links to Django site now leads to the 1.8 version

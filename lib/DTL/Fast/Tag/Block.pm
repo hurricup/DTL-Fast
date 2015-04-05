@@ -18,12 +18,22 @@ sub parse_parameters
 
     $self->{'block_name'} = $self->{'parameter'};
     
-    die "No name specified in the block tag" if not $self->{'block_name'};
+    die $self->get_parse_error("no name specified in the block tag") if not $self->{'block_name'};
 
     # registering block within template    
     if ( exists $DTL::Fast::Template::CURRENT_TEMPLATE->{'blocks'}->{$self->{'block_name'}} )
     {
-        die "Block name must be unique in the template. Duplicated block: $self->{'block_name'}";
+        die $self->get_parse_error(
+            sprintf(
+                "block name `%s` must be unique in the template"
+                , $self->{'block_name'}
+            )
+            , sprintf(
+                '                Reason: block `%s` was already defined at line %s'
+                , $self->{'block_name'}
+                , $DTL::Fast::Template::CURRENT_TEMPLATE->{'blocks'}->{$self->{'block_name'}}->{'_template_line'}
+            )
+        );
     }
     else
     {
