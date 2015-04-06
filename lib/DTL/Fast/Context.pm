@@ -55,6 +55,8 @@ sub traverse
 {
     my( $self, $variable, $path ) = @_;
 
+    my $variable_original = $variable;
+    
     foreach my $step (@$path)
     {
         my $current_type = reftype $variable;
@@ -66,11 +68,13 @@ sub traverse
         }
         elsif( not defined $current_type )
         {
-            die sprintf("undef value encountered while traversing variable: %s (%s) with %s, full path: %s"
+            require Data::Dumper;
+            die sprintf("undef value encountered while traversing variable: %s (%s) with %s, full path: %s, original: %s"
                 , $variable // 'undef'
                 , $current_type // 'undef'
                 , $step // 'undef'
                 , join( '.', @$path )
+                , Data::Dumper->Dump([$variable_original])
             );
         }
         elsif( $current_type eq 'HASH' )
@@ -86,11 +90,13 @@ sub traverse
         }
         else
         {
-            die sprintf("Don't know how to traverse %s (%s) with %s, full path: %s"
+            require Data::Dumper;
+            die sprintf("Don't know how to traverse %s (%s) with %s, full path: %s, original: %s"
                 , $variable // 'undef'
                 , $current_type // 'undef'
                 , $step // 'undef'
                 , join( '.', @$path )
+                , Data::Dumper->Dump([$variable_original])
             );
         }
     }
