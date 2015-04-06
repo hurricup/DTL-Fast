@@ -2,6 +2,7 @@ package DTL::Fast::Context;
 use strict; use utf8; use warnings FATAL => 'all';
 
 use Scalar::Util qw(reftype blessed);
+use Carp
 
 sub new
 {
@@ -66,10 +67,11 @@ sub traverse
         }
         elsif( not defined $current_type )
         {
-            die sprintf("undef value encountered while traversing variable: %s (%s) with %s"
+            die sprintf("undef value encountered while traversing variable: %s (%s) with %s, full path: %s"
                 , $variable // 'undef'
                 , $current_type // 'undef'
                 , $step // 'undef'
+                , join( '.', @$path )
             );
         }
         elsif( $current_type eq 'HASH' )
@@ -85,10 +87,11 @@ sub traverse
         }
         else
         {
-            die sprintf("Don't know how to traverse %s (%s) with %s"
+            die sprintf("Don't know how to traverse %s (%s) with %s, full path: %s"
                 , $variable // 'undef'
                 , $current_type // 'undef'
                 , $step // 'undef'
+                , join( '.', @$path )
             );
         }
     }
