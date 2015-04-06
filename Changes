@@ -1,6 +1,6 @@
 Revision history for Perl extension DTL::Fast.
 
-1.619 - in development
+1.619 - Mon 06 Apr 2015
     - Bugfix
         - Fixed bug with non-reference on context traversing
     - Improvement
