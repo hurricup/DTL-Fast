@@ -1,6 +1,8 @@
 Revision history for Perl extension DTL::Fast.
 
 1.619 - in development
+	- Bugfix
+		- Fixed bug with undef or scalar on traversing
 
 
 1.618 - Sun 05 Apr 2015

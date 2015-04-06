@@ -64,6 +64,14 @@ sub traverse
         {
             $variable = $variable->$step();
         }
+        elsif( not defined $current_type )
+        {
+            die sprintf("undef value encountered while traversing variable: %s (%s) with %s"
+                , $variable // 'undef'
+                , $current_type // 'undef'
+                , $step // 'undef'
+            );
+        }
         elsif( $current_type eq 'HASH' )
         {
             $variable = $variable->{$step};
