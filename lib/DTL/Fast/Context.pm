@@ -2,7 +2,6 @@ package DTL::Fast::Context;
 use strict; use utf8; use warnings FATAL => 'all';
 
 use Scalar::Util qw(reftype blessed);
-use Carp
 
 sub new
 {
