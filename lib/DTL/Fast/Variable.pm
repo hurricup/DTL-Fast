@@ -106,7 +106,7 @@ sub render
             ? $self->{'variable'}->[0]
             : $self->{'direct_read'}
                 ? $context->{'ns'}->[-1]->{$self->{'variable'}->[0]}
-                : $context->get($self->{'variable'});
+                : $context->get($self->{'variable'}, $self);
                 
         while (ref $value eq 'CODE')
         {

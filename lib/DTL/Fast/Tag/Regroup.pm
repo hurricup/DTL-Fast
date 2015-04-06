@@ -52,7 +52,7 @@ sub render
                 and ref $source eq 'HASH' 
             )
             {
-                my $grouper = $context->traverse($source, $self->{'grouper'});
+                my $grouper = $context->traverse($source, $self->{'grouper'}, $self);
                 
                 if( defined $grouper )
                 {

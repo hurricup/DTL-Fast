@@ -45,12 +45,13 @@ sub get_parse_error
 
 sub get_render_error
 {
-    my ($self, $message, $context) = @_;
+    my ($self, $context, $message, @messages) = @_;
     
     my @params = (
         $self->{'_template'}->{'file_path'}
         , $self->{'_template_line'}
         , '       Rendering error: '.($message // 'undef')
+        , @messages
     );
     
     if ( scalar @{$context->{'ns'}->[-1]->{'_dtl_include_path'}} > 1 ) # has inclusions, appending stack trace
@@ -58,7 +59,7 @@ sub get_render_error
         push @params, sprintf( <<'_EOM_'
            Stack trace: %s
 _EOM_
-            , join( "\n                 ", @{$context->{'ns'}->[-1]->{'_dtl_include_path'}})
+            , join( "\n                        ", reverse @{$context->{'ns'}->[-1]->{'_dtl_include_path'}})
         );
     }
     
@@ -80,7 +81,7 @@ _EOM_
     
     if ( scalar @messages )
     {
-        $result .= join "\n", @messages;
+        $result .= join "\n", map{ chomp($_); $_; } @messages;
     }
     
     $result .= "\n" if $result !~ /\n$/s;

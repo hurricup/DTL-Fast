@@ -31,8 +31,8 @@ sub filter
     return [(
         sort{
             $self->sort_function(
-                $context->traverse($a, $self->{'key'})
-                , $context->traverse($b, $self->{'key'})
+                $context->traverse($a, $self->{'key'}, $self)
+                , $context->traverse($b, $self->{'key'}, $self)
             )
         } @$value
     )];

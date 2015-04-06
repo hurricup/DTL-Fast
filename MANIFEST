@@ -276,6 +276,8 @@ t/tmpl/error_expression_unary_got_left.txt
 t/tmpl/error_expression_unpaired_brackets.txt
 t/tmpl/error_tag.txt
 t/tmpl/error_now_parameter.txt
+t/tmpl/error_render_variable.txt
+t/tmpl/error_render_variable_include.txt
 t/tmpl/error_undisclosed.txt
 t/tmpl/error_unknown_filter.txt
 t/tmpl/error_variable_name.txt

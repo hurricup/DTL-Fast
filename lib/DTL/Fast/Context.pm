@@ -18,7 +18,7 @@ sub new
 
 sub get
 {
-    my( $self, $variable_path ) = @_;
+    my( $self, $variable_path, $source_object ) = @_;
 
     if( ref $variable_path ne 'ARRAY' )    # suppose that raw variable invoked, period separated
     {
@@ -42,7 +42,7 @@ sub get
         $variable = $variable->();
     }
 
-    $variable = $self->traverse($variable, $variable_path)
+    $variable = $self->traverse($variable, $variable_path, $source_object)
         if
             defined $variable
             and scalar @$variable_path;
@@ -53,7 +53,7 @@ sub get
 # tracing variable path
 sub traverse
 {
-    my( $self, $variable, $path ) = @_;
+    my( $self, $variable, $path, $source_object ) = @_;
 
     my $variable_original = $variable;
     
@@ -68,13 +68,11 @@ sub traverse
         }
         elsif( not defined $current_type )
         {
-            require Data::Dumper;
-            die sprintf("undef value encountered while traversing variable: %s (%s) with %s, full path: %s, original: %s"
-                , $variable // 'undef'
-                , $current_type // 'undef'
-                , $step // 'undef'
-                , join( '.', @$path )
-                , Data::Dumper->Dump([$variable_original])
+            die $self->get_error(
+                $source_object
+                , sprintf( "non-reference value encountered on step `%s` while traversing context path", $step // 'undef' )
+                , sprintf( '       Traversing path: %s', join( '.', @$path ))
+                , sprintf( "    Traversed variable:\n%s", $self->dump_with_indent($variable_original))
             );
         }
         elsif( $current_type eq 'HASH' )
@@ -90,13 +88,16 @@ sub traverse
         }
         else
         {
-            require Data::Dumper;
-            die sprintf("Don't know how to traverse %s (%s) with %s, full path: %s, original: %s"
-                , $variable // 'undef'
-                , $current_type // 'undef'
-                , $step // 'undef'
-                , join( '.', @$path )
-                , Data::Dumper->Dump([$variable_original])
+            die $self->get_error(
+                $source_object
+                , sprintf(
+                    "don't know how continue traversing %s (%s) with step `%s`"
+                    , ref $variable || 'SCALAR'
+                    , reftype $variable // 'not blessed'
+                    , $step // 'undef'
+                )
+                , sprintf( '       Traversing path: %s', join( '.', @$path ))
+                , sprintf( "  Traversable variable:\n%s", $self->dump_with_indent($variable_original))
             );
         }
     }
@@ -107,6 +108,15 @@ sub traverse
     }
 
     return $variable;
+}
+
+sub dump_with_indent
+{
+    my ($self, $object ) = @_;
+    require Data::Dumper;
+    my $result = Data::Dumper->Dump([$object]);
+    $result =~ s/^/                        /mg;
+    return $result;
 }
 
 sub set
@@ -156,10 +166,35 @@ sub set
     return $self;
 }
 
+sub get_error
+{
+    my ($self, $source_object, $message, @messages) = @_;
+    
+    my $result;
+    if (
+        blessed $source_object
+        and $source_object->can('get_render_error')
+    ){
+        $result = $source_object->get_render_error(
+            $self
+            , $message
+            , @messages
+        );
+    } else {
+        $result = sprintf <<'_EOT_'
+Rendering error: %s
+%s
+_EOT_
+            , $message
+            , join '', @messages
+            ;
+    }
+    return $result;
+}
+
 sub push_scope
 {
     my( $self ) = @_;
-#    push @{$self->{'ns'}}, {}; # multi-level version, suppose it's slower on reading
     push @{$self->{'ns'}}, {%{$self->{'ns'}->[-1] // {}}};
     return $self;
 }

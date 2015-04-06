@@ -85,5 +85,46 @@ eval{get_template('error_block_duplicated.txt', 'dirs' => $dirs);};
 ok( $@ =~ m{\Qblock name `abc` must be unique in the template\E}, 'Duplicate block: error message');
 ok( $@ =~ m{\Q./t/tmpl/error_block_duplicated.txt, syntax began at line 27\E}, 'Duplicate block: filename and line number');
 ok( $@ =~ m{\Qblock `abc` was already defined at line 2\E}, 'Duplicate block: first definition');
+
+my $template1 = get_template('error_render_variable.txt', 'dirs' => $dirs);
+my $template2 = get_template('error_render_variable_include.txt', 'dirs' => $dirs);
+
+$context = {
+    'var1' => {
+        'hash' => {
+            'array' => undef
+        }
+    }
+};
+eval{$template1->render($context);};
+ok( $@ =~ m{\Qnon-reference value encountered on step `0` while traversing context path\E}, 'Context error, non-reference: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_render_variable.txt, syntax began at line 9\E}, 'Context error, non-reference: filename and line number');
+ok( $@ =~ m{\Qhash.array.0\E}, 'Context error, non-reference: traversing path');
+ok( $@ =~ m{\Q'array' => undef\E}, 'Context error, non-reference: traversed variable');
+
+eval{$template2->render($context);};
+ok( $@ =~ m{\Qnon-reference value encountered on step `0` while traversing context path\E}, 'Context error, non-reference, included: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_render_variable.txt, syntax began at line 9\E}, 'Context error, non-reference, included: filename and line number');
+ok( $@ =~ m{\Qhash.array.0\E}, 'Context error, non-reference, included: traversing path');
+ok( $@ =~ m{\Q'array' => undef\E}, 'Context error, non-reference, included: traversed variable');
+ok( $@ =~ m{\Q./t/tmpl/error_render_variable_include.txt\E}, 'Context error, non-reference, included: trace');
+
+$context = {
+    'var1' => {
+        'hash' => ['blabla']
+    }
+};
+eval{$template1->render($context);};
+ok( $@ =~ m{\Qdon't know how continue traversing ARRAY (ARRAY) with step `array`\E}, 'Context error, untracable: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_render_variable.txt, syntax began at line 9\E}, 'Context error, untracable: filename and line number');
+ok( $@ =~ m{\Qhash.array.0\E}, 'Context error, untracable: traversing path');
+ok( $@ =~ m{\$VAR1\s+\=\s+\{\s+'hash'\s+\=>\s+\[\s+'blabla'\s+\]\s+\}\;}s, 'Context error, untracable: traversed variable');
+
+eval{$template2->render($context);};
+ok( $@ =~ m{\Qdon't know how continue traversing ARRAY (ARRAY) with step `array`\E}, 'Context error, untracable, included: error message');
+ok( $@ =~ m{\Q./t/tmpl/error_render_variable.txt, syntax began at line 9\E}, 'Context error, untracable, included: filename and line number');
+ok( $@ =~ m{\Qhash.array.0\E}, 'Context error, untracable, included: traversing path');
+ok( $@ =~ m{\$VAR1\s+\=\s+\{\s+'hash'\s+\=>\s+\[\s+'blabla'\s+\]\s+\}\;}s, 'Context error, untracable, included: traversed variable');
+ok( $@ =~ m{./t/tmpl/error_render_variable_include.txt}, 'Context error, untracable, included: trace');
        
 done_testing();
