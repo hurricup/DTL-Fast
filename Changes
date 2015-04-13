@@ -1,8 +1,18 @@
 Revision history for Perl extension DTL::Fast.
 
+1.620 - Mon 13 Apr 2015
+    - Improvement
+        - Implemented `slice` filter working with scalars as substring, fixes #81
+        - Prettified expressions rendering error messages
+        - Prettified rendering error messages for `numberformat` and `stringformat` filters
+    - Bugfix
+        - Empty brackets now rendered as is, without throwing an exception, fixes #80
+        - Added `with` tag parameters validation, fixes #82
+        - Fixed bug with `-var` rendering, fixes #91
+
 1.619 - Mon 06 Apr 2015
     - Bugfix
-        - Fixed bug with non-reference on context traversing
+        - Fixed bug with non-reference on context traversing, fixes #76
     - Improvement
         - Implemented pretty debug message for context traversing errors
 

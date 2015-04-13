@@ -1,5 +1,6 @@
 package DTL::Fast::Expression::Operator::Unary;
 use strict; use utf8; use warnings FATAL => 'all'; 
+use parent 'DTL::Fast::Entity';
 
 use DTL::Fast::Template;
 
@@ -7,9 +8,8 @@ sub new
 {
     my( $proto, $argument, %kwargs ) = @_;
     $kwargs{'a'} = $argument;
-    $DTL::Fast::Template::CURRENT_TEMPLATE->{'modules'}->{$proto} //= $proto->VERSION // DTL::Fast->VERSION;
     
-    return bless {%kwargs}, $proto;
+    return $proto->SUPER::new(%kwargs);
 }
 
 sub render
@@ -25,6 +25,6 @@ sub render
 sub dispatch
 {
     my( $self, $arg1 ) = @_;
-    die 'ABSTRACT: This method should be overriden in subclasses';
+    die 'Abstract method dispatch was not overriden in subclass '.(ref $self);
 }
 1;

@@ -18,7 +18,7 @@ asdf
     {% endverbatim
     %}
 
-    {% with bla==1 bla1==2 %}
+    {% with bla=1 bla1 = 2 %}
         {% comment %} this is
             some
             kind o

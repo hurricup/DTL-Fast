@@ -16,7 +16,7 @@ sub render
 {
     my( $self, $context ) = @_;
     
-    return $self->dispatch( # this is bad in or, cause second argument should be calculated only if first is false. But in our situation it doesn't matter
+    return $self->dispatch( 
         $self->{'a'}->render($context, 1)
         , $self->{'b'}->render($context, 1)
         , $context 
@@ -26,7 +26,7 @@ sub render
 sub dispatch
 {
     my( $self, $arg1, $arg2 ) = @_;
-    die  'ABSTRACT: This method should be overriden in subclasses';
+    die 'Abstract method dispatch was not overriden in subclass '.(ref $self);
 }
 
 1;

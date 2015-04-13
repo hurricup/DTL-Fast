@@ -8,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'truncatewords'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    die "No max words number specified"
+    die $self->get_parse_error("no max words number specified")
         if not scalar @{$self->{'parameter'}};
     $self->{'maxlen'} = $self->{'parameter'}->[0];
     return $self;
@@ -17,10 +17,7 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    shift;  # filter_manager
-    my $value = shift;
-    my $context = shift;
+    my($self, $filter_manager, $value, $context ) = @_;
     
     my $maxlen = $self->{'maxlen'}->render($context);
     my @value = split /(\s+)/s, $value;

@@ -22,8 +22,8 @@ and 2 == 2
         %}
 
     {% with 
-        bla = 1 
-        bla1 = 2 
+        bla=1|slice 
+        bla1=2 
     %}
         {% comment %} this is
             some
@@ -33,9 +33,11 @@ and 2 == 2
             {% endif %}
         {%endcomment%}
 
-        {% if (2 > 1)
+        {% if 
+                (2 > 1 
+                )
             and
-                a == 
+                a == b
         %}
             thi si
             test

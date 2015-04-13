@@ -11,12 +11,12 @@ sub new
 {
     my( $proto, %kwargs ) = @_;
 
-    die $proto->get_parse_error('No directory arrays passed into constructor')
+    die $proto->get_parse_error('no directory arrays passed into constructor')
         if not $kwargs{'dirs'}
             or ref $kwargs{'dirs'} ne 'ARRAY'
         ;
     
-    die $proto->get_parse_error('No raw chunks array passed into constructor')
+    die $proto->get_parse_error('no raw chunks array passed into constructor')
         if not $kwargs{'raw_chunks'}
             or ref $kwargs{'raw_chunks'} ne 'ARRAY'
         ;
@@ -50,7 +50,7 @@ sub parse_next_chunk
     if(
         $chunk =~ /^
             \{\{\s*   # open sequence 
-            (.+?)     # variable name or value $1
+            ([^\s].*?) # variable name or value $1
             \s*\}\}   # close sequence 
         $/xs
     )
@@ -142,13 +142,13 @@ sub parse_tag_chunk
             and not $self->isa('DTL::Fast::Tag::Simple')
         ) 
         {
-            warn $self->get_parse_error(
+            warn $self->get_parse_warning(
                 sprintf( 'unknown tag {%% %s %%}', $full_tag_name )
-                , sprintf( <<'_EOM_'
-      Possible reasons: typo in tag name
-                        duplicated close tag {%% %1$s %%}
-                        unopened close tag {%% %1$s %%}
-                        undisclosed block tag %3$s
+                , 'Possible reasons' => sprintf( <<'_EOM_'
+typo in tag name
+duplicated close tag {%% %1$s %%}
+unopened close tag {%% %1$s %%}
+undisclosed block tag %3$s
 _EOM_
                     , $tag_name // 'undef'
                     , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE // 'unknown'
@@ -158,10 +158,10 @@ _EOM_
         }
         else # template parsing error
         {
-            warn $self->get_parse_error(
+            warn $self->get_parse_warning(
                 sprintf( 'unknown tag {%% %s %%}', $full_tag_name )
-                , sprintf( <<'_EOM_'
-      Possible reasons: typo, duplicated or unopened close tag {%% %1$s %%} at line %2$s
+                , 'Possible reasons' => sprintf( <<'_EOM_'
+typo, duplicated or unopened close tag {%% %1$s %%} at line %2$s
 _EOM_
                     , $tag_name // 'undef'
                     , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE // 'unknown'

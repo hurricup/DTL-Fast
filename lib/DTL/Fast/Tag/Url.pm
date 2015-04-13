@@ -31,7 +31,7 @@ sub parse_parameters
     }
     else
     {
-        die "Unable to parse url parameters $self->{'parameter'}";
+        die $self->get_parse_error("unable to parse url parameters: $self->{'parameter'}");
     }
     
     return $self;
@@ -61,12 +61,12 @@ sub render
         }
         else
         {
-            die "Url source returned false value by model path: $model_path";
+            die $self->get_render_error("url source returned false value by model path: $model_path");
         }
     }
     else
     {
-        die "In order to render url's you must provide `url_source` argument to the template constructor";
+        die $self->get_render_error("in order to render url's you must provide `url_source` argument to the template constructor");
     }
     
     return $result;
@@ -158,7 +158,7 @@ sub parse_named_parameters
         }
         else
         {
-            die "You can't mix positional and named arguments in url tag: $self->{'parameter'}";
+            die $self->get_parse_error("you can't mix positional and named arguments in url tag: $self->{'parameter'}");
         }
     }
     $self->{'arguments'} = $result;
@@ -172,7 +172,7 @@ sub parse_positional_parameters
     my $result = [];
     foreach my $param (@$params)
     {
-        die "You can't mix positional and named arguments in url tag: $self->{'parameter'}"
+        die $self->get_parse_error("you can't mix positional and named arguments in url tag: $self->{'parameter'}")
             if $param =~ /\=/;
             
         push @$result, $self->get_backup_or_variable($param);

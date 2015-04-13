@@ -50,16 +50,37 @@ sub dispatch
         }
         else
         {
-            die "Don't know how to add $arg2 ($arg2_type) to a HASH";
+            die $self->get_render_error(
+                $context,
+                sprintf("don't know how to add %s (%s) to a HASH"
+                    , $arg2 // 'undef'
+                    , $arg2_type || 'SCALAR'
+                )
+            );
         }
     }
     elsif( UNIVERSAL::can($arg1, 'plus'))
     {
         return $arg1->plus($arg2, $context);
     }
-    else
+    elsif(
+        defined $arg1
+        and defined $arg2
+    )
     {
         return $arg1.$arg2;
+    }
+    else
+    {
+        die $self->get_render_error(
+            $context,
+            sprintf("don't know how to add %s (%s) to %s (%s)"
+                , $arg1 // 'undef'
+                , $arg1_type || 'SCALAR'
+                , $arg2 // 'undef'
+                , $arg2_type || 'SCALAR'
+            )
+        );
     }
 }
 

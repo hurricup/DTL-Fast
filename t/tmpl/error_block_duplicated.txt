@@ -26,8 +26,8 @@ and 2 == 2
         %}
 {% block abc %}
     {% with 
-        bla == 1 
-        bla1 == 2 
+        bla = 1 
+        bla1 = 2 
     %}
 {% endblock %}
         {% comment %} this is

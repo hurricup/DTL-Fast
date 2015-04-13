@@ -71,8 +71,8 @@ sub traverse
             die $self->get_error(
                 $source_object
                 , sprintf( "non-reference value encountered on step `%s` while traversing context path", $step // 'undef' )
-                , sprintf( '       Traversing path: %s', join( '.', @$path ))
-                , sprintf( "    Traversed variable:\n%s", $self->dump_with_indent($variable_original))
+                , 'Traversing path' => join( '.', @$path )
+                , 'Traversed variable' => $self->dump_with_indent($variable_original)
             );
         }
         elsif( $current_type eq 'HASH' )
@@ -96,8 +96,8 @@ sub traverse
                     , reftype $variable // 'not blessed'
                     , $step // 'undef'
                 )
-                , sprintf( '       Traversing path: %s', join( '.', @$path ))
-                , sprintf( "  Traversable variable:\n%s", $self->dump_with_indent($variable_original))
+                , 'Traversing path' => join( '.', @$path )
+                , 'Traversable variable' => $self->dump_with_indent($variable_original)
             );
         }
     }
@@ -115,7 +115,7 @@ sub dump_with_indent
     my ($self, $object ) = @_;
     require Data::Dumper;
     my $result = Data::Dumper->Dump([$object]);
-    $result =~ s/^/                        /mg;
+#    $result =~ s/^/                        /mg; # now done in Entity::compile_error_messages
     return $result;
 }
 

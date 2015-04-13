@@ -16,11 +16,11 @@ sub parse_parameters
             DTL::Fast::Variable->new($1)
             , $2 
         );
-        warn '`ssi` tag is now depricated and will be removed in future versions. Please, use `include` tag';
+        warn $self->get_parse_warning('`ssi` tag is now depricated and will be removed in future versions. Please, use `include` tag');
     }
     else
     {
-        die "Can't parse parameter: $self->{'parameter'}";
+        die $self->get_parse_error("can't parse parameter: $self->{'parameter'}");
     }
     
     return $self;
@@ -30,9 +30,7 @@ sub parse_parameters
 # @todo: recursion protection
 sub render
 {
-    my $self = shift;
-    my $context = shift;
-    my $result;
+    my ($self, $context, $result) = @_;
     
     my $ssi_dirs = $context->{'ns'}->[-1]->{'_dtl_ssi_dirs'};
     
@@ -66,16 +64,19 @@ sub render
         }
         else
         {
-            warn sprintf(
-                "File %s is not in one of ssi_dirs:\n\t%s"
-                , $template_path // 'undef'
-                , join( "\n\t", @$ssi_dirs )
+            die $self-get_render_error(
+                $context, 
+                sprintf(
+                    "File %s is not in one of ssi_dirs:\n\t%s"
+                    , $template_path // 'undef'
+                    , join( "\n\t", @$ssi_dirs )
+                )
             );
         }
     }
     else
     {
-        warn 'In order to use ssi tag, you must provide ssi_dirs argument to the constructor';
+        die $self->get_render_error($context, 'in order to use ssi tag, you must provide ssi_dirs argument to the constructor');
     }
     
     return $result;

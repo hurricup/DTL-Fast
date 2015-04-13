@@ -19,11 +19,11 @@ sub parse_parameters
             , $3
         );
         
-        die "Traget variable can't be traversable: $3" if $3 =~ /\./;
+        die $self->get_parse_error("traget variable can't be traversable: $3") if $3 =~ /\./;
     }
     else
     {
-        die "Do not understand condition: $self->{'parameter'}";
+        die $self->get_parse_error("do not understand condition: $self->{'parameter'}");
     }
     
     return $self;
@@ -32,8 +32,7 @@ sub parse_parameters
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my ($self, $context) = @_;
 
     my $source_array = $self->{'source'}->render($context);
     
@@ -65,7 +64,10 @@ sub render
                 }
                 else
                 {
-                    die "Grouper value MUST exist and be defined in every source list item: ".join('.', @{$self->{'grouper'}});
+                    die $self->get_render_error(
+                        $context,
+                        "grouper value MUST exist and be defined in every source list item: ".join('.', @{$self->{'grouper'}})
+                    );
                 }
             }
         }
@@ -87,9 +89,12 @@ sub render
     }
     else
     {
-        die sprintf( "Regroup can be applied to lists only: %s is a %s"
-            , $self->{'source'}->{'original'} // 'undef'
-            , ref $source_array
+        die $self->get_render_error(
+            $context, 
+            sprintf( "regroup can be applied to lists only: %s is a %s"
+                , $self->{'source'}->{'original'} // 'undef'
+                , ref $source_array
+            )
         );
     }
     

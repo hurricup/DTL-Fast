@@ -22,7 +22,7 @@ sub parse_parameters
     
     if( not ($self->{'value'} = $TAG_MAP{$self->{'parameter'}}))
     {
-        die "Unknown template tag $self->{'parameter'}";
+        die $self->get_parse_error("unknown template tag $self->{'parameter'}");
     }
     
     return $self;

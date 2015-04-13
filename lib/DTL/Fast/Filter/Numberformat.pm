@@ -9,6 +9,9 @@ sub filter
 {
     my( $self, $filter_manager, $value, $context) = @_;
 
+    die $self->get_render_error($context, 'unable to numberformat undef value')
+        if not defined $value;
+    
     my @num = split /\./, $value;
     $num[0] =~ s/
         (\d)(?=

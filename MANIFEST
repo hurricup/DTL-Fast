@@ -266,6 +266,7 @@ t/tmpl/cycle_escape_autoescape.txt
 t/tmpl/cycle_escape_safe.txt
 t/tmpl/cycle_for.txt
 t/tmpl/cycle_simple.txt
+
 t/tmpl/error_autoescape_bla.txt
 t/tmpl/error_block_unnamed.txt
 t/tmpl/error_block_duplicated.txt
@@ -278,9 +279,14 @@ t/tmpl/error_tag.txt
 t/tmpl/error_now_parameter.txt
 t/tmpl/error_render_variable.txt
 t/tmpl/error_render_variable_include.txt
+t/tmpl/error_slice_noarg.txt 
+t/tmpl/error_slice_value.txt
 t/tmpl/error_undisclosed.txt
 t/tmpl/error_unknown_filter.txt
 t/tmpl/error_variable_name.txt
+t/tmpl/error_with_params.txt
+t/tmpl/error_in_operator.txt
+
 t/tmpl/include_recursive0.txt
 t/tmpl/include_recursive1.txt
 t/tmpl/include_recursive2.txt

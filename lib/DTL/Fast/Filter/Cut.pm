@@ -11,7 +11,7 @@ use DTL::Fast::Variable;
 sub parse_parameters
 {
     my $self = shift;
-    die "No substitute specified for removing"
+    die $self->get_parse_error("no substitute specified for removing")
         if not scalar @{$self->{'parameter'}};
     $self->{'remove'} = $self->{'parameter'}->[0];
     return $self;
@@ -20,10 +20,7 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    shift;  # filter_manager
-    my $value = shift;
-    my $context = shift;
+    my ($self, $filter_manager, $value, $context) = @_;
     
     my $remove = $self->{'remove'}->render($context);
     $value =~ s/\Q$remove\E//gs;

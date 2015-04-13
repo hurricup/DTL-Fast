@@ -9,7 +9,7 @@ sub parse_parameters
 {
     my( $self ) = @_;
 
-    die "No separator passed to the filter ".__PACKAGE__
+    die $self->get_parse_error("no separator passed to the join filter")
         if(
             ref $self->{'parameter'} ne 'ARRAY'
             or not scalar @{$self->{'parameter'}}
@@ -40,9 +40,11 @@ sub filter
     }
     else
     {
-        die sprintf( "Unable to apply filter %s to the %s value"
-            , __PACKAGE__
-            , $value_type || 'SCALAR'            
+        die $self->get_render_error(
+            $context,
+            sprintf( "Unable to apply join filter to the %s value"
+                , $value_type || 'SCALAR'
+            )
         );
     }    
     

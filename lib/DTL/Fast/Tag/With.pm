@@ -19,20 +19,26 @@ sub parse_parameters
     }
     else    # modern
     {
-        my @parts = split /[=\s]+/s, $self->backup_strings($self->{'parameter'});
+        my @parts = ();
+        my $string = $self->backup_strings($self->{'parameter'});
         
-        die sprintf("Unable to parse parameter for %s: %s"
-            , __PACKAGE__
-            , $self->{'parameter'} // 'undef'
+        while ( $string =~ s{^
+            \s*
+            ([^\s\=]+)
+            \s*\=\s*
+            ([^\s\=]+)
+            \s*
+            }{}x
         )
-            if (scalar @parts) % 2;
-        
-        while( scalar @parts )
         {
-            my $key = shift @parts;
-            my $val = shift @parts;
-
-            $self->{'mappings'}->{$key} = $self->get_backup_or_variable($val);
+            $self->{'mappings'}->{$1} = $self->get_backup_or_variable($2);
+        }
+        
+        if ( $string ) {
+            die $self->get_parse_error(
+                "there is an error in `with` parameters"
+                , 'Passed parameters' => $self->{'parameter'}
+            );
         }
     }
     

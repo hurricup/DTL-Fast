@@ -89,8 +89,8 @@ sub get_block_parse_error
     my ($self, $message) = @_;
     return $self->get_parse_error(
         $message,
-        sprintf(
-            "                 Block: %s at line %s"
+        'Block' => sprintf(
+            '%s at line %s'
             , ref $self
             , $self->{'_template_line'} // 'unknown'
         )

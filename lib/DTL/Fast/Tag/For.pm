@@ -5,6 +5,7 @@ use parent 'DTL::Fast::Tag';
 $DTL::Fast::TAG_HANDLERS{'for'} = __PACKAGE__;
 
 use DTL::Fast::Variable;
+use Scalar::Util qw(blessed reftype);
 
 #@Override
 sub get_close_tag{ return 'endfor';}
@@ -20,13 +21,13 @@ sub parse_parameters
         $source_name = $2;
         $reversed = $3;
         @target_names = map{
-            die "Iterator variable can't be traversable: $_" if /\./;
+            die $self->get_parse_error("iterator variable can't be traversable: $_") if /\./;
             $_;
         } split( /\s*,\s*/, $1 );
     }
     else
     {
-        die "Do not understand condition: $self->{'parameter'}";
+        die $self->get_parse_error("do not understand condition: $self->{'parameter'}");
     }
 
     $self->{'renderers'} = [];
@@ -43,7 +44,7 @@ sub parse_parameters
 
     if( not scalar @{$self->{'targets'}} )
     {
-        die "There is no target variables defined for iteration";
+        die $self->get_parse_error("there is no target variables defined for iteration");
     }
 
     return $self;
@@ -93,10 +94,11 @@ sub render
     my $result = '';
 
     my $source_data = $self->{'source'}->render($context);
-    my $source_type = ref $source_data;
+    my $source_ref = ref $source_data;
+    my $source_type = reftype $source_data;
 
     if( # iterating array
-        $source_type eq 'ARRAY'
+        $source_ref eq 'ARRAY'
         or (
             UNIVERSAL::can($source_data, 'as_array')
             and ($source_data = $source_data->as_array($context))
@@ -109,7 +111,7 @@ sub render
         );
     }
     elsif( # iterating hash
-        $source_type eq 'HASH'
+        $source_ref eq 'HASH'
         or (
             UNIVERSAL::can($source_data, 'as_hash')
             and ($source_data = $source_data->as_hash($context))
@@ -126,7 +128,7 @@ sub render
         die sprintf('Do not know how to iterate %s (%s, %s)'
             , $self->{'source'}->{'original'} // 'undef'
             , $source_data // 'undef'
-            , $source_type // 'SCALAR'
+            , $source_ref // 'SCALAR'
         );
     }
 
@@ -233,7 +235,7 @@ sub render_hash
         }
         else
         {
-            die "Hash can be only iterated with 2 target variables";
+            die $self->get_render_error("hash can be only iterated with 2 target variables");
         }
     }
     elsif( scalar @{$self->{'renderers'}} == 2 ) # there is an empty block

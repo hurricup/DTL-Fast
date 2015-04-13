@@ -4,7 +4,7 @@ use Exporter 'import';
 use Digest::MD5 qw(md5_hex);
 
 use 5.010;
-our $VERSION = '1.619'; # ==> ALSO update the version in the pod text below!
+our $VERSION = '1.620'; # ==> ALSO update the version in the pod text below!
 
 # loaded modules
 our %TAG_HANDLERS;
@@ -333,7 +333,7 @@ DTL::Fast - Perl implementation of Django templating language.
 
 =head1 VERSION
 
-Version 1.619
+Version 1.620
 
 =head1 SYNOPSIS
 
@@ -900,7 +900,17 @@ May be some of this features implemented in Django itself. Let me know about it.
 
 =item * alternatively, in logical expresisons you may compare (==,!=) value to C<undef> or C<None> which are synonims
 
-=item * C<slice> filter works with ARRAYs and HASHes. Arrays slicing supports Python's indexing rules and Perl's indexing rules (but Perl's one has no possibility to index from the end of the list). Hash slicing options should be a comma-separated keys.
+=item * C<slice> filter works with ARRAYs, HASHes and SCALARs (or SCALARrefs):
+
+=over
+
+=item * Arrays slicing supports Python's indexing rules and Perl's indexing rules (but Perl's one has no possibility to index from the end of the list).
+
+=item * Scalars slicing works as substring from_index ... to_index. Supports both Perl's and Python's indexes.
+
+=item * Hash slicing options should be a comma-separated keys.
+
+=back
 
 =item * You may use brackets in logical expressions to override natural precedence
 

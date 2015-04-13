@@ -3,6 +3,7 @@ use strict; use utf8; use warnings FATAL => 'all';
 # prototype for template entity. Handling current line and current template references
 
 use Scalar::Util qw(weaken);
+use Carp qw(confess);
 
 sub new
 {
@@ -35,10 +36,22 @@ sub get_parse_error
 {
     my ($self, $message, @messages) = @_;
     
-    return $self->get_error(
-        $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
-        , $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
-        , '         Parsing error: '.($message // 'undef')
+    return $self->compile_error_message(
+        'Parsing error' => $message // 'undef'
+        , 'Template' => $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
+        , 'Line' => $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
+        , @messages
+    );
+}
+
+sub get_parse_warning
+{
+    my ($self, $message, @messages) = @_;
+    
+    return $self->compile_error_message(
+        'Parsing warning' => $message // 'undef'
+        , 'Template' => $DTL::Fast::Template::CURRENT_TEMPLATE->{'file_path'}
+        , 'Line' => $DTL::Fast::Template::CURRENT_TEMPLATE_LINE
         , @messages
     );
 }
@@ -48,44 +61,66 @@ sub get_render_error
     my ($self, $context, $message, @messages) = @_;
     
     my @params = (
-        $self->{'_template'}->{'file_path'}
-        , $self->{'_template_line'}
-        , '       Rendering error: '.($message // 'undef')
+        'Rendering error' => $message // 'undef'
+        , 'Template' => $self->{'_template'}->{'file_path'}
+        , 'Line' => $self->{'_template_line'}
         , @messages
     );
     
-    if ( scalar @{$context->{'ns'}->[-1]->{'_dtl_include_path'}} > 1 ) # has inclusions, appending stack trace
+    confess "No context passed for rendering error generator." unless $context;
+    
+    if (
+        exists $context->{'ns'}->[-1]->{'_dtl_include_path'}
+        and ref $context->{'ns'}->[-1]->{'_dtl_include_path'} eq 'ARRAY'
+        and scalar @{$context->{'ns'}->[-1]->{'_dtl_include_path'}} > 1
+    ) # has inclusions, appending stack trace
     {
-        push @params, sprintf( <<'_EOM_'
-           Stack trace: %s
-_EOM_
-            , join( "\n                        ", reverse @{$context->{'ns'}->[-1]->{'_dtl_include_path'}})
-        );
+        push @params, 'Stack trace' => join( "\n", reverse @{$context->{'ns'}->[-1]->{'_dtl_include_path'}});
     }
     
-    return $self->get_error( @params );
+    return $self->compile_error_message( @params );
 }
 
-sub get_error
+# format error message from key=>val pair
+sub compile_error_message
 {
-    my ($self, $template, $line, $message, @messages ) = @_;
+    my ($self, @messages) = @_;
     
-    my $result = sprintf <<'_EOM_'
-%s
-              Template: %s, syntax began at line %s
-_EOM_
-        , $message // 'undef'
-        , $template // 'undef'
-        , $line // 'undef'
-    ;
-    
-    if ( scalar @messages )
+    die 'Odd parameters in messages array'
+        if scalar(@messages) % 2;
+        
+    # calculating max padding
+    my $padding = 0;
+    for( my $i = 0; $i < scalar @messages; $i += 2 )
     {
-        $result .= join "\n", map{ chomp($_); $_; } @messages;
+        my $length = length $messages[$i];
+        $padding = $length if $length > $padding;
     }
     
-    $result .= "\n" if $result !~ /\n$/s;
-    
+    my $result = '';
+    while ( scalar @messages )
+    {
+        my $key = shift @messages // 'undef';
+        my $value = shift @messages // 'undef';
+
+        chomp($value);
+        
+        my $key_length = length $key;
+        
+        $result .= sprintf
+            '%s%s: '
+            , ' ' x ($padding - $key_length)
+            , $key;
+            
+        my @value = split /\n+/, $value;
+        $result .= shift @value;
+        $result .= "\n";
+        
+        foreach my $value (@value)
+        {
+            $result .= (' ' x ($padding + 2)).$value."\n";
+        }
+    }
     return $result;
 }
 

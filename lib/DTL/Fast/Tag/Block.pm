@@ -28,8 +28,8 @@ sub parse_parameters
                 "block name `%s` must be unique in the template"
                 , $self->{'block_name'}
             )
-            , sprintf(
-                '                Reason: block `%s` was already defined at line %s'
+            , 'Reason' => sprintf(
+                'block `%s` was already defined at line %s'
                 , $self->{'block_name'}
                 , $DTL::Fast::Template::CURRENT_TEMPLATE->{'blocks'}->{$self->{'block_name'}}->{'_template_line'}
             )

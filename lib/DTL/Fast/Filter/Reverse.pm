@@ -30,7 +30,7 @@ sub filter
     }
     else
     {
-        die "Don't know how to reverse $value ($value_type)";
+        die $self->get_render_error( $context, "don't know how to reverse $value ($value_type)");
     }
 
     return $result;

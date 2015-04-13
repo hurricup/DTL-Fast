@@ -8,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'center'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    die "No width specified for adjusting"
+    die $self->get_parse_error("no width specified for adjusting")
         if not scalar @{$self->{'parameter'}};
     $self->{'width'} = $self->{'parameter'}->[0];
     return $self;
@@ -17,10 +17,7 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    shift;  # filter_manager
-    my $value = shift;
-    my $context = shift;
+    my ($self, $filter_manager, $value, $context) = @_;
     
     my $width = $self->{'width'}->render($context);
     
@@ -34,16 +31,14 @@ sub filter
     }
     else
     {
-        die "Argument must be a positive number, not '$width'";
+        die $self->get_render_error("Argument must be a positive number, not '$width'");
     }
     return $value;
 }
 
 sub adjust
 {
-    my $self = shift;
-    my $value = shift;
-    my $adjustment = shift;
+    my ($self, $value, $adjustment) = @_;
     return (' 'x int($adjustment/2)).$value;
 }
 

@@ -120,15 +120,5 @@ foreach my $data (@$SET)
     
 }
 
-eval{ DTL::Fast::Template->new(<<'_EOT_');
-{% with 
-    var3 = hash.key3 
-    var2
-%}
-_EOT_
-};
-
-ok( $@ =~ /Unable to parse parameter/, 'With parameters protection');
-
 
 done_testing();

@@ -72,7 +72,7 @@ sub get_parse_error
     return $self->SUPER::get_parse_error(
         $message
         , @additional
-        , '            Expression: '.$self->{'expression'}
+        , 'Expression' => $self->{'expression'}
     );
 }
 

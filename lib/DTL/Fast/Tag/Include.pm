@@ -37,8 +37,7 @@ sub parse_parameters
 #@Override
 sub render
 {
-    my $self = shift;
-    my $context = shift;
+    my ($self, $context) = @_;
     
     my $template_name = $self->{'template'}->render($context);
     
@@ -47,10 +46,13 @@ sub render
         , 'dirs' => $self->{'dirs'}
     );
   
-    die sprintf(
-        "Couldn't find included template %s in directories %s"
-        , $template_name // 'undef'
-        , join(', ', @{$self->{'dirs'}})
+    die $self->get_render_error(
+        $context,
+        sprintf(
+            "Couldn't find included template %s in directories %s"
+            , $template_name // 'undef'
+            , join(', ', @{$self->{'dirs'}})
+        )
     ) if not defined $result;
   
     return $result->render($context);

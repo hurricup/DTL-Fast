@@ -10,7 +10,7 @@ use DTL::Fast::Variable;
 sub parse_parameters
 {
     my $self = shift;
-    die "No format string specified"
+    die $self->get_parse_error("no format string specified")
         if not scalar @{$self->{'parameter'}};
     $self->{'format'} = $self->{'parameter'}->[0];
     return $self;
@@ -19,14 +19,17 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    shift;  # filter_manager
-    my $value = shift;
-    my $context = shift;
+    my($self, $filter_manager, $value, $context ) = @_;
     
     my $format = $self->{'format'}->render($context);
-    
-    return sprintf '%'.$format, $value // '';
+
+    die $self->get_render_error($context, 'unable to format string with undef value')
+        if not defined $value;
+
+    die $self->get_render_error($context, 'unable to format string with undef format')
+        if not defined $format;
+
+    return sprintf '%'.$format, $value;
 }
 
 1;

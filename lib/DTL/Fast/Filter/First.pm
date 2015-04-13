@@ -7,10 +7,7 @@ $DTL::Fast::FILTER_HANDLERS{'first'} = __PACKAGE__;
 #@Override
 sub filter
 {
-    shift;  # self
-    shift;  # filter_manager
-    my $value = shift;  # value
-    shift;  # context
+    my ($self, $filter_manager, $value, $context) = @_;
 
     if( ref $value eq 'ARRAY' )
     {
@@ -18,10 +15,13 @@ sub filter
     }
     else
     {
-        die sprintf(
-            "first filter may be applied only to an ARRAY reference, not %s (%s)"
-            , $value // 'undef'
-            , ref $value || 'SCALAR'
+        die $self->get_render_error(
+            $context, 
+            sprintf(
+                "first filter may be applied only to an ARRAY reference, not %s (%s)"
+                , $value // 'undef'
+                , ref $value || 'SCALAR'
+            )
         );
     }
     

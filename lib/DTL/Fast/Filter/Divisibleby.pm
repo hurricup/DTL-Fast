@@ -10,7 +10,7 @@ use Scalar::Util qw(looks_like_number);
 sub parse_parameters
 {
     my $self = shift;
-    die "No divider specified"
+    die $self->get_parse_error("no divider specified")
         if not scalar @{$self->{'parameter'}};
     $self->{'divider'} = $self->{'parameter'}->[0];
     return $self;
@@ -19,10 +19,7 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    shift;  # filter_manager
-    my $value = shift;
-    my $context = shift;
+    my ($self, $filter_manager, $value, $context) = @_;
     
     my $divider = $self->{'divider'}->render($context);
 

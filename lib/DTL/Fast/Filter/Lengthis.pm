@@ -9,7 +9,7 @@ $DTL::Fast::FILTER_HANDLERS{'length_is'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    die "No length value specified"
+    die $self->get_parse_error("no length value specified")
         if not scalar @{$self->{'parameter'}};
     $self->{'length'} = $self->{'parameter'}->[0];
     return $self;
@@ -18,12 +18,9 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    shift;  # filter_manager
-    my $value = shift;  # value
-    my $context = shift;  # context
+    my( $self, $filter_manager, $value, $context ) = @_;
 
-    my $length = $self->SUPER::filter(undef, $value);
+    my $length = $self->SUPER::filter($filter_manager, $value, $context);
     return $length == $self->{'length'}->render($context) ?
         1
         : 0;

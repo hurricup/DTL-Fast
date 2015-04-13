@@ -7,15 +7,15 @@ $DTL::Fast::FILTER_HANDLERS{'unordered_list'} = __PACKAGE__;
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    my $filter_manager = shift;  # filter_manager
-    my $value = shift; # value
-    my $context = shift;
+    my($self, $filter_manager, $value, $context ) = @_;
     
-    die sprintf(
-        "Argument must be an ARRAY reference, not %s (%s)"
-        , $value // 'undef'
-        , ref $value || 'SCALAR'
+    die $self->get_render_error(
+        $context, 
+        sprintf(
+            "Argument must be an ARRAY reference, not %s (%s)"
+            , $value // 'undef'
+            , ref $value || 'SCALAR'
+        )
     ) if ref $value ne 'ARRAY';
     
     $self->{'global_safe'} = $context->{'ns'}->[-1]->{'_dtl_safe'};

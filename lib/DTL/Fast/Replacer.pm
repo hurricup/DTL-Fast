@@ -93,10 +93,12 @@ sub parse_sources
     
     my $sources = $self->backup_strings($source);
 
-    warn sprintf(
-        "Comma-separated source values in %s tag are DEPRICATED, please use spaces:\n\t%s"
-        , ref $self
-        , $source
+    warn $self->get_parse_warning(
+        sprintf(
+            "comma-separated source values in %s tag are DEPRICATED, please use spaces:\n\t%s"
+            , ref $self
+            , $source
+        )
     ) if $sources =~ /,/;
         
     my $result = [];

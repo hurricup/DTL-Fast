@@ -5,17 +5,16 @@ use parent 'DTL::Fast::Filter';
 $DTL::Fast::FILTER_HANDLERS{'random'} = __PACKAGE__;
 
 #@Override
-#@todo this method should be locale-specific
 sub filter
 {
-    shift;  # self
-    shift;  # filter_manager
-    my $value = shift; # value
-    shift; # context
+    my( $self, $filter_manager, $value, $context ) = @_;
     
-    die sprintf("Argument must be an ARRAY ref, not %s (%s)"
-        , $value // 'undef'
-        , ref $value || 'SCALAR'
+    die $self->get_render_error(
+        $context,
+        sprintf("Argument must be an ARRAY ref, not %s (%s)"
+            , $value // 'undef'
+            , ref $value || 'SCALAR'
+        )
     ) if ref $value ne 'ARRAY';
 
     return $value->[int(rand scalar @$value)];

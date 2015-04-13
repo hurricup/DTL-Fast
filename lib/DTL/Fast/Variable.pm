@@ -65,9 +65,9 @@ sub new
         {
             die $proto->get_parse_error(
                 "variable `$variable_name` contains incorrect symbols (not /alphanumeric/-/_/./ )"
-                , <<'_EOM_'
-      Possible reasons: typo in variable name
-                        typo in logical operator `=` instead of `==`, for example
+                , 'Possible reasons' => <<'_EOM_'
+typo in variable name
+typo in logical operator `=` instead of `==`, for example
 _EOM_
             );
         }
@@ -113,6 +113,15 @@ sub render
             $value = $value->();
         }
     }
+    
+    if (
+        $self->{'sign'} == -1
+        and looks_like_number $value
+        )
+    {
+        $value = -$value;
+    }    
+    
     $value = $self->{'filter_manager'}->filter($value, $context)
         if $self->{'filter_manager'}->{'filters_number'};
     

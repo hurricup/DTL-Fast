@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use strict; use warnings FATAL => 'all'; 
+use strict; use warnings FATAL => 'all';
 use Test::More;
 
 use DTL::Fast::Expression;
@@ -25,6 +25,12 @@ my $COMPARE_NUM_SET = [ # compare numeric values
     {'val1' => -3.14, 'val2' => -3.14 },
     {'val1' => -3.14, 'val2' => -3.15 },
     {'val1' => -3.15, 'val2' => -3.14 },
+    
+    # auhtor tests, issue #93
+    #{'val1' => undef, 'val2' => -3.14 },
+    #{'val1' => -3.15, 'val2' => undef },
+    #{'val1' => undef, 'val2' => undef },
+    
 ];
 
 my $STRING_SET = [ # compare and operate string and mixed values
@@ -34,6 +40,11 @@ my $STRING_SET = [ # compare and operate string and mixed values
     {'val1' => 'def', 'val2' => '' },
     {'val1' => 'abc', 'val2' => 3.14 },
     {'val1' => 3.14, 'val2' => 'abc' },
+    
+    # auhtor tests, issue #93
+    #{'val1' => undef, 'val2' => 'abc' },
+    #{'val1' => 'abc', 'val2' => undef },
+    #{'val1' => undef, 'val2' => undef },
 ];
 
 my $LOGICAL_SET = [ # logical operations
@@ -52,7 +63,11 @@ my $LOGICAL_SET = [ # logical operations
     {'val1' => '', 'val2' => 0 },
     {'val1' => '', 'val2' => 1 },
     {'val1' => 'bingo', 'val2' => 0 },
-    {'val1' => 'bingo', 'val2' => 1 },
+
+    # auhtor tests, issue #93
+    #{'val1' => undef, 'val2' => 1 },
+    #{'val1' => 1, 'val2' => undef },
+    #{'val1' => undef, 'val2' => undef },
 ];
 
 my $NUMERIC_SET = [    # math operations
@@ -65,6 +80,11 @@ my $NUMERIC_SET = [    # math operations
     {'val1' => 3.14, 'val2' => 0},
     {'val1' => -3.14, 'val2' => 0},
     {'val1' => 0, 'val2' => 0},
+
+    # auhtor tests, issue #93
+    #{'val1' => undef, 'val2' => 0},
+    #{'val1' => 0, 'val2' => undef},
+    #{'val1' => undef, 'val2' => undef},
 ];
 
 my $NUMERIC_SET_DIV = [    # math operations without division by zero
@@ -80,6 +100,11 @@ my $NUMERIC_SET_DIV = [    # math operations without division by zero
     {'val1' => 0, 'val2' => -15},
     {'val1' => -42, 'val2' => 15},
     {'val1' => 42, 'val2' => -15},
+
+    # auhtor tests, issue #93
+    #{'val1' => undef, 'val2' => -15},
+    #{'val1' => 42, 'val2' => undef},
+    #{'val1' => undef, 'val2' => undef},
 ];
         
 my $samples = [
@@ -349,21 +374,32 @@ foreach my $sample (@$samples)
         foreach my $context (@{$sample->{'context'}})
         {
             my @context = ();
+            
             foreach my $key (keys %$context)
             {
-                push @context, sprintf( '%s = %s', $key, $context->{$key});
+                push @context, sprintf( '%s = %s', $key // 'undef', $context->{$key} // 'undef');
             }
             my $title = '';
             if( scalar @context )
             {
                 $title = join('; ', @context);
             }
+
+            my $result;
+            eval{ $result = $exp->render(new DTL::Fast::Context($context)) };
             
-            is( 
-                $exp->render(new DTL::Fast::Context($context))
-                , $sample->{'control'}->($context)
-                , $title
-            );
+            if ( $@ )
+            {
+                print STDERR $@;   
+            }
+            else
+            {
+                is( 
+                    $result
+                    , $sample->{'control'}->($context)
+                    , $title
+                );
+            }
         }
     }
 }

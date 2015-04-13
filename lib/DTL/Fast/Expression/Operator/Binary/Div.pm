@@ -8,7 +8,7 @@ use Scalar::Util qw(looks_like_number);
 
 sub dispatch
 {
-    my( $self, $arg1, $arg2) = @_;
+    my( $self, $arg1, $arg2, $context) = @_;
     my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
     my $result = 0;
 
@@ -22,12 +22,15 @@ sub dispatch
     }
     else
     {
-        die sprintf(
-            "Don't know how to divide %s (%s) by %s (%s)"
-            , $arg1 // 'undef'
-            , $arg1_type || 'SCALAR'
-            , $arg2 // 'undef'
-            , $arg2_type || 'SCALAR'
+        die $self->get_render_error(
+            $context,
+            sprintf(
+                "Don't know how to divide %s (%s) by %s (%s)"
+                , $arg1 // 'undef'
+                , $arg1_type || 'SCALAR'
+                , $arg2 // 'undef'
+                , $arg2_type || 'SCALAR'
+            )
         );
     }
 

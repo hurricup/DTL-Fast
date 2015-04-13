@@ -25,7 +25,7 @@ sub parse_parameters{return shift;}
 sub filter
 {
     my ($self) = @_;
-    die sprintf( "filter method must be overriden in %s", ref $self );
+    die sprintf( "filter was not overriden in a subclass %s", ref $self );
 }
 
 1;

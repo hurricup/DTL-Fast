@@ -11,7 +11,7 @@ sub parse_parameters
 {
     my $self = shift;
     
-    die "No single arguments passed to the add ".__PACKAGE__
+    die $self->get_parse_error("no single arguments passed to the add ".__PACKAGE__)
         if(
             ref $self->{'parameter'} ne 'ARRAY'
             or not scalar @{$self->{'parameter'}}
@@ -25,10 +25,7 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;
-    my $filter_manager = shift;
-    my $value = shift;
-    my $context = shift;
+    my ($self, $filter_manager, $value, $context) = @_;
     
     my $result = $value;
     my $value_type = ref $value;
@@ -43,7 +40,7 @@ sub filter
     }
     elsif( $value_type ) # @todo here we can implement ->add interface
     {
-        die "Don't know how to add anything to $value_type";
+        die $self->get_render_error("don't know how to add anything to $value_type");
     }
     
     foreach my $parameter (@{$self->{'parameters'}})
@@ -65,7 +62,7 @@ sub filter
             }
             else
             {
-                die "It's not possible to add a single value to a hash";
+                die $self->get_render_error("it's not possible to add a single value to a hash");
             }
         }
         elsif( $result_type eq 'ARRAY' )

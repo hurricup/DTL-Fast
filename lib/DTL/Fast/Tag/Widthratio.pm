@@ -17,15 +17,17 @@ sub parse_parameters
         
         $self->{'sources'} = $self->parse_sources($1);
         
-        die sprintf(
-            "Three arguments should be passed to widthratio: %s %s"
-            , $self->{'parameter'}  // 'undef'
-            , scalar @{$self->{'sources'}}
+        die $self->get_parse_error(
+            sprintf(
+                "Three arguments should be passed to widthratio: %s %s"
+                , $self->{'parameter'}  // 'undef'
+                , scalar @{$self->{'sources'}}
+            )
         ) if scalar @{$self->{'sources'}} != 3;
     }
     else
     {
-        die "Unable to parse ratio parameters $self->{'parameter'}";
+        die die $self->get_parse_error("Unable to parse ratio parameters $self->{'parameter'}");
     }
     
     return $self;

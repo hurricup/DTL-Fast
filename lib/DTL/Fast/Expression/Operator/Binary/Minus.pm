@@ -8,7 +8,7 @@ use Scalar::Util qw(looks_like_number);
 
 sub dispatch
 {
-    my( $self, $arg1, $arg2) = @_;
+    my( $self, $arg1, $arg2, $context) = @_;
     my ($arg1_type, $arg2_type) = (ref $arg1, ref $arg2);
 
     if( looks_like_number($arg1) and looks_like_number($arg2))
@@ -17,11 +17,11 @@ sub dispatch
     }
     elsif( $arg1_type eq 'ARRAY' ) # @todo array substitution
     {
-        die 'Arrays substitution not yet implemented';
+        die $self->get_render_error( $context, 'arrays substitution not yet implemented');
     }
     elsif( $arg1_type eq 'HASH' )   # @todo hash substitution
     {
-        die 'Hashes substitution not yet implemented';
+        die $self->get_render_error( $context, 'hashes substitution not yet implemented');
     }
     elsif( UNIVERSAL::can($arg1, 'minus'))
     {
@@ -29,11 +29,14 @@ sub dispatch
     }
     else
     {
-        die sprintf("Don't know how to substitute %s (%s) from %s (%s)"
-            , $arg2 // 'undef'
-            , $arg2_type // 'undef'
-            , $arg1 // 'undef'
-            , $arg1_type // 'undef'
+        die $self->get_render_error(
+            $context,
+            sprintf("don't know how to substitute %s (%s) from %s (%s)"
+                , $arg1 // 'undef'
+                , $arg1_type || 'SCALAR'
+                , $arg2 // 'undef'
+                , $arg2_type || 'SCALAR'
+            )
         );
     }
 }

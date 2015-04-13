@@ -53,6 +53,7 @@ $context->set(
         }
         , 'key6' => new Foo()
     }
+    , 'a' => 'onechar'
 );
 
 is( DTL::Fast::Template->new('checking {{ array.0 }}')->render($context), 'checking first', 'Traversed substitution: array->scalar');
@@ -76,5 +77,14 @@ is( DTL::Fast::Template->new('{{ array.0 }}')->render($context), 'first', 'Inter
 is( DTL::Fast::Template->new('{{array.0|upper}}')->render($context), 'FIRST', 'Filter without spaces');
 is( DTL::Fast::Template->new('{{ array.0 | upper}}')->render($context), 'FIRST', 'Filter with spaces');
 is( DTL::Fast::Template->new('{{ missvar | default: "blabla"}}')->render($context), 'blabla', 'Default filter with spaces');
+
+is( DTL::Fast::Template->new('{{ }}')->render($context), '{{ }}', 'Empty variable brackets');
+is( DTL::Fast::Template->new('{{}}')->render($context), '{{}}', 'Emptiest variable brackets');
+is( DTL::Fast::Template->new('{{ a }}')->render($context), 'onechar', 'One-character length variable rendering');
+
+is( DTL::Fast::Template->new('{{ var }}')->render({ 'var' => 1 }), '1', 'Positive number as is');
+is( DTL::Fast::Template->new('{{ -var }}')->render({ 'var' => 1 }), '-1', 'Positive number, negate');
+is( DTL::Fast::Template->new('{{ var }}')->render({ 'var' => -1 }), '-1', 'Negative number as is');
+is( DTL::Fast::Template->new('{{ -var }}')->render({ 'var' => -1 }), '1', 'Negative number, negate');
 
 done_testing();

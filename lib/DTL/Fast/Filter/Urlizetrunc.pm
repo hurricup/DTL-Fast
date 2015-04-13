@@ -8,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'urlizetrunc'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    die "No max size specified"
+    die $self->get_parse_error("no max size specified")
         if not scalar @{$self->{'parameter'}};
     $self->{'maxsize'} = $self->{'parameter'}->[0];
     return $self;
@@ -17,10 +17,7 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    my $filter_manager = shift;  # filter_manager
-    my $value = shift;  # value
-    my $context = shift;    #context
+    my($self, $filter_manager, $value, $context ) = @_;
     
     $self->{'size'} = $self->{'maxsize'}->render($context);
     return $self->SUPER::filter($filter_manager, $value, $context);
@@ -29,8 +26,7 @@ sub filter
 #@Override
 sub normalize_text
 {
-    my $self = shift;
-    my $text = shift;
+    my ($self, $text) = @_;
     
     if( length $text > $self->{'size'} )
     {

@@ -8,7 +8,7 @@ $DTL::Fast::FILTER_HANDLERS{'split'} = __PACKAGE__;
 sub parse_parameters
 {
     my $self = shift;
-    die "No split pattern specified"
+    die $self->get_parse_error("no split pattern specified")
         if not scalar @{$self->{'parameter'}};
     $self->{'pattern'} = $self->{'parameter'}->[0];
     return $self;
@@ -21,7 +21,7 @@ sub filter
     
     my $pattern = $self->{'pattern'}->render($context);
     
-    die "Splitting pattern must be defined and not empty."
+    die $self->get_render_error("splitting pattern must be defined and not empty")
         if not $pattern;
         
     $value = [split /$pattern/si, $value // ''];

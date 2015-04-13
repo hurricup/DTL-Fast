@@ -11,7 +11,7 @@ use locale;
 sub parse_parameters
 {
     my $self = shift;
-    die "No sorting key specified"
+    die $self->get_parse_error("no sorting key specified")
         if not scalar @{$self->{'parameter'}};
     $self->{'key'} = [split /\./, $self->{'parameter'}->[0]->render()]; # do we need to backup strings here ?
     return $self;
@@ -20,12 +20,9 @@ sub parse_parameters
 #@Override
 sub filter
 {
-    my $self = shift;  # self
-    shift;  # filter_manager
-    my $value = shift;
-    my $context = shift;
+    my ($self, $filter_manager, $value, $context) = @_;
 
-    die "dictsort works only with array of hashes"
+    die $self->get_render_error("dictsort works only with array of hashes")
         if ref $value ne 'ARRAY';
 
     return [(
@@ -40,9 +37,7 @@ sub filter
 
 sub sort_function
 {
-    my $self = shift;
-    my $val1 = shift;
-    my $val2 = shift;
+    my ($self, $val1, $val2) = @_;
     my $result;
 
     if( looks_like_number($val1) and looks_like_number($val2))
