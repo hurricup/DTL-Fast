@@ -1,5 +1,5 @@
-DTL-Fast - Django templating in Perl
-====================================
+DTL::Fast - Perl port of Django templating language
+===================================================
 
     Documentation on CPAN:
         http://search.cpan.org/~hurricup/DTL-Fast/lib/DTL/Fast.pm
