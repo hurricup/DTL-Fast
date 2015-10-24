@@ -1,6 +1,9 @@
 package DTL::Fast::Template;
-use strict; use utf8; use warnings FATAL => 'all'; 
 use parent 'DTL::Fast::Parser';
+use strict;
+use utf8;
+use warnings FATAL => 'all';
+use feature qw/s/;
 
 use DTL::Fast qw(get_template);
 use DTL::Fast::Context;

@@ -27,9 +27,18 @@ XSLoader::load('DTL::Fast', $VERSION);
 
 our $RUNTIME_CACHE;
 
-our @EXPORT_OK = qw(count_lines);
+our @EXPORT_OK = qw(
+    count_lines
+    get_template
+    select_template
+    register_tag
+    preload_operators
+    register_operator
+    preload_tags
+    register_filter
+    preload_filters
+    );
 
-push @EXPORT_OK, 'get_template';
 sub get_template
 {
     my( $template_name, %kwargs ) = @_;
@@ -49,7 +58,7 @@ sub get_template
     my $template;
 
     $RUNTIME_CACHE //= DTL::Fast::Cache::Runtime->new();
-    
+
     if( 
         $kwargs{'no_cache'}
         or not defined ( $template = $RUNTIME_CACHE->get($cache_key))
@@ -187,7 +196,6 @@ sub __read_file
 }
 
 # result should be cached with full list of params
-push @EXPORT_OK, 'select_template';
 sub select_template
 {
     my( $template_names, %kwargs ) = @_;
@@ -213,7 +221,6 @@ sub select_template
 }
 
 # registering tag as known
-push @EXPORT_OK, 'register_tag';
 sub register_tag
 {
     my( %tags ) = @_;
@@ -228,7 +235,6 @@ sub register_tag
 }
 
 # registering tag as known
-push @EXPORT_OK, 'preload_tags';
 sub preload_tags
 {
     require Module::Load;
@@ -245,7 +251,6 @@ sub preload_tags
 
 
 # registering filter as known
-push @EXPORT_OK, 'register_filter';
 sub register_filter
 {
     my( %filters ) = @_;
@@ -259,12 +264,11 @@ sub register_filter
     return;
 }
 
-push @EXPORT_OK, 'preload_filters';
 sub preload_filters
 {
     require Module::Load;
     
-    while( my( $keyword, $module) = each %KNOWN_FILTERS )
+    while( my( undef, $module) = each %KNOWN_FILTERS )
     {
         Module::Load::load($module);
         $LOADED_MODULES{$module} = time;
@@ -277,7 +281,6 @@ sub preload_filters
 #
 #   '=' => [ priority, module ]
 #
-push @EXPORT_OK, 'register_operator';
 sub register_operator
 {
     my %ops = @_;
@@ -306,12 +309,11 @@ sub register_operator
 }
 
 
-push @EXPORT_OK, 'preload_operators';
 sub preload_operators
 {
     require Module::Load;
     
-    while( my( $keyword, $module) = each %KNOWN_OPS_PLAIN )
+    while( my( undef, $module) = each %KNOWN_OPS_PLAIN )
     {
         Module::Load::load($module);
         $LOADED_MODULES{$module} = time;
@@ -350,7 +352,7 @@ Or create a file: template.txt in /home/alex/templates with contents:
 And load and render it:
 
     use DTL::Fast qw( get_template );
-    my $tpl = get_template( 'template.txt', ['/home/alex/templates'] );
+    my $tpl = get_template( 'template.txt', dirs => ['/home/alex/templates'] );
     print $tpl->render({ username => 'Alex'});
 
 =head1 DESCRIPTION
