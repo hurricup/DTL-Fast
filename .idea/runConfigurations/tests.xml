@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="tests" type="#PerlConfigurationType" factoryName="Perl">
+    <option name="SCRIPT_PATH" value="D:\repository\DTL-Fast\test.pl" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="D:\repository\DTL-Fast" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <option name="CHARSET" value="windows-1251" />
+    <option name="USE_ALTERNATIVE_SDK" value="false" />
+    <option name="ALTERNATIVE_SDK_PATH" value="" />
+    <method />
+  </configuration>
+</component>
