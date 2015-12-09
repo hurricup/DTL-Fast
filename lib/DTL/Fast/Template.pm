@@ -3,12 +3,12 @@ use parent 'DTL::Fast::Parser';
 use strict;
 use utf8;
 use warnings FATAL => 'all';
-use feature qw/s/;
 
 use DTL::Fast qw(get_template);
 use DTL::Fast::Context;
 use DTL::Fast::Tags;
 use DTL::Fast::Filters;    
+use Scalar::Util qw/weaken/;
 
 our $CURRENT_TEMPLATE;      # global variable for linking  modules
 our $CURRENT_TEMPLATE_LINE; # global variable for source line number
@@ -40,7 +40,8 @@ sub remember_template
     
     $self->{'_template'} = $self;
     $self->{'_template_line'} = 1;
-    
+    weaken $self->{'_template'};
+
     return $self;
 }
 

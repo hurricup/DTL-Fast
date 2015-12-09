@@ -17,8 +17,6 @@ sub new
 
     $self->remember_template;
 
-    weaken $self->{'_template'};
-    
     return $self;
 }
 
@@ -28,7 +26,8 @@ sub remember_template
     
     $self->{'_template'} = $DTL::Fast::Template::CURRENT_TEMPLATE;
     $self->{'_template_line'} = $DTL::Fast::Template::CURRENT_TEMPLATE_LINE;
-    
+    weaken $self->{'_template'};
+
     return $self;
 }
 
