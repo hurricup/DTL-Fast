@@ -1,5 +1,9 @@
 Revision history for Perl extension DTL::Fast.
 
+1.621 - Wed 09 Dec 2015
+    - Minor docs fixes
+    - Memory leaks fixes in _template key
+
 1.620 - Mon 13 Apr 2015
     - Improvement
         - Implemented `slice` filter working with scalars as substring, fixes #81
