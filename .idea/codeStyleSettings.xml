@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectCodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value>
+        <option name="LINE_SEPARATOR" value="&#10;" />
+        <Perl5CodeStyleSettings>
+          <option name="OPTIONAL_QUOTES" value="2" />
+          <option name="OPTIONAL_QUOTES_HASH_INDEX" value="2" />
+          <option name="OPTIONAL_QUOTES_HEREDOC_OPENER" value="1" />
+          <option name="OPTIONAL_DEREFERENCE" value="1" />
+          <option name="OPTIONAL_DEREFERENCE_HASHREF_ELEMENT" value="2" />
+          <option name="OPTIONAL_DEREFERENCE_SIMPLE" value="2" />
+          <option name="OPTIONAL_PARENTHESES" value="1" />
+        </Perl5CodeStyleSettings>
+        <SqlCodeStyleSettings>
+          <option name="WRAP_INSIDE_CREATE_TABLE" value="1" />
+        </SqlCodeStyleSettings>
+        <XML>
+          <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+        </XML>
+      </value>
+    </option>
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default (1)" />
+  </component>
+</project>
