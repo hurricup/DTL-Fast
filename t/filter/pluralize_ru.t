@@ -21,33 +21,33 @@ $context = new DTL::Fast::Context({
 
 my $SET = [
     {
-        'template' => 'товар{{ var1|pluralize }}',
-        'test' => 'товар',
+        'template' => 'пїЅпїЅпїЅпїЅпїЅ{{ var1|pluralize }}',
+        'test' => 'пїЅпїЅпїЅпїЅпїЅ',
         'title' => 'Default single',
     },
     {
-        'template' => 'товар{{ var2|pluralize }}',
-        'test' => 'товар',
+        'template' => 'пїЅпїЅпїЅпїЅпїЅ{{ var2|pluralize }}',
+        'test' => 'пїЅпїЅпїЅпїЅпїЅ',
         'title' => 'Default multi',
     },
     {
-        'template' => 'товар{{ var2|pluralize:",ов" }}',
-        'test' => 'товаров',
+        'template' => 'пїЅпїЅпїЅпїЅпїЅ{{ var2|pluralize:",пїЅпїЅ" }}',
+        'test' => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
         'title' => 'Override not complete values',
     },
     {
-        'template' => 'товар{{ var1|pluralize:",а,ов" }} товар{{ var2|pluralize:",а,ов" }} товар{{ var7|pluralize:",а,ов" }} товар{{ var12|pluralize:",а,ов" }} товар{{ var21|pluralize:",а,ов" }} товар{{ var100|pluralize:",а,ов" }}',
-        'test' => 'товар товара товаров товаров товар товаров',
+        'template' => 'пїЅпїЅпїЅпїЅпїЅ{{ var1|pluralize:",пїЅ,пїЅпїЅ" }} пїЅпїЅпїЅпїЅпїЅ{{ var2|pluralize:",пїЅ,пїЅпїЅ" }} пїЅпїЅпїЅпїЅпїЅ{{ var7|pluralize:",пїЅ,пїЅпїЅ" }} пїЅпїЅпїЅпїЅпїЅ{{ var12|pluralize:",пїЅ,пїЅпїЅ" }} пїЅпїЅпїЅпїЅпїЅ{{ var21|pluralize:",пїЅ,пїЅпїЅ" }} пїЅпїЅпїЅпїЅпїЅ{{ var100|pluralize:",пїЅ,пїЅпїЅ" }}',
+        'test' => 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
         'title' => 'Override multi',
     },
     {
-        'template' => 'товар{{ var7|pluralize:",ов" }}',
-        'test' => 'товаров',
+        'template' => 'пїЅпїЅпїЅпїЅпїЅ{{ var7|pluralize:",пїЅпїЅ" }}',
+        'test' => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
         'title' => 'Override not complete values 2',
     },
     {
-        'template' => 'товар{{ var2_5|pluralize:",а,ов" }}',
-        'test' => 'товара',
+        'template' => 'пїЅпїЅпїЅпїЅпїЅ{{ var2_5|pluralize:",пїЅ,пїЅпїЅ" }}',
+        'test' => 'пїЅпїЅпїЅпїЅпїЅпїЅ',
         'title' => 'Float value',
     },
 ];
