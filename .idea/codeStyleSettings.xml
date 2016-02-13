@@ -13,9 +13,6 @@
           <option name="OPTIONAL_DEREFERENCE_SIMPLE" value="2" />
           <option name="OPTIONAL_PARENTHESES" value="1" />
         </Perl5CodeStyleSettings>
-        <SqlCodeStyleSettings>
-          <option name="WRAP_INSIDE_CREATE_TABLE" value="1" />
-        </SqlCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
