@@ -1,26 +1,16 @@
-DTL::Fast - Perl port of Django templating language
-===================================================
+# DTL::Fast - Perl5 port of Django templates
 
-    Documentation on CPAN:
-        http://search.cpan.org/~hurricup/DTL-Fast/lib/DTL/Fast.pm
+[![Build Status](https://api.travis-ci.org/hurricup/DTL-Fast.svg)](https://travis-ci.org/hurricup/DTL-Fast)
 
-    Documentation on MetaCPAN
-        https://metacpan.org/pod/DTL::Fast
+* [Documentation on CPAN](http://search.cpan.org/~hurricup/DTL-Fast/lib/DTL/Fast.pm)
+* [Documentation on MetaCPAN](https://metacpan.org/pod/DTL::Fast)
+* [CPAN Testers reports](http://www.cpantesters.org/distro/D/DTL-Fast.html)
+* [Testers matrix](http://matrix.cpantesters.org/?dist=DTL-Fast)
+* [AnnoCPAN, Annotated CPAN documentation](http://annocpan.org/dist/DTL-Fast)
+* [CPAN Ratings](http://cpanratings.perl.org/d/DTL-Fast)
 
-    CPAN Testers reports
-        http://www.cpantesters.org/distro/D/DTL-Fast.html
-
-    Testers matrix
-        http://matrix.cpantesters.org/?dist=DTL-Fast
         
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/DTL-Fast
-
-    CPAN Ratings
-        http://cpanratings.perl.org/d/DTL-Fast
-        
-INSTALLATION
-============
+## INSTALLATION
 
 To install this module type the following:
 
@@ -29,8 +19,7 @@ To install this module type the following:
    make test
    make install
 
-DEPENDENCIES
-============
+## DEPENDENCIES
 
 This module requires these other modules and libraries:
 
@@ -41,8 +30,7 @@ This module requires these other modules and libraries:
   Storable
   URI::Escape::XS
 
-COPYRIGHT AND LICENCE
-=====================
+## COPYRIGHT AND LICENCE
 
 Copyright (C) 2014-2015 by Alexandr Evstigneev (hurricup@evstigneev.com)
 
