@@ -1,5 +1,8 @@
 Revision history for Perl extension DTL::Fast.
 
+1.623 - Tue 23 Feb 2017
+    - Removed test with incorrect utf symbols, because they are not accepted by perl 5.26
+
 1.621 - Wed 09 Dec 2015
     - Minor docs fixes
     - Memory leaks fixes in _template key
