@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use strict; use warnings FATAL => 'all'; 
+use strict; use warnings FATAL => 'all';
 use Test::More;use utf8;
 
 use DTL::Fast;
@@ -13,13 +13,6 @@ test
 _EOM_
         , 'control' => 3
         , 'title' => 'Regular text'
-  },
-  {
-        'text' => <<'_EOM_'
-úüýþÿ
-_EOM_
-        , 'control' => 1
-        , 'title' => 'Non utf8 string with UTF8 control chars'
   },
   {
         'text' => ""
