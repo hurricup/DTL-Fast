@@ -1,12 +1,34 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="tests" type="#PerlConfigurationType" factoryName="Perl">
+  <configuration default="false" name="tests" type="#PerlConfigurationType" factoryName="Perl" show_console_on_std_err="false" show_console_on_std_out="false">
+    <option name="alternativeSdkPath" value="" />
+    <option name="compileTimeBreakpointsEnabled" value="false" />
+    <option name="consoleCharset" value="windows-1251" />
+    <option name="envs">
+      <map />
+    </option>
+    <option name="nonInteractiveModeEnabled" value="false" />
+    <option name="passParentEnvs" value="true" />
+    <option name="perlParameters" value="" />
+    <option name="programParameters" value="" />
+    <option name="scriptPath" value="D:\repository\DTL-Fast\test.pl" />
+    <option name="useAlternativeSdk" value="false" />
+    <option name="workingDirectory" value="D:\repository\DTL-Fast" />
     <option name="SCRIPT_PATH" value="D:\repository\DTL-Fast\test.pl" />
     <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="PERL_PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="D:\repository\DTL-Fast" />
+    <option name="ENVS">
+      <map />
+    </option>
     <option name="PASS_PARENT_ENVS" value="true" />
     <option name="CHARSET" value="windows-1251" />
     <option name="USE_ALTERNATIVE_SDK" value="false" />
     <option name="ALTERNATIVE_SDK_PATH" value="" />
+    <option name="scriptCharset" value="utf8" />
+    <option name="startMode" value="RUN" />
+    <option name="isNonInteractiveModeEnabled" value="false" />
+    <option name="isCompileTimeBreakpointsEnabled" value="false" />
+    <option name="initCode" value="" />
     <method />
   </configuration>
 </component>
