@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/t" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/timetheese" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/blib" />
     </content>
     <orderEntry type="module-library">
       <library>
