@@ -64,7 +64,7 @@ sub render
         }
         else
         {
-            die $self-get_render_error(
+            die $self->get_render_error(
                 $context, 
                 sprintf(
                     "File %s is not in one of ssi_dirs:\n\t%s"
