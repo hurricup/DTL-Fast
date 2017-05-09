@@ -2,7 +2,7 @@
 
 [![Build Status](https://api.travis-ci.org/hurricup/DTL-Fast.svg)](https://travis-ci.org/hurricup/DTL-Fast)
 
-* [Documentation on CPAN](http://search.cpan.org/~hurricup/DTL-Fast/lib/DTL/Fast.pm)
+* [Documentation on CPAN](http://search.cpan.org/~hurricup/DTL-Fast/lib/DTL/Fast.pod)
 * [Documentation on MetaCPAN](https://metacpan.org/pod/DTL::Fast)
 * [CPAN Testers reports](http://www.cpantesters.org/distro/D/DTL-Fast.html)
 * [Testers matrix](http://matrix.cpantesters.org/?dist=DTL-Fast)
@@ -30,9 +30,8 @@ This module requires these other modules and libraries:
   Storable
   URI::Escape::XS
 
-## COPYRIGHT AND LICENCE
-
-Copyright (C) 2014-2015 by Alexandr Evstigneev (hurricup@evstigneev.com)
+```
+Copyright (C) 2014-2017 by Alexandr Evstigneev (hurricup@evstigneev.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

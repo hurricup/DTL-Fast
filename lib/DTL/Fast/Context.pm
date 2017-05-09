@@ -7,15 +7,29 @@ use Scalar::Util qw(reftype blessed);
 
 sub new
 {
-    my ( $proto, $context ) = @_;
+    my ( $proto, $context, %kwargs ) = @_;
     $context //= { };
 
     die  "Context should be a HASH reference"
         if (ref $context ne 'HASH');
 
     return bless {
-            ns => [ $context ]
+            ns                  => [ $context ],
+            die_on_missing_path => exists $kwargs{die_on_missing_path} ? $kwargs{die_on_missing_path} : 1
         }, $proto;
+}
+
+#@returns DTL::Fast::Context
+sub set_die_on_missing_path
+{
+    my ($self, $value) = @_;
+    $self->{die_on_missing_path} = $value;
+    return $self;
+}
+
+sub should_die_on_missing_path
+{
+    return shift->{die_on_missing_path};
 }
 
 sub get
@@ -69,13 +83,13 @@ sub traverse
         }
         elsif (not defined $current_type)
         {
-            die $self->get_error(
-                    $source_object
-                    , sprintf( "non-reference value encountered on step `%s` while traversing context path",
-                        $step // 'undef' )
-                    , 'Traversing path'    => join( '.', @$path )
-                    , 'Traversed variable' => $self->dump_with_indent($variable_original)
-                );
+            return $self->handle_error($self->get_error(
+                $source_object
+                , sprintf( "non-reference value encountered on step `%s` while traversing context path",
+                    $step // 'undef' )
+                , 'Traversing path: '.join( '.', @$path )
+                , 'Traversed variable: '.$self->dump_with_indent($variable_original)
+            ));
         }
         elsif ($current_type eq 'HASH')
         {
@@ -90,17 +104,18 @@ sub traverse
         }
         else
         {
-            die $self->get_error(
-                    $source_object
-                    , sprintf(
-                        "don't know how continue traversing %s (%s) with step `%s`"
-                        , ref $variable || 'SCALAR'
-                        , reftype $variable // 'not blessed'
-                            , $step // 'undef'
-                    )
-                    , 'Traversing path'      => join( '.', @$path )
-                    , 'Traversable variable' => $self->dump_with_indent($variable_original)
-                );
+            return $self->handle_error($self->get_error(
+                $source_object
+                , sprintf(
+                    "don't know how continue traversing %s (%s) with step `%s`"
+                    , ref $variable || 'SCALAR'
+                    , reftype $variable // 'not blessed'
+                        , $step // 'undef'
+                )
+                , 'Traversing path: '.join( '.', @$path )
+                , 'Traversable variable: '.$self->dump_with_indent($variable_original)
+            ));
+
         }
     }
 
@@ -110,6 +125,18 @@ sub traverse
     }
 
     return $variable;
+}
+
+sub handle_error
+{
+    my ($self, $error_message) = @_;
+    if ($self->should_die_on_missing_path) {
+        die $error_message;
+    }
+    else {
+        warn $error_message;
+        return undef;
+    }
 }
 
 sub dump_with_indent
@@ -188,7 +215,7 @@ Rendering error: %s
 %s
 _EOT_
             , $message
-            , join '', @messages
+            , join "\n", @messages
         ;
     }
     return $result;
