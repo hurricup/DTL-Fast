@@ -21,6 +21,10 @@ sub filter
 {
     my ($self, $filter_manager, $value, $context) = @_;
 
+    if ( !defined $value || ( $value eq '' ) ) {
+        $filter_manager->{safe} = 1;
+    }
+
     return $value || $self->{default}->render($context);
 }
 

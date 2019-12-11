@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use strict; use warnings FATAL => 'all'; 
+use strict; use warnings FATAL => 'all';
 use Test::More;
 
 use DTL::Fast qw(get_template);
@@ -99,12 +99,30 @@ default value
 _EOT_
         'title' => 'Dynamic undef value',
     },
+    {
+        'template' => <<'_EOT_',
+{{ var5|default:var1 }}
+_EOT_
+        'test' => <<'_EOT_',
+test string
+_EOT_
+        'title' => 'Dynamic undef variable and default string value',
+    },
+    {
+        'template' => <<'_EOT_',
+{{ var3|default:var1 }}
+_EOT_
+        'test' => <<'_EOT_',
+test string
+_EOT_
+        'title' => 'Dynamic empty string variable and default string value',
+    },
 ];
 
 foreach my $data (@$SET)
 {
     is( DTL::Fast::Template->new($data->{'template'})->render($context), $data->{'test'}, $data->{'title'});
-    
+
 }
 
 done_testing();
