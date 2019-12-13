@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use strict; use warnings FATAL => 'all'; 
+use strict; use warnings FATAL => 'all';
 use Test::More;
 
 use DTL::Fast qw(get_template);
@@ -13,7 +13,8 @@ $context = new DTL::Fast::Context({
     'var2' => 123,
     'var3' => '',
     'var4' => 0,
-    'var5' => undef
+    'var5' => undef,
+    'var6' => '<script>alert("Hello user")</script>'
 });
 
 my $SET = [
@@ -99,12 +100,57 @@ default value
 _EOT_
         'title' => 'Dynamic undef value',
     },
+    {
+        'template' => <<'_EOT_',
+{{ var5|default:var1 }}
+_EOT_
+        'test' => <<'_EOT_',
+test string
+_EOT_
+        'title' => 'Dynamic undef variable and default string value',
+    },
+    {
+        'template' => <<'_EOT_',
+{{ var3|default:var1 }}
+_EOT_
+        'test' => <<'_EOT_',
+test string
+_EOT_
+        'title' => 'Dynamic empty string variable and default string value',
+    },
+    {
+        'template' => <<'_EOT_',
+{{ var5|default:var6 }}
+_EOT_
+        'test' => <<'_EOT_',
+&lt;script&gt;alert(&quot;Hello user&quot;)&lt;/script&gt;
+_EOT_
+        'title' => 'Dynamic undef variable and default string html value, check correct escaping, no double escaping',
+    },
+    {
+        'template' => <<'_EOT_',
+{{ var5|default:var6 }}
+_EOT_
+        'test' => <<'_EOT_',
+&lt;script&gt;alert(&quot;Hello user&quot;)&lt;/script&gt;
+_EOT_
+        'title' => 'Dynamic empty string variable and default string html value, check correct escaping, no double escaping',
+    },
+    {
+        'template' => <<'_EOT_',
+{{ var6|default:var1 }}
+_EOT_
+        'test' => <<'_EOT_',
+&lt;script&gt;alert(&quot;Hello user&quot;)&lt;/script&gt;
+_EOT_
+        'title' => 'Dynamic html variable and default, no double escaping',
+    },
 ];
 
 foreach my $data (@$SET)
 {
     is( DTL::Fast::Template->new($data->{'template'})->render($context), $data->{'test'}, $data->{'title'});
-    
+
 }
 
 done_testing();
